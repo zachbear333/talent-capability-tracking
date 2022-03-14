@@ -249,4 +249,8 @@ def edit(request, name):
         # print(person.skill.split(','))
         return render(request, "bios/edit.html", {"form":form,
                                                   "person":person})
+
+def error_404(request, exception):
+        data = {}
+        return render(request,'certman/404.html', data)
         
