@@ -1,0 +1,23 @@
+{% extends 'bios/base.html'%}
+
+{% block title %} Create New Profile {% endblock %}
+
+{% block content %} 
+<form method='post' action='/upload_img/' enctype="multipart/form-data">
+    {% csrf_token %}
+    {% comment %} {{ form.as_p }} {% endcomment %}
+    <table id="create-table">
+        <tr>
+            <th> Name (The name of the users you upload to)</th>
+            <th> Photo (.jpeg only) </th>
+            <th> Bio (.pdf only) </th>
+        </tr>
+        <td> {{form.name}} </td>
+        <td> {{form.photo}} </td>
+        <td> {{form.bio_ppt}} </td>
+    </table>
+    <button type="submit">Upload</button>
+
+</form>
+
+{% endblock %}

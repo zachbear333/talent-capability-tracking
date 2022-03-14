@@ -1,0 +1,67 @@
+{% extends 'bios/base.html'%}
+
+{% block title %} Edit Profile {% endblock %}
+
+{% block content %} 
+<form method='post' action='/{{person.name}}/edit/'>
+    {% csrf_token %}
+    <div>
+        <table id="create-table">
+            <tr>
+                <th> Name </th>
+                <th> Email </th>
+                <th> Position </th>
+                <th> Location </th>
+            </tr>
+            <td> {{person.name}} </td>
+            <td> {{person.email}} </td>
+            <td> {{person.position}} </td>
+            <td> {{form.location}} </td>
+        </table>
+        <table id="create-table">
+            <tr>
+                <th> Areas of Expertise </th>
+                <th> Industry Experience </th>
+                <th> Technique </th>
+            </tr>
+
+            <td style="vertical-align:top; width:40%"> {{form.skill}} </td>
+            <td style="vertical-align:top; width:30%"> {{form.industry}} </td>
+            <td style="vertical-align:top; width:30%"> {{form.technique}} </td>
+
+        </table>
+        <table id="create-table">
+            <tr>
+                <th> Client </th>
+            </tr>
+            <td> {{ form.client }} </td>
+        </table>
+
+        <table id="create-table">
+            <tr>
+                <th> Self-Intro </th>
+            </tr>
+            <td> {{ form.intro }} </td>
+        </table>
+
+        {% comment %} <table id="create-table">
+            <tr>
+                <th> Profile Image Upload </th>
+            </tr>
+            <td> {{ form.photo }} </td>
+        </table>
+
+        <table id="create-table">
+            <tr>
+                <th> Bio Upload </th>
+            </tr>
+            <td> {{ form.bio_ppt }} </td>
+        </table> {% endcomment %}
+    </div>
+    <button type="submit", name="update"> Update Profile </button>
+    
+   
+</form>
+
+
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "bios/base.html" %}
+{% block title %} Bio Info {% endblock %}
+
+{% block content%}
+
+{% load static %}
+
+<div class="bio-page-container">
+    <div class="profile-img">
+        {% comment %} <img src="{% static 'media/images/'%}{{people.name}}.jpeg" onerror="this.onerror=null; this.src='static/img/profile-img/default.png'" alt="home" width=240px/> {% endcomment %}
+        <img src="{% static 'media/images/'%}{{people.name}}.jpeg" onerror="this.onerror=null; this.src='static/img/logo2.png'" alt="home" width=240px/>
+    </div>
+
+    <div class="profile-content">
+        <table id='bio-table'>
+            <tr id='index-col'>
+                <td> Name </td>
+                <td> Email </td>
+                <td> Position </td>
+                <td> Location </td>
+                <td> Industry Experience </td>
+                <td> Area of Expertise </td>
+                <td> Technique </td>
+                <td> Blend Client </td>
+                <td> Introduction </td>
+                <td> Bio </td>
+            </tr>
+            <tr>
+                <td> {{people.name}} </td>
+                <td> {{people.email}} </td>
+                <td> {{people.position}} </td>
+                <td> {{people.location}} </td>
+                <td> {{people.industry}} </td>
+                <td> {{people.skill}} </td>
+                <td> {{people.technique}} </td>
+                <td> {{people.client}} </td>
+                <td> {{people.intro}} </td>
+                <td> <a href="/media/bio_ppt/{{people.name}}.pdf"> Click on this Link </td>
+            </tr>           
+        </table>
+    </div>
+
+    <div class='create-botton' style="background-color:#04AA6D; width:20%; font-size:small; text-align:center;border-radius:5px; ">
+        <a href="/{{people.name}}/edit/" style="text-decoration: none; font-size:large; color:white; padding: 6px 6px 6px 6px;">  
+            Edit Profile
+            {% comment %} <button id="create-apply-button"> Create User Profile</button>   {% endcomment %}
+        </a>
+    </div>
+    {% comment %} <div class="bio-img">
+        <img src="{% static 'media/images/'%}{{people.name}}.pptx" onerror="this.onerror=null; this.src='static/img/profile-img/default.png'" alt="home" width=240px/>
+    </div> {% endcomment %}
+
+</div>
+
+{% endblock %}
