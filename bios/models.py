@@ -24,8 +24,6 @@ class Student(models.Model):
     name = models.CharField(max_length=100)
 
 
-
-
 class BioInfo(models.Model):
     LOCATION_CHOICES = [
         ('Columbia, MD (HQ)', 'Columbia, MD (HQ)'),

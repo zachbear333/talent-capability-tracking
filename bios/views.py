@@ -6,7 +6,7 @@ from re import search
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from .models import BioInfo
-from .forms import CreateNewProfile, EditProfile, FileUpload
+from .forms import CreateNewProfile, EditProfile, FileUpload, testform
 # from django.views import View
 from django.core.files.storage import FileSystemStorage
 # from io import BytesIO
@@ -27,11 +27,18 @@ from django.template.loader import get_template
 
 
 
-def test(response):
-    return render(response, 'bios/test.html')
+def test(request):
+    if request.method == "POST":
+        form = testform(request.POST)
+        if form.is_valid():
+            print('yse')
+        # return HttpResponseRedirect("/%i" %t.id)
+        return HttpResponseRedirect("/upload_img/")
+    else:    
+        form = testform()
+    # return render(request, "bios/create.html", {"form" : form})
+    return render(request, 'bios/test.html', {"form" : form})
 
-# def upload_db(request):
-#     return render(request, 'bios/upload_db.html')
 
 def index(response, name):
     item = BioInfo.objects.get(name=name)

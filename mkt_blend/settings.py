@@ -23,10 +23,10 @@ print(BASE_DIR)
 SECRET_KEY = 'django-insecure-upzr4x-#n41i7@gikx8d4+)z#do$=1-h2h2rc8^0g7)v$#-o59'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # ALLOWED_HOSTS = ["talentcommunity-env.eba-fqgc5ip5.us-east-1.elasticbeanstalk.com"]
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["tct.blend360dev.io", 'localhost']
 
 # Application definition
 
@@ -40,6 +40,8 @@ INSTALLED_APPS = [
 
     'bios.apps.BiosConfig',
     'user',
+    # ms azure
+    'django_auth_adfs',
 ]
 
 MIDDLEWARE = [
@@ -50,6 +52,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # ms azure
+    'django_auth_adfs.middleware.LoginRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'mkt_blend.urls'
@@ -135,3 +139,38 @@ STATICFILES_DIRS = (
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+# ms azure
+AUTHENTICATION_BACKENDS = (
+    'django_auth_adfs.backend.AdfsAuthCodeBackend',
+)
+
+client_id = '1602ed5b-59e1-4cbc-a040-ba579351ff72'
+client_secret = ''
+tenant_id = 'b1aae949-a5ef-4815-b7af-f7c4aa546b28'
+
+# client_id = '23e86757-05df-472a-af77-9b79228ffcb4'
+# client_secret = 'vDO7Q~RYd3GynmcZNVGWLlXHpA41ZSIG39Cz1'
+# tenant_id = 'b1aae949-a5ef-4815-b7af-f7c4aa546b28'
+
+AUTH_ADFS = {
+    'AUDIENCE': client_id,
+    'CLIENT_ID': client_id,
+    'CLIENT_SECRET': client_secret,
+    'CLAIM_MAPPING': {'first_name': 'given_name',
+                      'last_name': 'family_name',
+                      'email': 'upn'},
+    'GROUPS_CLAIM': 'roles',
+    'MIRROR_GROUPS': True,
+    'USERNAME_CLAIM': 'upn',
+    'TENANT_ID': tenant_id,
+    'RELYING_PARTY_ID': client_id,
+    "LOGIN_EXEMPT_URLS": ["api/", "public/"],
+}
+
+LOGIN_URL = '/oauth2/login' 
+LOGIN_REDIRECT_URL = '/'
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

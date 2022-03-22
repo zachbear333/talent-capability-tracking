@@ -1,0 +1,76 @@
+
+{% extends "bios/base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+	#hidden {
+		display:none;
+	}
+</style>
+<form method='post' action='/test/' enctype="multipart/form-data">
+    {% csrf_token %}
+	<p> Name </p>
+	{{ form.name }}
+	<p> Skill </p>
+
+	{% for s in form.skill %}
+	<div class="hahah">
+		{{ s }}
+	</div>
+	{% endfor %}
+	<p> level </p>
+	{{ form.level }}
+</form>
+	{% comment %} <img id='image' src="{% static 'img/logo2.png' %}">
+	<button onclick="test()"> Show and hide </button> {% endcomment %}
+{% endblock %}
+
+{% block jsblock %}
+	{% comment %} <script type='text/javascript' src="{% static '/js/test.js' %}"></script> {% endcomment %}
+	<script>
+
+		function test(event) {
+
+			let p = document.getElementById(event.target.id);
+        	let divContains_P = document.getElementsByClassName('hahah');
+			let formCopyTarget = null;
+			for (var i=0; i<divContains_P.length; i++) {
+				children = divContains_P[i].getElementsByTagName('*')
+				
+				for (var j=0; j<children.length; j++) {
+					if (children[j] == p && formCopyTarget == null) {
+						formCopyTarget = divContains_P[i]
+					}
+				}
+			}
+
+			const emptyForm = document.getElementById('hidden').cloneNode(true)
+			const new_name = 'another'.concat(event.target.id)
+			child = emptyForm.getElementsByTagName('*')
+			for (var i=0; i<child.length; i++) {
+				if (child[i].tagName == "INPUT" && child[i].id.includes("hidden")) {
+					child[i].id = event.target.id.concat(child[i].id)
+				}
+				/* if (child[i].tagName == "LABEL" && child[i].id.includes("hidden")) {
+					emptyForm.setAttribute('id', new_name)
+					console.log(child[i])
+					child[i].id = event.target.id.concat(child[i].id)
+				} */
+			}
+			
+			// console.log(new_name)
+			// emptyForm.setAttribute('class', "qiguai")
+			emptyForm.setAttribute('id', new_name)
+			if (p.checked == true) {
+				formCopyTarget.append(emptyForm);
+			} else {
+				tmp = document.getElementById(new_name)
+				formCopyTarget.removeChild(tmp);
+			}
+
+		}
+
+	</script>
+
+{% endblock %}

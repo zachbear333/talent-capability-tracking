@@ -1,6 +1,6 @@
 from logging import PlaceHolder
 from django import forms
-from django.forms import ModelForm
+from django.forms import BoundField, ModelForm
 from .models import BioInfo, Student
 
 
@@ -103,13 +103,21 @@ POSITION_CHOICES = [
     ('SVP, Data Science', 'SVP, Data Science')
 ]
 
+LEVEL_CHOICES = [
+    ('1', '1'),
+    ('2', '2'),
+    ('3', '3'),
+    ('4', '4'),
+    ('5', '5'),
+]
+
 class CreateNewProfile(forms.Form):
     name = forms.CharField(label="Name", max_length=200)
     email = forms.CharField(label="Email", max_length=200)
     # position = forms.CharField(label="Position", max_length=100)
     position = forms.CharField(label="Position", widget=forms.Select(choices=POSITION_CHOICES))
     location = forms.CharField(label="Location", widget=forms.Select(choices=LOCATION_CHOICES))
-    skill = forms.MultipleChoiceField(required=False, label="Areas of Expertise", choices=SKILL_CHOICES, widget=forms.CheckboxSelectMultiple)
+    skill = forms.MultipleChoiceField(required=False, label="Areas of Expertise", choices=SKILL_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={'onclick':'test();',}))
     technique = forms.MultipleChoiceField(required=False, label="Techniques", choices=TECHNICUQE_CHOICES, widget=forms.CheckboxSelectMultiple)
     industry = forms.MultipleChoiceField(required=False, label="Industry Experiences", choices=INDUSTRIES_CHOICES, widget=forms.CheckboxSelectMultiple)
     # client = forms.MultipleChoiceField(label="Blend Client", choices=CLIENT_CHOICES, widget=forms.CheckboxSelectMultiple)
@@ -129,6 +137,16 @@ class EditProfile(forms.Form):
                                                              'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:25px;'}))
     intro = forms.CharField(required=False, label="Intro", widget=forms.Textarea(attrs={
                                                                 'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;'}))
+
+
+class testform(forms.Form):
+    name = forms.CharField(label="Name", max_length=200)
+    skill = forms.MultipleChoiceField(required=False, label="Areas of Expertise", choices=SKILL_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={
+        'class':'skill-test',
+        'onchange':'test(event);',
+        }))
+    level = forms.CharField(label="level", widget=forms.RadioSelect(choices=LEVEL_CHOICES, attrs={"id":'hidden'}))
+
 
 
 class FileUpload(ModelForm):

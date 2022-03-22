@@ -12,6 +12,15 @@
     </div>
 
     <div class="profile-content">
+        {% comment %} <table class='table-tess'>
+            <tr id='idx-col'>
+                Name
+            </tr>
+            <tr id='val-col'>
+                {{people.name}}
+            </tr>
+
+        </table> {% endcomment %}
         <table id='bio-table'>
             <tr id='index-col'>
                 <td> Name </td>
@@ -37,19 +46,19 @@
                 <td> {{people.intro}} </td>
                 <td> <a href="/media/bio_ppt/{{people.name}}.pdf"> Click on this Link </td>
             </tr>           
-        </table>
+        </table> 
     </div>
 
-    <div class='create-botton' style="background-color:#04AA6D; width:20%; font-size:small; text-align:center;border-radius:5px; ">
+    {% comment %} <div class='create-botton' style="background-color:#04AA6D; width:20%; font-size:small; text-align:center;border-radius:5px; ">
         <a href="/{{people.name}}/edit/" style="text-decoration: none; font-size:large; color:white; padding: 6px 6px 6px 6px;">  
             Edit Profile
-            {% comment %} <button id="create-apply-button"> Create User Profile</button>   {% endcomment %}
         </a>
-    </div>
+    </div> {% endcomment %}
     {% comment %} <div class="bio-img">
         <img src="{% static 'media/images/'%}{{people.name}}.pptx" onerror="this.onerror=null; this.src='static/img/profile-img/default.png'" alt="home" width=240px/>
     </div> {% endcomment %}
 
-</div>
+</div>      
 
 {% endblock %}
+

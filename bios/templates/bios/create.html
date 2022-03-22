@@ -1,4 +1,5 @@
 {% extends 'bios/base.html'%}
+{% load static %}
 
 {% block title %} Create New Profile {% endblock %}
 
@@ -65,20 +66,9 @@
     <button type="submit", name="save"> Create / Update Profile </button>
 </form>
 
-{% comment %} <form method='post' action='/upload_img/' enctype="multipart/form-data">
-    {% csrf_token %}
-    <table id="create-table">
-        <tr>
-            <th> Name (The name of the users you upload to)</th>
-            <th> Photo (.jpeg only) </th>
-            <th> Bio (.pdf only) </th>
-        </tr>
-        <td> {{form.name}} </td>
-        <td> {{form.photo}} </td>
-        <td> {{form.bio_ppt}} </td>
-    </table>
-    <button type="submit">Upload</button>
 
-</form> {% endcomment %}
+{% endblock %}
 
+{% block jsblock %}
+	<script type='text/javascript' src="{% static '/js/test.js' %}"></script>
 {% endblock %}

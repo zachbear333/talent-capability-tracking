@@ -269,6 +269,10 @@ a:hover {
     background-color: transparent;
     text-decoration: underline;
 }
+
+#login-info:hover {
+    text-align:left;
+}
   
 
 

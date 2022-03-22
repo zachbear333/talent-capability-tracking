@@ -1,93 +1,11 @@
-@gray-base: #000;
-@gray-darker: lighten(@gray-base, 13.5%);
-@gray-dark: lighten(@gray-base, 20%);
-@gray: lighten(@gray-base, 33.5%);
-@gray-light: lighten(@gray-base, 46.7%);
-@gray-lighter: lighten(@gray-base, 93.5%);
-@brand-primary: darken(#428bca, 6.5%);
-@brand-success: #5cb85c;
-@brand-info: #5bc0de;
-@brand-warning: #f0ad4e;
-@brand-danger: #d9534f;
-
-@icon-font: 'Glyphicons Halflings';
-
-@down-arrow: "\e259";
-@up-arrow: "\e260";
-
-.primary {
-  min-height: 800px;
-}
-
-/*** Accordion Toggles ***/
-.panel-heading {
-  position: relative;
-  
-  .accordion-toggle:after {
-    font-family: @icon-font;
-    content: @up-arrow;
-    position: absolute;
-    right: 16px;    
-  }
-
-  .accordion-toggle.collapsed:after {
-    font-family: @icon-font;
-    content: @down-arrow;
-  }
-}
-
-/*** Filter Menu ***/
-
-/* Panels */
-.filter-menu {
-  .panel {
-    border-radius: 0;
-    border: 1px solid @gray-lighter;
-  }
-
-  .panel-heading {
-    background: #fff;
-    padding: 0;
-  }
-  
-  .panel-title {
-    color: @gray-dark;
-    font-weight: bold;
-    display: block;
-    padding: 16px;    
-  }
-  
-  a.panel-title {
-    color: @gray-dark;
-
-    &:hover,
-    &:focus {
-      color: @gray-dark;
-      text-decoration: none;
-    }
-  }
-  
-  .panel-body {
-    padding: 16px;
-  }
-}
-
-/* Inner Panels */
-.filter-menu .panel-group {
-  margin: -16px;
-
-  .panel-title {
-    background: #eee;
-    transition: color, 0.5s, ease;
-
-    &:hover {
-      color: @gray-dark;
-      text-decoration: none;
-      background: @gray-light;
-    }
-  }
-  
-  .panel + .panel {
-    margin-top: 0;
-  }
-}
+.parent {display: block;position: relative;float: left;line-height: 30px;background-color: #4FA0D8;border-right:#CCC 1px solid;}
+.parent a{margin: 10px;color: #FFFFFF;text-decoration: none;}
+.parent:hover > ul {display:block;position:absolute;}
+.child {display: none;}
+.child li {background-color: #E4EFF7;line-height: 30px;border-bottom:#CCC 1px solid;border-right:#CCC 1px solid; width:100%;}
+.child li a{color: #000000;}
+ul{list-style: none;margin: 0;padding: 0px; min-width:10em;}
+ul ul ul{left: 100%;top: 0;margin-left:1px;}
+li:hover {background-color: #95B4CA;}
+.parent li:hover {background-color: #F0F0F0;}
+.expand{font-size:12px;float:right;margin-right:5px;}

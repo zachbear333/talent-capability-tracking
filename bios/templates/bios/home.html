@@ -85,7 +85,7 @@
             <input type="submit" id="filter-apply-button" value="Apply"/> 
         </form>
         <div class='create-botton' style="background-color:#04AA6D; width:90%; font-size:small; text-align:center;border-radius:5px;">
-            <a href="/create/" style="text-decoration: none; font-size:medium; color:white; padding: 6px 6px 6px 6px;">  
+            <a href="/create/" style="text-decoration: none; font-size:medium; color:white; padding: 6px 6px 6px 6px;" onclick='test()'>  
                 Create Profile
                 {% comment %} <button id="create-apply-button"> Create User Profile</button>   {% endcomment %}
             </a>
@@ -108,7 +108,7 @@
             <th> Area of Expertise </th>
             <th> Technique </th>
             <th> Industry Experience </th>
-            <th> Email </th>
+            <th> Blend Client </th>
             <th> Position </th>
         </tr>
         {% for person in people_number %}
@@ -117,7 +117,7 @@
             <td> {{ person.skill }} </td>
             <td> {{ person.technique }} </td>
             <td> {{ person.industry }} </td>
-            <td> {{ person.email }} </td>
+            <td> {{ person.client }} </td>
             <td> {{ person.position }}</td>
             
             </tr>

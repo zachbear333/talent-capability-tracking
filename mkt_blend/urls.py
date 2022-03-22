@@ -24,6 +24,7 @@ urlpatterns = [
     path('v1', include('bios.urls')),
     path('user/', include('django.contrib.auth.urls')),
     path('user/', include('user.urls')),
+    path('oauth2/', include('django_auth_adfs.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 #changed
