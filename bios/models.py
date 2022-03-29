@@ -20,7 +20,7 @@ def path_and_rename2(instance, filename):
 
 class Student(models.Model):
     photo = models.ImageField(null=True, blank=True, upload_to=path_and_rename)
-    bio_ppt = models.FileField(upload_to=path_and_rename2)
+    bio_ppt = models.FileField(null=True, blank=True, upload_to=path_and_rename2)
     name = models.CharField(max_length=100)
 
 
@@ -132,6 +132,7 @@ class BioInfo(models.Model):
     technique = models.CharField(max_length=300, choices=TECHNICUQE_CHOICES, default=None)
     industry = models.CharField(max_length=300, choices=INDUSTRIES_CHOICES, default=None)
     client = models.CharField(max_length=300)
+    # businee_domain = models.CharField(max_length=300)
     intro = models.TextField()
     photo = models.ImageField(null=True, blank=True, upload_to="images/")
     bio_ppt = models.ImageField(null=True, blank=True)

@@ -13,30 +13,67 @@ LOCATION_CHOICES = [
 ]
 
 SKILL_CHOICES = [
-    ('Predictive Modeling', 'Predictive Modeling'),
-    ('Machine Learning', "Machine Learning"),
-    ('Deep Learning', "Deep Learning"),
-    ('Natural Language Processing', 'Natural Language Processing'), 
-    ('Recommendation System', "Recommendation System"),
-    ('LTV', 'LTV'),
-    ('Optimization', 'Optimization'),
-    ('Markov Chain', 'Markov Chain'),
-    ('Measurement', 'Measurement'),
-    ('AB Testing', 'AB Testing'), 
-    ('Business Intelligence', 'Business Intelligence'),
-    ('Campaign Design / Execution', 'Campaign Design / Execution'), 
-    ('Cloud Services', 'Cloud Services'),
-    ('Customer Segmentation and Insights', 'Customer Segmentation and Insights'),
+    # Data Engineering
     ('Data Governence', 'Data Governence'),
-    ('Data Visualization', 'Data Visualization'),
     ('Data Wrangling', 'Data Wrangling'),
     ('Data / Network Security', 'Data / Network Security'),
-    ('Deployment', 'Deployment'),
-    ('Digital Analytics', 'Digital Analytics'),
+    # BI
+    ('Data Visualization', 'Data Visualization'),
+    ('Business Intelligence', 'Business Intelligence'),
+    ('Application Architecture', 'Application Architecture'),
+    # Process Infrastructure
+    ('Automation & Job Scheduling', 'Automation & Job Scheduling'),
+    ('Process efficiency', 'Process efficiency'),
+    ('Version Controlling', 'Version Controlling'),
+    ('Project Management', 'Project Management'),
+    ('Space Management', 'Space Management'),
+    # Analytics Application
+    ('Campaign Design/Execution', 'Campaign Design/Execution'),
+    ('Operation', 'Operation'),
     ('Personalization', 'Personalization'),
-    ('SEO', 'SEO'),
+    ('Customer Segmentation and Insights', 'Customer Segmentation and Insights'),
+    ('LTV', 'LTV'),
+    ('Unit Testing (QA)', 'Unit Testing (QA)'),
+    ('Digital Analytics', 'Digital Analytics'),
+    ('Factor Analysis', 'Factor Analysis'),
+    ('Insight Generation', 'Insight Generation'),
+    ('Outlier Detection Algorithms', 'Outlier Detection Algorithms'),
+    ('Experimental Design', 'Experimental Design'),
+    ('MMM', 'MMM'),
+    ('MTA', 'MTA'),
+    ('Optimization', 'Optimization'),
     ('Simulation', 'Simulation'),
+    ('Search Engine Optimization', 'Search Engine Optimization'),
+    # Statistics / ML
+    ('A/B Testing', 'A/B Testing'),
+    ('Ada Boost', 'Ada Boost'),
+    ('Bayesian Modelling', 'Bayesian Modelling'),
+    ('Causal Inference', 'Causal Inference'),
+    ('Clustering Models', 'Clustering Models'),
+    ('Decision Trees', 'Decision Trees'),
+    ('KNN', 'KNN'),
+    ('Random Forest', 'Random Forest'),
+    ('XGBoost', 'XGBoost'),
+    ('Survival analysis', 'Survival analysis'),
     ('Time Series Analysis', 'Time Series Analysis'),
+    ('Discriminant Analysis', 'Discriminant Analysis'),
+    ('SVM', 'SVM'),
+    ('PCA', 'PCA'),
+    ('Logistic Regression', 'Logistic Regression'),
+    ('Linear Regression', 'Linear Regression'),
+    ('Multi-levels Stacking', 'Multi-levels Stacking'),
+    ('Spatial Statistics', 'Spatial Statistics'),
+    # Deep Learning / NLP
+    ('LSTM', 'LSTM'),
+    ('CNN', 'CNN'),
+    ('Autoencoder', 'Autoencoder'),
+    ('Transformer', 'Transformer'),
+    ('BERT', 'BERT'),
+    ('TF-IDF', 'TF-IDF'),
+    ('Word Embedding', 'Word Embedding'),
+    ('Sentiment analysis', 'Sentiment analysis'),
+    ('Latent Dirichlet Allocation', 'Latent Dirichlet Allocation'),
+    ('Topic Modelling', 'Topic Modelling'),
 ]
 
 INDUSTRIES_CHOICES = [
@@ -74,16 +111,37 @@ CLIENT_CHOICES = [
 ]
 
 TECHNICUQE_CHOICES = [
-    ('Python', 'Python'),
-    ('SQL', "SQL"),
-    ('Spark', "Spark"),
-    ('GCP', 'GCP'), 
-    ('AWS', "AWS"),
+    # CLOUD COMPUTING SERVICES
+    ('AWS', 'AWS'),
+    ('Azure', 'Azure'),
+    ('GCP', 'GCP'),
+    ('Snowflake', 'Snowflake'),
     ('Databricks', 'Databricks'),
+    # PROGRAMMING LANGUAGE
+    ('Python', 'Python'),
     ('R', 'R'),
-    ('Snowflakes', 'Snowflakes'),
+    ('C/C++', 'C/C++'),
     ('Java', 'Java'),
-    ('C/C++', 'C/C++')
+    ('SAS', 'SAS'),
+    ('SCALA', 'SCALA'),
+    ('MATLAB', 'MATLAB'),
+    # DATA VISUALIZATION
+    ('Tableau', 'Tableau'),
+    ('Power BI', 'Power BI'),
+    ('Dashboard Design', 'Dashboard Design'),
+    ('Plotly', 'Plotly'),
+    # DATABASE
+    ('SQL', "SQL"),
+    ('MySQL', 'MySQL'),
+    ('MongoDB', 'MongoDB'),
+    ('Adobe Analytics', 'Adobe Analytics'),
+    # Other
+    ('Django', 'Django'),
+    ('Docker', 'Docker'),
+    ('Linux', 'Linux'),
+    ('Git', 'Git'),
+    ('PyTorch', 'PyTorch'),
+    ('Tensorflow', 'Tensorflow')
 ]
 
 POSITION_CHOICES = [
@@ -117,9 +175,19 @@ class CreateNewProfile(forms.Form):
     # position = forms.CharField(label="Position", max_length=100)
     position = forms.CharField(label="Position", widget=forms.Select(choices=POSITION_CHOICES))
     location = forms.CharField(label="Location", widget=forms.Select(choices=LOCATION_CHOICES))
-    skill = forms.MultipleChoiceField(required=False, label="Areas of Expertise", choices=SKILL_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={'onclick':'test();',}))
-    technique = forms.MultipleChoiceField(required=False, label="Techniques", choices=TECHNICUQE_CHOICES, widget=forms.CheckboxSelectMultiple)
-    industry = forms.MultipleChoiceField(required=False, label="Industry Experiences", choices=INDUSTRIES_CHOICES, widget=forms.CheckboxSelectMultiple)
+    #skill = forms.MultipleChoiceField(required=False, label="Areas of Expertise", choices=SKILL_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={'onchange':'test(event);',}))
+    skill = forms.MultipleChoiceField(required=False, label="Areas of Expertise", choices=SKILL_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={
+    'class':'skill-test',
+    'onchange':'test(event);',
+    }))
+    technique = forms.MultipleChoiceField(required=False, label="Techniques", choices=TECHNICUQE_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={
+    'class':'tech-test',
+    'onchange':'test(event);',    
+    }))
+    industry = forms.MultipleChoiceField(required=False, label="Industry Experiences", choices=INDUSTRIES_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={
+    'class':'industry-test',
+    'onchange':'test(event);',      
+    }))
     # client = forms.MultipleChoiceField(label="Blend Client", choices=CLIENT_CHOICES, widget=forms.CheckboxSelectMultiple)
     client = forms.CharField(required=False, label="Client", max_length=400,
                                 widget=forms.TextInput(attrs={'placeholder':'Seperate Clients by Comma.',
@@ -129,9 +197,18 @@ class CreateNewProfile(forms.Form):
 
 class EditProfile(forms.Form):
     location = forms.CharField(label="Location", widget=forms.Select(choices=LOCATION_CHOICES))
-    skill = forms.MultipleChoiceField(required=False, label="Areas of Expertise", choices=SKILL_CHOICES, widget=forms.CheckboxSelectMultiple)
-    technique = forms.MultipleChoiceField(required=False, label="Techniques", choices=TECHNICUQE_CHOICES, widget=forms.CheckboxSelectMultiple)
-    industry = forms.MultipleChoiceField(required=False, label="Industry Experiences", choices=INDUSTRIES_CHOICES, widget=forms.CheckboxSelectMultiple)
+    skill = forms.MultipleChoiceField(required=False, label="Areas of Expertise", choices=SKILL_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={
+    'class':'industry-test',
+    'onchange':'test(event);',      
+    }))
+    technique = forms.MultipleChoiceField(required=False, label="Techniques", choices=TECHNICUQE_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={
+    'class':'industry-test',
+    'onchange':'test(event);',  
+    }))
+    industry = forms.MultipleChoiceField(required=False, label="Industry Experiences", choices=INDUSTRIES_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={
+    'class':'industry-test',
+    'onchange':'test(event);',  
+    }))
     client = forms.CharField(required=False, label="Client", max_length=400,
                                 widget=forms.TextInput(attrs={'placeholder':'Seperate Clients by Comma.',
                                                              'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:25px;'}))
@@ -145,7 +222,7 @@ class testform(forms.Form):
         'class':'skill-test',
         'onchange':'test(event);',
         }))
-    level = forms.CharField(label="level", widget=forms.RadioSelect(choices=LEVEL_CHOICES, attrs={"id":'hidden'}))
+    # level = forms.CharField(label="level", widget=forms.RadioSelect(choices=LEVEL_CHOICES, attrs={"id":'hidden'}))
 
 
 

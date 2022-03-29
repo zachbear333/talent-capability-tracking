@@ -4,7 +4,7 @@
 
 {% block content %}
 <style>
-	#hidden {
+	.hidden {
 		display:none;
 	}
 </style>
@@ -13,63 +13,84 @@
 	<p> Name </p>
 	{{ form.name }}
 	<p> Skill </p>
-
+	{% comment %} {{ form.skill }} {% endcomment %}
 	{% for s in form.skill %}
-	<div class="hahah">
-		{{ s }}
+
+	{% if forloop.counter0 == 0 %}
+		Cloud Computing Services
+	{% endif %}
+	<div class="hahah" id="{{forloop.counter0}}" style="margin-left:30px;">
+		{{s}}
+		<div class="hidden" id="id_skill_{{forloop.counter0}}">
+			<div id="skill_select_{{forloop.counter0}}" onchange="test2(event);">
+				<input type="radio" name="gender" value="1" onchange="test2(event);"> 1
+				<input type="radio" name="gender" value="2" onchange="test2(event);"> 2
+				<input type="radio" name="gender" value="3" onchange="test2(event);"> 3
+			</div>
+			{% comment %} <select id="skill_select_{{forloop.counter0}}" onchange="test2(event);">
+				<option value=''> </option>
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+			</select> {% endcomment %}
+		</div>
 	</div>
 	{% endfor %}
-	<p> level </p>
-	{{ form.level }}
+	<button type="submit", name="save"> Create / Update Profile </button>
+
 </form>
-	{% comment %} <img id='image' src="{% static 'img/logo2.png' %}">
-	<button onclick="test()"> Show and hide </button> {% endcomment %}
 {% endblock %}
 
 {% block jsblock %}
 	{% comment %} <script type='text/javascript' src="{% static '/js/test.js' %}"></script> {% endcomment %}
 	<script>
-
+		
 		function test(event) {
+			let checkbox = document.getElementById(event.target.id);
+			// const prefix = 'id_skill_';
+			// console.log(checkbox.id);
+			if (checkbox.checked == true) {
+				let hidden_selects = document.getElementsByClassName('hidden')
+				for (var i=0; i<hidden_selects.length; i++) {
+					compare_id = hidden_selects[i].id;
+					// compare_id = prefix.concat(hidden_selects[i].id);
 
-			let p = document.getElementById(event.target.id);
-        	let divContains_P = document.getElementsByClassName('hahah');
-			let formCopyTarget = null;
-			for (var i=0; i<divContains_P.length; i++) {
-				children = divContains_P[i].getElementsByTagName('*')
-				
-				for (var j=0; j<children.length; j++) {
-					if (children[j] == p && formCopyTarget == null) {
-						formCopyTarget = divContains_P[i]
+					if (checkbox.id == compare_id) {
+						select_id = hidden_selects[i].id.split('_')
+						hidden_selects[i].setAttribute("class", "unhide");
+					}
+				}
+
+			} else {
+				let unhide_selects = document.getElementsByClassName('unhide')
+				for (var i=0; i<unhide_selects.length; i++) {
+					compare_id = unhide_selects[i].id
+					// compare_id = prefix.concat(unhide_selects[i].id)
+
+					if (checkbox.id == compare_id) {
+						console.log("no");
+						unhide_selects[i].setAttribute("class", "hidden");
 					}
 				}
 			}
+		} 
 
-			const emptyForm = document.getElementById('hidden').cloneNode(true)
-			const new_name = 'another'.concat(event.target.id)
-			child = emptyForm.getElementsByTagName('*')
-			for (var i=0; i<child.length; i++) {
-				if (child[i].tagName == "INPUT" && child[i].id.includes("hidden")) {
-					child[i].id = event.target.id.concat(child[i].id)
+		function test2(event) {
+			console.log(event.target.id)
+			options = document.getElementById(event.target.id)
+			skill_idx = event.target.id.split('_')
+			elements = options.getElementsByTagName('*')
+			for (var i=0; i<elements.length; i++) {
+				if (elements[i].selected == true) {
+					console.log(elements[i].value)
+					selected_skill = document.getElementById("id_skill_".concat(skill_idx[2]))
+					selected_skill.setAttribute('value', selected_skill.value.concat(' '.concat(elements[i].value)))
+					console.log(selected_skill.innerHTML)
 				}
-				/* if (child[i].tagName == "LABEL" && child[i].id.includes("hidden")) {
-					emptyForm.setAttribute('id', new_name)
-					console.log(child[i])
-					child[i].id = event.target.id.concat(child[i].id)
-				} */
 			}
-			
-			// console.log(new_name)
-			// emptyForm.setAttribute('class', "qiguai")
-			emptyForm.setAttribute('id', new_name)
-			if (p.checked == true) {
-				formCopyTarget.append(emptyForm);
-			} else {
-				tmp = document.getElementById(new_name)
-				formCopyTarget.removeChild(tmp);
-			}
-
-		}
+		} 
 
 	</script>
 
