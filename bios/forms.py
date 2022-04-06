@@ -12,6 +12,19 @@ LOCATION_CHOICES = [
     ('Remote', 'Remote')
 ]
 
+DOMAIN_CHOICES = [
+        ('Sales & Marketing', 'Sales & Marketing'),
+        ('Supply Chain', 'Supply Chain'),
+        ('Pricing', 'Pricing'),
+        ('Product', 'Product'),
+        ('Finance', 'Finance'),
+        ('IoT', 'IoT'),
+        ('HR', 'HR'),
+        ('Real Estate', 'Real Estate'),
+        ('Manufacturing', 'Manufacturing'),
+        ('Customer Experience', 'Customer Experience'),
+]
+
 SKILL_CHOICES = [
     # Data Engineering
     ('Data Governence', 'Data Governence'),
@@ -175,6 +188,11 @@ class CreateNewProfile(forms.Form):
     # position = forms.CharField(label="Position", max_length=100)
     position = forms.CharField(label="Position", widget=forms.Select(choices=POSITION_CHOICES))
     location = forms.CharField(label="Location", widget=forms.Select(choices=LOCATION_CHOICES))
+    domain = forms.MultipleChoiceField(required=False, label="Business Domain", choices=DOMAIN_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={
+    'class':'domain-test',
+    'onchange':'test(event);',
+    }))
+
     #skill = forms.MultipleChoiceField(required=False, label="Areas of Expertise", choices=SKILL_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={'onchange':'test(event);',}))
     skill = forms.MultipleChoiceField(required=False, label="Areas of Expertise", choices=SKILL_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={
     'class':'skill-test',
@@ -197,6 +215,7 @@ class CreateNewProfile(forms.Form):
 
 class EditProfile(forms.Form):
     location = forms.CharField(label="Location", widget=forms.Select(choices=LOCATION_CHOICES))
+    domain = forms.CharField(label="Business Domain", widget=forms.Select(choices=DOMAIN_CHOICES))
     skill = forms.MultipleChoiceField(required=False, label="Areas of Expertise", choices=SKILL_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={
     'class':'industry-test',
     'onchange':'test(event);',      
@@ -207,6 +226,10 @@ class EditProfile(forms.Form):
     }))
     industry = forms.MultipleChoiceField(required=False, label="Industry Experiences", choices=INDUSTRIES_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={
     'class':'industry-test',
+    'onchange':'test(event);',  
+    }))
+    domain = forms.MultipleChoiceField(required=False, label="Business Domain", choices=DOMAIN_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={
+    'class':'domain-test',
     'onchange':'test(event);',  
     }))
     client = forms.CharField(required=False, label="Client", max_length=400,
@@ -222,7 +245,6 @@ class testform(forms.Form):
         'class':'skill-test',
         'onchange':'test(event);',
         }))
-    # level = forms.CharField(label="level", widget=forms.RadioSelect(choices=LEVEL_CHOICES, attrs={"id":'hidden'}))
 
 
 

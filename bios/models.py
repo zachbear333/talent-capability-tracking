@@ -107,6 +107,19 @@ class BioInfo(models.Model):
         ('C/C++', 'C/C++')
     ]
 
+    DOMAIN_CHOICES = [
+        ('Sales & Marketing', 'Sales & Marketing'),
+        ('Supply Chain', 'Supply Chain'),
+        ('Pricing', 'Pricing'),
+        ('Product', 'Product'),
+        ('Finance', 'Finance'),
+        ('IoT', 'IoT'),
+        ('HR', 'HR'),
+        ('Real Estate', 'Real Estate'),
+        ('Manufacturing', 'Manufacturing'),
+        ('Customer Experience', 'Customer Experience'),
+    ]
+
     POSITION_CHOICES = [
         ('Associate Data Scientist/Intern', 'Associate Data Scientist/Intern'),
         ('Associate Data Scientist, All-Star', 'Associate Data Scientist, All-Star'),
@@ -126,13 +139,17 @@ class BioInfo(models.Model):
 
     name = models.CharField(max_length=200)
     email = models.CharField(max_length=200)
+
     position = models.CharField(max_length=100, choices=POSITION_CHOICES, default=None)
     location = models.CharField(max_length=100, choices=LOCATION_CHOICES, default=None)
     skill = models.CharField(max_length=300, choices=SKILL_CHOICES, default=None)
     technique = models.CharField(max_length=300, choices=TECHNICUQE_CHOICES, default=None)
     industry = models.CharField(max_length=300, choices=INDUSTRIES_CHOICES, default=None)
+    business_domain = models.CharField(max_length=300, choices=DOMAIN_CHOICES, null=True, blank=True)
+    university = models.CharField(max_length=300)
+    major =  models.CharField(max_length=300)
+
     client = models.CharField(max_length=300)
-    # businee_domain = models.CharField(max_length=300)
     intro = models.TextField()
     photo = models.ImageField(null=True, blank=True, upload_to="images/")
     bio_ppt = models.ImageField(null=True, blank=True)

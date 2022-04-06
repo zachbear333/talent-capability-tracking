@@ -118,6 +118,14 @@ a .create-button {
     border-radius: 4px;
 }
 
+.dropdown-single-level {
+    width:90%;
+    height:40px;
+    position:relative;
+    background-color:#b7f7e7;
+    border-radius: 4px;
+}
+
 .dropdown-test {
     background: #f8e6cf;
     visibility: hidden;

@@ -22,19 +22,11 @@
 	<div class="hahah" id="{{forloop.counter0}}" style="margin-left:30px;">
 		{{s}}
 		<div class="hidden" id="id_skill_{{forloop.counter0}}">
-			<div id="skill_select_{{forloop.counter0}}" onchange="test2(event);">
-				<input type="radio" name="gender" value="1" onchange="test2(event);"> 1
-				<input type="radio" name="gender" value="2" onchange="test2(event);"> 2
-				<input type="radio" name="gender" value="3" onchange="test2(event);"> 3
+			<div id="skill_select_{{forloop.counter0}}">
+				<input type="radio" name="id_skill_{{forloop.counter0}}" value="1" onchange="test2(event);"> 1
+				<input type="radio" name="id_skill_{{forloop.counter0}}" value="2" onchange="test2(event);"> 2
+				<input type="radio" name="id_skill_{{forloop.counter0}}" value="3" onchange="test2(event);"> 3
 			</div>
-			{% comment %} <select id="skill_select_{{forloop.counter0}}" onchange="test2(event);">
-				<option value=''> </option>
-				<option value="1">1</option>
-				<option value="2">2</option>
-				<option value="3">3</option>
-				<option value="4">4</option>
-				<option value="5">5</option>
-			</select> {% endcomment %}
 		</div>
 	</div>
 	{% endfor %}
@@ -78,9 +70,13 @@
 		} 
 
 		function test2(event) {
-			console.log(event.target.id)
-			options = document.getElementById(event.target.id)
-			skill_idx = event.target.id.split('_')
+			console.log(event.target)
+			options = document.getElementById(event.target.name)
+			options.setAttribute('value', options.value.concat(" ".concat(event.target.value)))
+			console.log(options.value)
+			/* skill_idx = event.target.id.split('_')
+
+			console.log("hahaha", options)
 			elements = options.getElementsByTagName('*')
 			for (var i=0; i<elements.length; i++) {
 				if (elements[i].selected == true) {
@@ -89,7 +85,7 @@
 					selected_skill.setAttribute('value', selected_skill.value.concat(' '.concat(elements[i].value)))
 					console.log(selected_skill.innerHTML)
 				}
-			}
+			}*/
 		} 
 
 	</script>

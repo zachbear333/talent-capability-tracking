@@ -22,12 +22,20 @@
         <span> Talent Capability Tracking </span>
         </a>
         <div class='login-info' style="float:right; margin: auto 0 auto auto;">
-            <a href="/{{user.first_name}}_{{user.last_name}}/edit/" style="text-decoration: none; font-size:medium; padding: 6px 6px 6px 6px;">  
-                {{ user }}
-            </a>
-            <a href="/oauth2/logout" style="text-decoration: none; font-size:medium; padding: 6px 6px 6px 6px;">
+            <p style="font-size:22px; float:right;"> Welcome to Blend360 TCT, {{ user.first_name }}! </p>
+        </br>
+            <a href="/oauth2/logout" style="text-decoration: none; font-size:medium; margin: auto 0 auto auto; float:right;">
                 Logout
             </a>
+            <a href="/{{user.first_name}}_{{user.last_name}}/edit/" style="text-decoration: none; font-size:medium; margin: auto 0 auto auto; float:right;">  
+                Edit Profile
+            </a>
+
+            <a href="/upload_img/" style="text-decoration: none; font-size:medium; margin: auto 0 auto auto; float:right;">  
+                Upload Profile Image/Bio
+            </a>
+
+
         </div>
     </div>   
     

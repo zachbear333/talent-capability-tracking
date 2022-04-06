@@ -21,32 +21,56 @@
             </tr>
 
         </table> {% endcomment %}
+        Basic Info
         <table id='bio-table'>
             <tr id='index-col'>
                 <td> Name </td>
                 <td> Email </td>
                 <td> Position </td>
                 <td> Location </td>
-                <td> Industry Experience </td>
+                <td> University </td>
+                <td> Major </td>
+                {% comment %} <td> Industry Experience </td>
                 <td> Area of Expertise </td>
-                <td> Technique </td>
+                <td> Technique </td> {% endcomment %}
                 <td> Blend Client </td>
                 <td> Introduction </td>
                 <td> Bio </td>
+                {% comment %} <td> Business Domain </td> {% endcomment %}
             </tr>
             <tr>
                 <td> {{people.name}} </td>
                 <td> {{people.email}} </td>
                 <td> {{people.position}} </td>
                 <td> {{people.location}} </td>
-                <td> {{people.industry}} </td>
+                <td> {{people.university}} </td>
+                <td> {{people.major}} </td>
+                {% comment %} <td> {{people.industry}} </td>
                 <td> {{people.skill}} </td>
-                <td> {{people.technique}} </td>
+                <td> {{people.technique}} </td> {% endcomment %}
                 <td> {{people.client}} </td>
                 <td> {{people.intro}} </td>
                 <td> <a href="/media/bio_ppt/{{people.name}}.pdf"> Click on this Link </td>
+                {% comment %} <td> {{people.business_domain}} </td> {% endcomment %}
             </tr>           
         </table> 
+
+        Skillset Info
+        <table id="content-table">
+            <tr>
+                <th> Skill </th>
+                <th> Skill Proficient Level </th>
+            </tr>
+
+            {% for key, value in skill.items %}
+            <tr>
+                <td> {{key}} </td>
+                <td> {{value}} </td>
+            </tr>
+        {% endfor %}
+            
+        </table>
+
     </div>
 
     {% comment %} <div class='create-botton' style="background-color:#04AA6D; width:20%; font-size:small; text-align:center;border-radius:5px; ">

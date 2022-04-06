@@ -12,6 +12,179 @@ from django.core.files.storage import FileSystemStorage
 # from io import BytesIO
 from django.template.loader import get_template
 
+LOCATION_CHOICES = [
+    ('Columbia, MD (HQ)', 'Columbia, MD (HQ)'),
+    ('New York, NY', 'New York, NY'),
+    ('Denver, CO', 'Denver, CO'),
+    ('India', 'India'),
+    ('Remote', 'Remote')
+]
+
+DOMAIN_CHOICES = [
+        ('Sales & Marketing', 'Sales & Marketing'),
+        ('Supply Chain', 'Supply Chain'),
+        ('Pricing', 'Pricing'),
+        ('Product', 'Product'),
+        ('Finance', 'Finance'),
+        ('IoT', 'IoT'),
+        ('HR', 'HR'),
+        ('Real Estate', 'Real Estate'),
+        ('Manufacturing', 'Manufacturing'),
+        ('Customer Experience', 'Customer Experience'),
+]
+
+SKILL_CHOICES = [
+    # Data Engineering
+    ('Data Governence', 'Data Governence'),
+    ('Data Wrangling', 'Data Wrangling'),
+    ('Data / Network Security', 'Data / Network Security'),
+    # BI
+    ('Data Visualization', 'Data Visualization'),
+    ('Business Intelligence', 'Business Intelligence'),
+    ('Application Architecture', 'Application Architecture'),
+    # Process Infrastructure
+    ('Automation & Job Scheduling', 'Automation & Job Scheduling'),
+    ('Process efficiency', 'Process efficiency'),
+    ('Version Controlling', 'Version Controlling'),
+    ('Project Management', 'Project Management'),
+    ('Space Management', 'Space Management'),
+    # Analytics Application
+    ('Campaign Design/Execution', 'Campaign Design/Execution'),
+    ('Operation', 'Operation'),
+    ('Personalization', 'Personalization'),
+    ('Customer Segmentation and Insights', 'Customer Segmentation and Insights'),
+    ('LTV', 'LTV'),
+    ('Unit Testing (QA)', 'Unit Testing (QA)'),
+    ('Digital Analytics', 'Digital Analytics'),
+    ('Factor Analysis', 'Factor Analysis'),
+    ('Insight Generation', 'Insight Generation'),
+    ('Outlier Detection Algorithms', 'Outlier Detection Algorithms'),
+    ('Experimental Design', 'Experimental Design'),
+    ('MMM', 'MMM'),
+    ('MTA', 'MTA'),
+    ('Optimization', 'Optimization'),
+    ('Simulation', 'Simulation'),
+    ('Search Engine Optimization', 'Search Engine Optimization'),
+    # Statistics / ML
+    ('A/B Testing', 'A/B Testing'),
+    ('Ada Boost', 'Ada Boost'),
+    ('Bayesian Modelling', 'Bayesian Modelling'),
+    ('Causal Inference', 'Causal Inference'),
+    ('Clustering Models', 'Clustering Models'),
+    ('Decision Trees', 'Decision Trees'),
+    ('KNN', 'KNN'),
+    ('Random Forest', 'Random Forest'),
+    ('XGBoost', 'XGBoost'),
+    ('Survival analysis', 'Survival analysis'),
+    ('Time Series Analysis', 'Time Series Analysis'),
+    ('Discriminant Analysis', 'Discriminant Analysis'),
+    ('SVM', 'SVM'),
+    ('PCA', 'PCA'),
+    ('Logistic Regression', 'Logistic Regression'),
+    ('Linear Regression', 'Linear Regression'),
+    ('Multi-levels Stacking', 'Multi-levels Stacking'),
+    ('Spatial Statistics', 'Spatial Statistics'),
+    # Deep Learning / NLP
+    ('LSTM', 'LSTM'),
+    ('CNN', 'CNN'),
+    ('Autoencoder', 'Autoencoder'),
+    ('Transformer', 'Transformer'),
+    ('BERT', 'BERT'),
+    ('TF-IDF', 'TF-IDF'),
+    ('Word Embedding', 'Word Embedding'),
+    ('Sentiment analysis', 'Sentiment analysis'),
+    ('Latent Dirichlet Allocation', 'Latent Dirichlet Allocation'),
+    ('Topic Modelling', 'Topic Modelling'),
+]
+tmp = []
+for a, _ in SKILL_CHOICES:
+    tmp.append(a)
+
+INDUSTRIES_CHOICES = [
+    ('Retail', 'Retail'),
+    ('Grocery', "Grocery"),
+    ('Financial Services', "Financial Services"),
+    ('Transportation', 'Transportation'), 
+    ('Healthcare', "Healthcare"),
+    ('B2B', 'B2B'),
+    ('Construction', 'Construction'),
+    ('Manufacturing', 'Manufacturing'),
+    ('Utilities', 'Utilities'),
+    ('Insurance', 'Insurance'),
+    ('Communication Services', 'Communication Services'),
+    ('E Commerce', 'E Commerce'),
+    ('Educational Services', 'Educational Services'),
+    ('Energy', 'Energy'),
+    ('Hospitality', 'Hospitality'),
+    ('Information Technology', 'Information Technology'),
+    ('Life Sciences', 'Life Sciences'),
+    ('Real Estate', 'Real Estate'),
+    ('Technology', 'Technology'),
+]
+
+CLIENT_CHOICES = [
+    ('AARP', 'AARP'),
+    ('Acorns', "Acorns"),
+    ('CVS', "CVS"),
+    ('Grammarly', 'Grammarly'), 
+    ('HGV', "HGV"),
+    ('Marriott MTA', 'Marriott MTA'),
+    ('Sunovion', 'Sunovion'),
+    ('Visa', 'Visa'),
+    ('Walmart', 'Walmart')
+]
+
+TECHNICUQE_CHOICES = [
+    # CLOUD COMPUTING SERVICES
+    ('AWS', 'AWS'),
+    ('Azure', 'Azure'),
+    ('GCP', 'GCP'),
+    ('Snowflake', 'Snowflake'),
+    ('Databricks', 'Databricks'),
+    # PROGRAMMING LANGUAGE
+    ('Python', 'Python'),
+    ('R', 'R'),
+    ('C/C++', 'C/C++'),
+    ('Java', 'Java'),
+    ('SAS', 'SAS'),
+    ('SCALA', 'SCALA'),
+    ('MATLAB', 'MATLAB'),
+    # DATA VISUALIZATION
+    ('Tableau', 'Tableau'),
+    ('Power BI', 'Power BI'),
+    ('Dashboard Design', 'Dashboard Design'),
+    ('Plotly', 'Plotly'),
+    # DATABASE
+    ('SQL', "SQL"),
+    ('MySQL', 'MySQL'),
+    ('MongoDB', 'MongoDB'),
+    ('Adobe Analytics', 'Adobe Analytics'),
+    # Other
+    ('Django', 'Django'),
+    ('Docker', 'Docker'),
+    ('Linux', 'Linux'),
+    ('Git', 'Git'),
+    ('PyTorch', 'PyTorch'),
+    ('Tensorflow', 'Tensorflow')
+]
+
+POSITION_CHOICES = [
+    ('Associate Data Scientist/Intern', 'Associate Data Scientist/Intern'),
+    ('Associate Data Scientist, All-Star', 'Associate Data Scientist, All-Star'),
+    ('Lead Data Scientist', 'Lead Data Scientist'),
+    ('Senior Manager, Data Science', 'Senior Manager, Data Science'),
+    ('Director, Data Science', 'Director, Data Science'),
+    ('Senior Data Scientist', 'Senior Data Scientist'),
+    ('Data Scientist', 'Associate Director, Data Science'),
+    ('Manager, Data Science', 'Manager, Data Science '),
+    ('Senior Director, Data Science', 'Senior Director, Data Science'),
+    ('Marketing Scientist, All-Star', 'Marketing Scientist, All-Star'),
+    ('Senior Marketing Scientist', 'Senior Marketing Scientist'),
+    ('Associate Marketing Scientist, All-Star', 'Associate Marketing Scientist, All-Star'),
+    ('VP, Data Science', 'VP, Data Science'),
+    ('SVP, Data Science', 'SVP, Data Science')
+]
+
 SKILL_RUBRIC = {
     "1" : "Unfamiliar",
     "2" : "Novice",
@@ -54,56 +227,100 @@ def test(request):
 
 def index(response, name):
     item = BioInfo.objects.get(name=name)
-    # item = dict(item.__dict__.items())
-    return render(response, 'bios/bio-info.html', {"people":item})
+    skill_tmp = item.skill
+    skill_dict = {}
+    for s in skill_tmp.split(','):
+        if '(' in s:
+            idx = s.index('(')
+            # print("(" + s[:idx-1].strip() + ")")
+            skill_dict[s[:idx-1].strip()] = s[idx+1:-1].strip()
+            # skill_set.append(s[:idx-1].strip())
+            # skill_level.append(s[idx+1:-1].strip())
+        else:
+            skill_dict[s] = "Unfamiliar"
+    print(skill_dict)
+    return render(response, 'bios/bio-info.html', {"people":item,
+                                                   "skill":skill_dict,
+                                                   })
 
 def distinct_features():
-    skill_res, industry_res, tech_res = [], [], []
+    skill_res, industry_res, tech_res, domain_res = [], [], [], []
     people_all = BioInfo.objects.all()
+    # loop thru all the people
     for person in people_all:
         skill_lst = person.skill.split(',')
         industry_lst = person.industry.split(',')
         tech_lst = person.technique.split(',')
+        if person.business_domain:
+            domain_lst = person.business_domain.split(',')
+        else:
+            domain_lst = []
         # deal with skill
         for skill in skill_lst:
             skill = skill.strip()
-            if skill in skill_res or not skill:
+            if skill in skill_res or not skill or skill == 'N/A':
                 continue
-            skill_res.append(skill)
+            if "(" in skill:
+                if ' '.join(skill.split(' ')[:-1]) not in skill_res:
+                    skill_res.append(' '.join(skill.split(' ')[:-1]))
+            else:
+                skill_res.append(skill)
 
         # deal with industry
         for industry in industry_lst:
             industry = industry.strip()
-            if industry in industry_res or not industry:
+            if industry in industry_res or not industry or industry == 'N/A':
                 continue
-            industry_res.append(industry)
+            if "(" in industry:
+                if ' '.join(industry.split(' ')[:-2]) not in industry_res:
+                    industry_res.append(' '.join(industry.split(' ')[:-2]))
+            else:
+                industry_res.append(industry)
         
         # deal with technology
         for tech in tech_lst:
             tech = tech.strip()
-            if tech in tech_res or not tech:
+            if tech in tech_res or not tech or tech == "N/A":
                 continue
-            tech_res.append(tech)
+            if "(" in tech:
+                if ' '.join(tech.split(' ')[:-1]) not in tech_res:
+                    tech_res.append(' '.join(tech.split(' ')[:-1]))
+            else:
+                tech_res.append(tech)
 
-    return skill_res, industry_res, tech_res
+        # deal with technology
+        for domain in domain_lst:
+            domain = domain.strip()
+            if domain in domain_res or not domain or domain == "N/A":
+                continue
+            if "(" in domain:
+                if ' '.join(domain.split(' ')[:-1]) not in domain_res:
+                    domain_res.append(' '.join(domain.split(' ')[:-1]))
+            else:
+                domain_res.append(domain)
 
-
+    return sorted(skill_res), sorted(industry_res), sorted(tech_res), sorted(domain_res)
 
 def home(request):
-    
+    # single selection
     position_query = request.GET.get('position-dropdown')
     location_query = request.GET.get('location-dropdown')
+    # multi selection
     skill_query = request.GET.getlist('skill-dropdown')
+    skill_level_query = request.GET.get('skill-level-dropdown') # number
     industry_query = request.GET.getlist('industry-dropdown')
+    industry_level_query = request.GET.get('industry-level-dropdown') # number
     tech_query = request.GET.getlist('tech-dropdown')
-    search_query = request.GET.get('search-input')
+    tech_level_query = request.GET.get('tech-level-dropdown') # number
+    print(skill_level_query, industry_level_query, tech_level_query)
 
+    # search bar
+    search_query = request.GET.get('search-input')
+    # distinct options in filter
     people = BioInfo.objects.all()
     position_dist = BioInfo.objects.values('position').distinct()
     location_dist = BioInfo.objects.values('location').distinct()
-    # skill_dist = BioInfo.objects.values('skill').distinct()
-    # industry_dist = BioInfo.objects.values('industry').distinct()
-    skill_dist, industry_dist, tech_dist = distinct_features()
+    skill_dist, industry_dist, tech_dist, domain_dist = distinct_features()
 
     if position_query:
         people = people.filter(position=position_query)
@@ -113,12 +330,52 @@ def home(request):
     if skill_query:
         for i in skill_query:
             people = people.filter(skill__contains=i)
+            if skill_level_query:
+                for person in people:
+                    tmp_skill = person.skill
+                    for t in tmp_skill.split(','):
+                        if ")" in t[-1]:
+                            t = t.strip()
+                            if i in t:
+                                if REVERSE_RUBRIC[t.split(' ')[-1][1:-1]] < skill_level_query:
+                                    print(REVERSE_RUBRIC[t.split(' ')[-1][1:-1]], skill_level_query)
+                                    print(person.name, "excluded")
+                                    people = people.exclude(id=person.id)
+                        else:
+                            people = people.exclude(id=person.id)
+
     if industry_query:
         for i in industry_query:
             people = people.filter(industry__contains=i)
+            if industry_level_query:
+                for person in people:
+                    tmp_industry = person.industry
+                    for t in tmp_industry.split(','):
+                        if ")" in t[-1]:
+                            t = t.strip()  
+                            if i in t:
+                                if REVERSE_RUBRIC[''.join(t.split(' ')[-2:])[1:-1]] < industry_level_query:
+                                    print(REVERSE_RUBRIC[''.join(t.split(' ')[-2:])[1:-1]], industry_level_query)
+                                    print(person.name, "excluded")
+                                    people = people.exclude(id=person.id)
+                        else:
+                            people = people.exclude(id=person.id)
     if tech_query:
         for i in tech_query:
             people = people.filter(technique__contains=i)
+            if tech_level_query:
+                for person in people:
+                    tmp_tech = person.technique
+                    for t in tmp_tech.split(','):
+                        if ")" in t[-1]:
+                            t = t.strip()
+                            if i in t:
+                                if REVERSE_RUBRIC[t.split(' ')[-1][1:-1]] < tech_level_query:
+                                    print(REVERSE_RUBRIC[t.split(' ')[-1][1:-1]], tech_level_query)
+                                    print(person.name, "excluded")
+                                    people = people.exclude(id=person.id)
+                        else:
+                            people = people.exclude(id=person.id)
 
     if search_query:
         search_sections = search_query.split(' ')
@@ -148,6 +405,7 @@ def home(request):
                                               "skill_distinct": skill_dist,
                                               "industry_distinct": industry_dist,
                                               "tech_distinct": tech_dist,
+                                              "domain_distinct": domain_dist,
                                               })   
 
 def create(request):
@@ -202,6 +460,17 @@ def create(request):
         if not intro:
             intro = 'N/A'
 
+        d = form.getlist('domain')
+        if not d:
+            d = ['N/A']
+        for k in range(len(d)):
+            level = d[k].split(' ')[-1]
+            for j in range(len(d[k])):
+                if d[k][j].isdigit():
+                    flag = j
+                    break
+            print("{} ({})".format(d[k][:flag-1], SKILL_RUBRIC[level]))
+            d[k] = "{} ({})".format(d[k][:flag-1], SKILL_RUBRIC[level])
         t, _ = BioInfo.objects.update_or_create(
             name = n,
             defaults={
@@ -212,7 +481,8 @@ def create(request):
                 "technique" : ', '.join(tech), 
                 "industry" : ', '.join(i), 
                 "client" : c, 
-                "intro" : intro
+                "intro" : intro,
+                "business_domain" : ', '.join(d),
             }
         )
         t.save()
@@ -243,8 +513,7 @@ def edit(request, name):
     skill_init = []
     preselect_dict = {}
     for s in skills:
-        # print(' '.join(s.strip().split(" ")[:-1]))
-        # skill_init.append(' '.join(s.strip().split(" ")[:-1]))
+        flag = 0
         for i in range(len(s)):
             if s[i].isdigit() or s[i] == '(':
                 flag = i
@@ -252,43 +521,56 @@ def edit(request, name):
         # print(flag)
         if flag != 0:
             skill_init.append(s[:flag-1].strip())
-        # else:
-        #     skill_init.append(' '.join(s.strip().split(" ")[:-1]))
-        print("SKILL ****>", skill_init)
-        # preselect_dict[' '.join(s.strip().split(" ")[:-1])] = s.strip().split(" ")[-1]
-        preselect_dict[s[:flag-1]] = ''.join(s.strip().split(" ")[-1])
+            print("SKILL ****>", skill_init)
+            preselect_dict['id_skill_{}'.format(tmp.index(s[:flag-1].strip()))] = ''.join(s.strip().split(" ")[-1])
     print(skill_init)
+
     # initial industries
     industries = person.industry.split(',')
     industry_init = []
     for ins in industries:
+        flag = 0
         for i in range(len(ins)):
             if ins[i].isdigit() or ins[i] == '(':
                 flag = i
                 break
         if flag != 0:
             industry_init.append(ins[:flag-1].strip())
-        print("INDUSTRY ****>", industry_init)
-        # industry_init.append(' '.join(ins.strip().split(" ")[:-2]))
-        # preselect_dict[' '.join(ins.strip().split(" ")[:-2])] = ' '.join(ins.strip().split(" ")[-2:])
-        preselect_dict[ins[:flag-1]] = ''.join(ins.strip().split(" ")[-2:])
+            print("INDUSTRY ****>", industry_init)
+            preselect_dict[ins[:flag-1]] = ''.join(ins.strip().split(" ")[-2:])
     print(industry_init)
 
     # initial techniques
     techniques = person.technique.split(',')
     tech_init = []
     for tech in techniques:
+        flag = 0
         for i in range(len(tech)):
             if tech[i].isdigit() or tech[i] == '(':
                 flag = i
                 break
         if flag != 0:
             tech_init.append(tech[:flag-1].strip())
-        print("TECH ****>", tech_init)
-        # tech_init.append(' '.join(tech.strip().split(" ")[:-1]))
-        # preselect_dict[' '.join(tech.strip().split(" ")[:-1])] = tech.strip().split(" ")[-1]
-        preselect_dict[tech[:flag-1]] = ''.join(tech.strip().split(" ")[-1])
+        if tech_init:
+            print("TECH ****>", tech_init)
+            preselect_dict[tech[:flag-1]] = ''.join(tech.strip().split(" ")[-1])
     print(tech_init)
+
+    # initial domain
+    domain_init = []
+    if person.business_domain:
+        domain = person.business_domain.split(',')    
+        for dom in domain:
+            for i in range(len(dom)):
+                if dom[i].isdigit() or dom[i] == '(':
+                    flag = i
+                    break
+            if flag != 0:
+                domain_init.append(dom[:flag-1].strip())
+            print("DOMAIN ****>", domain_init)
+            preselect_dict[dom[:flag-1]] = ''.join(dom.strip().split(" ")[-1])
+        print(domain_init)
+
     print(preselect_dict)
     print("====================")
     for k, v in preselect_dict.items():
@@ -310,8 +592,6 @@ def edit(request, name):
                 if s[i][j].isdigit():
                     flag = j
                     break
-            # print(flag, s[i], s[i][:flag])
-            # print("ahahahahhahah {} ({})".format(' '.join(s[i].split(' ')[:j-1]), SKILL_RUBRIC[level]))
             print("{} ({})".format(s[i][:flag-1], SKILL_RUBRIC[level]))
             s[i] = "{} ({})".format(s[i][:flag-1], SKILL_RUBRIC[level])
 
@@ -338,7 +618,18 @@ def edit(request, name):
                     break
             print("{} ({})".format(i[i_][:flag-1], EXPERIENCE_RUBRIC[level]))
             i[i_] = "{} ({})".format(i[i_][:flag-1], EXPERIENCE_RUBRIC[level])
-
+    
+        d = form.getlist('domain')
+        if not d:
+            d = ['N/A']
+        for k in range(len(d)):
+            level = d[k].split(' ')[-1]
+            for j in range(len(d[k])):
+                if d[k][j].isdigit():
+                    flag = j
+                    break
+            print("{} ({})".format(d[k][:flag-1], SKILL_RUBRIC[level]))
+            d[k] = "{} ({})".format(d[k][:flag-1], SKILL_RUBRIC[level])
 
         c = form.get('client')
         if not c:
@@ -346,7 +637,6 @@ def edit(request, name):
         intro = form.get('intro')
         if not intro:
             intro = 'N/A'
-
         t, _ = BioInfo.objects.update_or_create(
             name = name,
             defaults={
@@ -355,42 +645,11 @@ def edit(request, name):
                 "technique" : ', '.join(tech), 
                 "industry" : ', '.join(i), 
                 "client" : c, 
-                "intro" : intro
+                "intro" : intro,
+                "business_domain" : ', '.join(d)
             }
         )
         t.save()
-        # form = EditProfile(request.POST)
-        # if form.is_valid():
-        #     l = form.cleaned_data['location']
-        #     s = form.cleaned_data['skill']
-        #     if not s:
-        #         s = ['N/A']
-        #     tech = form.cleaned_data['technique']
-        #     if not tech:
-        #         tech = ['N/A']
-        #     i = form.cleaned_data['industry']
-        #     if not i:
-        #         i = ['N/A']
-        #     c = form.cleaned_data['client']
-        #     if not c:
-        #         c = 'N/A'
-        #     intro = form.cleaned_data['intro']
-        #     if not intro:
-        #         intro = 'N/A'
-            
-        #     t, _ = BioInfo.objects.update_or_create(
-        #         name = name,
-        #         defaults={
-        #             "location" : l, 
-        #             "skill" : ', '.join(s),
-        #             "technique" : ', '.join(tech), 
-        #             "industry" : ', '.join(i), 
-        #             "client" : c, 
-        #             "intro" : intro
-        #         }
-        #     )
-        #     t.save()
-        
         
         return HttpResponseRedirect("/")      
     else:
@@ -398,7 +657,8 @@ def edit(request, name):
                                     'industry' : industry_init,
                                     'technique' : tech_init, 
                                     'client' : person.client,
-                                    'intro' : person.intro})
+                                    'intro' : person.intro,
+                                    'domain':domain_init,})
         return render(request, "bios/edit.html", {"form":form,
                                                   "person":person,
                                                   "preselect":preselect_dict})

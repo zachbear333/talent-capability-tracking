@@ -9,7 +9,8 @@
 		display:none;
 	}
 </style>
-
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous">
+</script>
 <form method='post' action='/{{person.name}}/edit/'>
     {% csrf_token %}
     <div>
@@ -19,19 +20,26 @@
                 <th> Email </th>
                 <th> Position </th>
                 <th> Location </th>
+                {% comment %} <th> Business Domain </th> {% endcomment %}
             </tr>
             <td> {{person.name}} </td>
             <td> {{person.email}} </td>
             <td> {{person.position}} </td>
             <td> {{form.location}} </td>
+            {% comment %} <td> {{form.domain}} </td> {% endcomment %}
         </table>
         <table id="create-table">
             <tr>
-                <th> Areas of Expertise </th>
-                {% comment %} <th> Industry Experience </th>
-                <th> Technique </th> {% endcomment %}
+                <th> Areas of Expertise      </br>
+                    {% comment %} Unfamiliar  - I have little or no familiarity with this skill and have never applied this skill </br>
+                    Novice      - I have limited experience  </br>
+                    Proficient  - I am comfortable using this skill, and independently competent with this skill  </br>
+                    Advanced    - I have strong proficiency in this skill.Teammates should turn to me for help  </br>  {% endcomment %}
+        </th>
             </tr>
+
             <td {% comment %} style="vertical-align:top; width:40%" {% endcomment %}>
+                
                 {% for s in form.skill %}
 
                 {% if forloop.counter0 == 0 %}
@@ -127,6 +135,26 @@
                 </div>
                 {% endfor %}                
             </td>
+            <tr>
+                <th> Business Domain </th>
+            </tr>
+            <td> 
+                {% for s in form.domain %}
+                <div class="hahah" id="{{forloop.counter0}}" style="display:flex;margin-left:15px;">
+                    {{s}}
+                    <div class="hidden" id="id_domain_{{forloop.counter0}}">
+                        <select id="domain_select_{{forloop.counter0}}" onchange="test5(event);">
+                            <option value=''> ---SELECT--- </option>
+                            <option value="1">1 - Unfamiliar</option>
+                            <option value="2">2 - Novice</option>
+                            <option value="3">3 - Proficient</option>
+                            <option value="4">4 - Advanced</option>
+                            <option value="5">5 - Expert</option>
+                        </select>
+                    </div>
+                </div>
+                {% endfor %}     
+            </td>
 
         </table>
         <table id="create-table">
@@ -143,19 +171,6 @@
             <td> {{ form.intro }} </td>
         </table>
 
-        {% comment %} <table id="create-table">
-            <tr>
-                <th> Profile Image Upload </th>
-            </tr>
-            <td> {{ form.photo }} </td>
-        </table>
-
-        <table id="create-table">
-            <tr>
-                <th> Bio Upload </th>
-            </tr>
-            <td> {{ form.bio_ppt }} </td>
-        </table> {% endcomment %}
     </div>
     <button type="submit", name="update"> Update Profile </button>
     
@@ -166,17 +181,18 @@
     {{k}} {{v}}
 {% endfor %}   
 
-<script>
-    console.log("just a check here")
-    skill_element = document.getElementsByClassName("skill")
-    industry_element = document.getElementsByClassName("industry")
-    technique_element = document.getElementsByClassName("technique")
-    // 
 
+{% autoescape off %}
+<script type="text/javascript">
+    var preselect = {{preselect}};
+    for (let key in preselect) {
+        element = document.getElementById(key);
+        console.log(element);
+    }
+    
 
-   
 </script>
-
+{% endautoescape %}
 
 
 {% endblock %}
@@ -263,6 +279,23 @@
 				}
 			}
 		}
+
+        function test5(event) {
+			console.log(event.target.id)
+			options = document.getElementById(event.target.id)
+			skill_idx = event.target.id.split('_')
+			elements = options.getElementsByTagName('*')
+			for (var i=0; i<elements.length; i++) {
+				if (elements[i].selected == true) {
+					console.log(elements[i].value)
+					selected_skill = document.getElementById("id_domain_".concat(skill_idx[2]))
+					selected_skill.setAttribute('value', selected_skill.value.concat(' '.concat(elements[i].value)))
+					// selected_skill.setAttribute('text', selected_skill.value.concat(' '.concat(elements[i].value)))
+					console.log(selected_skill.value)
+				}
+			}
+		}
+
     </script>
 
 {% endblock %}

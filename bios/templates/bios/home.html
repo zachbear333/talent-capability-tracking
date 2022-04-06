@@ -46,6 +46,18 @@
                 <option value="{{ p }}"> {{ p }} </option>
                 {% endfor %}
             </select>
+            {% comment %} <br></br> {% endcomment %}
+
+            <label for="skill-level"> At least </label>
+            <select name="skill-level-dropdown" class="dropdown-single">
+                {% comment %} <option value='' disabled selected>SELECT</option>{% endcomment %}
+                <option value="1"> Unfamiliar</option> 
+                <option value="2"> Novice</option>
+                <option value="3"> Proficient</option>
+                <option value="4"> Advanced</option>
+                <option value="5"> Expert</option>
+            </select>
+
             <br></br>
 
             <label for="industry"> Industry Experience</label>
@@ -54,6 +66,15 @@
                 <option value="{{ p }}"> {{ p }} </option>
                 {% endfor %}
             </select>
+
+            <label for="industry-level"> At least </label>
+            <select name="industry-level-dropdown" class="dropdown-single">
+                <option value="1"> &lt;1 YOE</option>
+                <option value="2"> 1-3 YOE</option>
+                <option value="3"> 4-5 YOE</option>
+                <option value="4"> 5-10 YOE</option>
+                <option value="5"> &gt;10 YOE</option>
+            </select>
             <br></br>
 
             <label for="tech"> Technique </label>
@@ -61,6 +82,34 @@
                 {% for p in tech_distinct %}
                 <option value="{{ p }}"> {{ p }} </option>
                 {% endfor %}
+            </select>
+
+            <label for="tech-level"> At least </label>
+            <select name="tech-level-dropdown" class="dropdown-single">
+                {% comment %} <option value='' disabled selected>SELECT</option>{% endcomment %}
+                <option value="1"> Unfamiliar</option> 
+                <option value="2"> Novice</option>
+                <option value="3"> Proficient</option>
+                <option value="4"> Advanced</option>
+                <option value="5"> Expert</option>
+            </select>
+            <br></br>
+
+            <label for="domain"> Business Domain </label>
+            <select name="domain-dropdown" class="dropdown-multi" multiple>
+                {% for p in domain_distinct %}
+                <option value="{{ p }}"> {{ p }} </option>
+                {% endfor %}
+            </select>
+
+            <label for="domain-level"> At least </label>
+            <select name="domain-level-dropdown" class="dropdown-single">
+                {% comment %} <option value='' disabled selected>SELECT</option>{% endcomment %}
+                <option value="1"> Unfamiliar</option> 
+                <option value="2"> Novice</option>
+                <option value="3"> Proficient</option>
+                <option value="4"> Advanced</option>
+                <option value="5"> Expert</option>
             </select>
             <br></br>
 
@@ -84,19 +133,13 @@
 
             <input type="submit" id="filter-apply-button" value="Apply"/> 
         </form>
-        <div class='create-botton' style="background-color:#04AA6D; width:90%; font-size:small; text-align:center;border-radius:5px;">
+        {% comment %} <div class='create-botton' style="background-color:#04AA6D; width:90%; font-size:small; text-align:center;border-radius:5px;">
             <a href="/create/" style="text-decoration: none; font-size:medium; color:white; padding: 6px 6px 6px 6px;" onclick='test()'>  
                 Create Profile
-                {% comment %} <button id="create-apply-button"> Create User Profile</button>   {% endcomment %}
             </a>
         </div>
-        </br>
-        {% comment %} <div class='create-botton' style="background-color:#04AA6D; width:90%; font-size:small; text-align:center;border-radius:5px;">
-            <a href="/upload_img/" style="text-decoration: none; font-size:medium; color:white; padding: 6px 6px 6px 6px;">  
-                Upload Profile Image / Bio(.pdf)
-                 <button id="create-apply-button"> Create User Profile</button>  
-            </a>
-        </div> {% endcomment %}
+        </br> {% endcomment %}
+
     </div>
 </div>
 
