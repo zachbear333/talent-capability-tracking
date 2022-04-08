@@ -207,11 +207,16 @@ REVERSE_RUBRIC = {
     "Proficient" : "3",
     "Advanced" : "4",
     "Expert" : "5",
+    "<1" : "1",
+    "1-3" : "2",
+    "4-5" : "3",
+    "5-10" : "4",
+    ">10" : "5",
     "<1YOE" : "1",
     "1-3YOE" : "2",
     "4-5YOE" : "3",
     "5-10YOE" : "4",
-    ">10YOE" : "5"  
+    ">10YOE" : "5"    
 }
 
 def test(request):
@@ -227,20 +232,46 @@ def test(request):
 
 def index(response, name):
     item = BioInfo.objects.get(name=name)
+    # area of expertise table
     skill_tmp = item.skill
     skill_dict = {}
     for s in skill_tmp.split(','):
         if '(' in s:
             idx = s.index('(')
-            # print("(" + s[:idx-1].strip() + ")")
-            skill_dict[s[:idx-1].strip()] = s[idx+1:-1].strip()
-            # skill_set.append(s[:idx-1].strip())
-            # skill_level.append(s[idx+1:-1].strip())
+            skill_dict[s[:idx-1].strip()] = REVERSE_RUBRIC[s[idx+1:-1].strip()]
         else:
-            skill_dict[s] = "Unfamiliar"
-    print(skill_dict)
+            skill_dict[s] = "1"
+    skill_dict = sorted(skill_dict.items(), key=lambda x:x[1], reverse=True)
+    skill_dict = {k:SKILL_RUBRIC[v] for k, v in skill_dict}
+
+    # industry experience table
+    industry_tmp = item.industry
+    industry_dict = {}
+    for s in industry_tmp.split(','):
+        if '(' in s:
+            idx = s.index('(')
+            industry_dict[s[:idx-1].strip()] = REVERSE_RUBRIC[s.split(' ')[-2][1:]]
+        else:
+            industry_dict[s] = "1"
+    industry_dict = sorted(industry_dict.items(), key=lambda x:x[1], reverse=True)
+    industry_dict = {k:EXPERIENCE_RUBRIC[v] for k, v in industry_dict}
+
+    # technique skill table
+    tech_tmp = item.technique
+    tech_dict = {}
+    for s in tech_tmp.split(','):
+        if '(' in s:
+            idx = s.index('(')
+            tech_dict[s[:idx-1].strip()] = REVERSE_RUBRIC[s[idx+1:-1].strip()]
+        else:
+            tech_dict[s] = "1"
+    tech_dict = sorted(tech_dict.items(), key=lambda x:x[1], reverse=True)
+    tech_dict = {k:SKILL_RUBRIC[v] for k, v in tech_dict}
+
     return render(response, 'bios/bio-info.html', {"people":item,
                                                    "skill":skill_dict,
+                                                   "industry":industry_dict,
+                                                   "technique":tech_dict,
                                                    })
 
 def distinct_features():
@@ -452,6 +483,13 @@ def create(request):
             print("{} ({})".format(i[i_][:flag-1], EXPERIENCE_RUBRIC[level]))
             i[i_] = "{} ({})".format(i[i_][:flag-1], EXPERIENCE_RUBRIC[level])
 
+        u = form.get('university')
+        if not u:
+            u = 'N/A'
+
+        m = form.get('major')
+        if not m:
+            m = 'N/A'
 
         c = form.get('client')
         if not c:
@@ -469,7 +507,7 @@ def create(request):
                 if d[k][j].isdigit():
                     flag = j
                     break
-            print("{} ({})".format(d[k][:flag-1], SKILL_RUBRIC[level]))
+            # print("{} ({})".format(d[k][:flag-1], SKILL_RUBRIC[level]))
             d[k] = "{} ({})".format(d[k][:flag-1], SKILL_RUBRIC[level])
         t, _ = BioInfo.objects.update_or_create(
             name = n,
@@ -480,6 +518,8 @@ def create(request):
                 "skill" : ', '.join(s),
                 "technique" : ', '.join(tech), 
                 "industry" : ', '.join(i), 
+                "university" : u,
+                "major" : m,
                 "client" : c, 
                 "intro" : intro,
                 "business_domain" : ', '.join(d),

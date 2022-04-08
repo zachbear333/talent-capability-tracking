@@ -21,7 +21,7 @@
             </tr>
 
         </table> {% endcomment %}
-        Basic Info
+        <h3> Basic Info </h3>
         <table id='bio-table'>
             <tr id='index-col'>
                 <td> Name </td>
@@ -54,12 +54,12 @@
                 {% comment %} <td> {{people.business_domain}} </td> {% endcomment %}
             </tr>           
         </table> 
-
-        Skillset Info
+        </br>
+        <h3> Skillset Info </h3>
         <table id="content-table">
             <tr>
-                <th> Skill </th>
-                <th> Skill Proficient Level </th>
+                <th> Area of Expertise </th>
+                <th> Proficient Level </th>
             </tr>
 
             {% for key, value in skill.items %}
@@ -67,7 +67,31 @@
                 <td> {{key}} </td>
                 <td> {{value}} </td>
             </tr>
-        {% endfor %}
+            {% endfor %}
+
+            <tr>
+                <th> Industry Experience </th>
+                <th> Proficient Level </th>
+            </tr>
+
+            {% for key, value in industry.items %}
+            <tr>
+                <td> {{key}} </td>
+                <td> {{value}} </td>
+            </tr> 
+            {% endfor %}
+
+            <tr>
+                <th> Technique Skill </th>
+                <th> Proficient Level </th>
+            </tr>
+
+            {% for key, value in technique.items %}
+            <tr>
+                <td> {{key}} </td>
+                <td> {{value}} </td>
+            </tr> 
+            {% endfor %}
             
         </table>
 

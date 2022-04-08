@@ -206,6 +206,13 @@ class CreateNewProfile(forms.Form):
     'class':'industry-test',
     'onchange':'test(event);',      
     }))
+    university = forms.CharField(required=False, label="University", max_length=400,
+                                widget=forms.TextInput(attrs={
+                                                             'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:25px;'}))
+    major = forms.CharField(required=False, label="Major", max_length=400,
+                                widget=forms.TextInput(attrs={
+                                                             'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:25px;'}))
+
     # client = forms.MultipleChoiceField(label="Blend Client", choices=CLIENT_CHOICES, widget=forms.CheckboxSelectMultiple)
     client = forms.CharField(required=False, label="Client", max_length=400,
                                 widget=forms.TextInput(attrs={'placeholder':'Seperate Clients by Comma.',
@@ -232,6 +239,12 @@ class EditProfile(forms.Form):
     'class':'domain-test',
     'onchange':'test(event);',  
     }))
+    university = forms.CharField(required=False, label="University", max_length=400,
+                                widget=forms.TextInput(attrs={
+                                                             'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:25px;'}))
+    major = forms.CharField(required=False, label="Major", max_length=400,
+                                widget=forms.TextInput(attrs={
+                                                             'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:25px;'}))
     client = forms.CharField(required=False, label="Client", max_length=400,
                                 widget=forms.TextInput(attrs={'placeholder':'Seperate Clients by Comma.',
                                                              'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:25px;'}))

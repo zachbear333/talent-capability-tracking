@@ -1,31 +1,7 @@
 {% extends 'bios/base.html'%}
 
 {% block content %}
-{% comment %} <style>
-    #content-table {
-      font-family: Arial, Helvetica, sans-serif;
-      border-collapse: collapse;
-      width: 100%;
-      margin-top: 10px;
-    }
-    
-    #content-table td, #content-table th {
-      border: 1px solid #ddd;
-      padding: 8px;
-    }
-    
-    #content-table tr:nth-child(even){background-color: #f3f3f3;}
-    
-    #content-table tr:hover {background-color: #ddd;}
-    
-    #content-table th {
-      padding-top: 12px;
-      padding-bottom: 12px;
-      text-align: left;
-      background-color: #04AA6D;
-      color: white;
-    }
-</style> {% endcomment %}
+
 <form action="/" method="get">
     <div class='searchbar-container'>
         <img class="search-icon" src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDU2Ljk2NiA1Ni45NjYiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDU2Ljk2NiA1Ni45NjY7IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iMTZweCIgaGVpZ2h0PSIxNnB4Ij4KPHBhdGggZD0iTTU1LjE0Niw1MS44ODdMNDEuNTg4LDM3Ljc4NmMzLjQ4Ni00LjE0NCw1LjM5Ni05LjM1OCw1LjM5Ni0xNC43ODZjMC0xMi42ODItMTAuMzE4LTIzLTIzLTIzcy0yMywxMC4zMTgtMjMsMjMgIHMxMC4zMTgsMjMsMjMsMjNjNC43NjEsMCw5LjI5OC0xLjQzNiwxMy4xNzctNC4xNjJsMTMuNjYxLDE0LjIwOGMwLjU3MSwwLjU5MywxLjMzOSwwLjkyLDIuMTYyLDAuOTIgIGMwLjc3OSwwLDEuNTE4LTAuMjk3LDIuMDc5LTAuODM3QzU2LjI1NSw1NC45ODIsNTYuMjkzLDUzLjA4LDU1LjE0Niw1MS44ODd6IE0yMy45ODQsNmM5LjM3NCwwLDE3LDcuNjI2LDE3LDE3cy03LjYyNiwxNy0xNywxNyAgcy0xNy03LjYyNi0xNy0xN1MxNC42MSw2LDIzLjk4NCw2eiIgZmlsbD0iIzAwMDAwMCIvPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8L3N2Zz4K" />
@@ -38,7 +14,6 @@
 
     <div class='filter'>
         <form action="/" method="get">
-
             <label for="skill"> Area of Expertise</label>
             <select name="skill-dropdown" class="dropdown-multi" multiple>
                 {% comment %} <option value='' disabled selected>Skill Set</option> {% endcomment %}
@@ -51,13 +26,12 @@
             <label for="skill-level"> At least </label>
             <select name="skill-level-dropdown" class="dropdown-single">
                 {% comment %} <option value='' disabled selected>SELECT</option>{% endcomment %}
-                <option value="1"> Unfamiliar</option> 
-                <option value="2"> Novice</option>
-                <option value="3"> Proficient</option>
-                <option value="4"> Advanced</option>
-                <option value="5"> Expert</option>
+                <option value="1"> 1 - Unfamiliar</option> 
+                <option value="2"> 2 - Novice</option>
+                <option value="3"> 3 - Proficient</option>
+                <option value="4"> 4 - Advanced</option>
+                <option value="5"> 5 - Expert</option>
             </select>
-
             <br></br>
 
             <label for="industry"> Industry Experience</label>
@@ -69,15 +43,15 @@
 
             <label for="industry-level"> At least </label>
             <select name="industry-level-dropdown" class="dropdown-single">
-                <option value="1"> &lt;1 YOE</option>
-                <option value="2"> 1-3 YOE</option>
-                <option value="3"> 4-5 YOE</option>
-                <option value="4"> 5-10 YOE</option>
-                <option value="5"> &gt;10 YOE</option>
+                <option value="1"> &lt;1 Year</option>
+                <option value="2"> 1-3 Year</option>
+                <option value="3"> 4-5 Year</option>
+                <option value="4"> 5-10 Year</option>
+                <option value="5"> &gt;10 Year</option>
             </select>
             <br></br>
 
-            <label for="tech"> Technique </label>
+            <label for="tech"> Technique Skill </label>
             <select name="tech-dropdown" class="dropdown-multi" multiple>
                 {% for p in tech_distinct %}
                 <option value="{{ p }}"> {{ p }} </option>
@@ -87,11 +61,11 @@
             <label for="tech-level"> At least </label>
             <select name="tech-level-dropdown" class="dropdown-single">
                 {% comment %} <option value='' disabled selected>SELECT</option>{% endcomment %}
-                <option value="1"> Unfamiliar</option> 
-                <option value="2"> Novice</option>
-                <option value="3"> Proficient</option>
-                <option value="4"> Advanced</option>
-                <option value="5"> Expert</option>
+                <option value="1"> 1 - Unfamiliar</option> 
+                <option value="2"> 2 - Novice</option>
+                <option value="3"> 3 - Proficient</option>
+                <option value="4"> 4 - Advanced</option>
+                <option value="5"> 5 - Expert</option>
             </select>
             <br></br>
 
@@ -105,15 +79,15 @@
             <label for="domain-level"> At least </label>
             <select name="domain-level-dropdown" class="dropdown-single">
                 {% comment %} <option value='' disabled selected>SELECT</option>{% endcomment %}
-                <option value="1"> Unfamiliar</option> 
-                <option value="2"> Novice</option>
-                <option value="3"> Proficient</option>
-                <option value="4"> Advanced</option>
-                <option value="5"> Expert</option>
+                <option value="1"> 1 - Unfamiliar</option> 
+                <option value="2"> 2 - Novice</option>
+                <option value="3"> 3 - Proficient</option>
+                <option value="4"> 4 - Advanced</option>
+                <option value="5"> 5 - Expert</option>
             </select>
             <br></br>
 
-            <select name="position-dropdown" class="dropdown-single">
+            {% comment %} <select name="position-dropdown" class="dropdown-single">
                 <option value='' disabled selected>Position</option>
                 {% for p in position_distinct %}
                 <option value="{{ p.position }}"> {{ p.position }} </option>
@@ -121,24 +95,23 @@
             </select>
             <br></br>
 
-            {% comment %} <label for="location"> Location</label> {% endcomment %}
             <select name="location-dropdown" class="dropdown-single">
                 <option value='' disabled selected>Location</option>
                 {% for p in location_distinct %}
                 <option value="{{ p.location }}"> {{ p.location }} </option>
                 {% endfor %}
             </select>
-            <br></br>
+            <br></br> {% endcomment %}
 
 
             <input type="submit" id="filter-apply-button" value="Apply"/> 
         </form>
-        {% comment %} <div class='create-botton' style="background-color:#04AA6D; width:90%; font-size:small; text-align:center;border-radius:5px;">
+        <div class='create-botton' style="background-color:#04AA6D; width:90%; font-size:small; text-align:center;border-radius:5px;">
             <a href="/create/" style="text-decoration: none; font-size:medium; color:white; padding: 6px 6px 6px 6px;" onclick='test()'>  
                 Create Profile
             </a>
         </div>
-        </br> {% endcomment %}
+        </br>
 
     </div>
 </div>
@@ -149,8 +122,9 @@
         <tr>
             <th> Name </th>
             <th> Area of Expertise </th>
-            <th> Technique </th>
             <th> Industry Experience </th>
+            <th> Technique Skill </th>
+            <th> Business Domain </th>
             <th> Blend Client </th>
             <th> Position </th>
         </tr>
@@ -158,16 +132,15 @@
             <tr>
             <td> <a href="/{{person.name}}">{{ person.name }} </td>
             <td> {{ person.skill }} </td>
-            <td> {{ person.technique }} </td>
             <td> {{ person.industry }} </td>
+            <td> {{ person.technique }} </td>
+            <td> {{ person.business_domain}} </td>
             <td> {{ person.client }} </td>
-            <td> {{ person.position }}</td>
-            
+            <td> {{ person.position }}</td>         
             </tr>
         {% endfor %}
     </table>
 </div>
-<div>
 
 
 
