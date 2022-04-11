@@ -5,108 +5,146 @@
 
 {% load static %}
 
-<div class="bio-page-container">
-    <div class="profile-img">
-        {% comment %} <img src="{% static 'media/images/'%}{{people.name}}.jpeg" onerror="this.onerror=null; this.src='static/img/profile-img/default.png'" alt="home" width=240px/> {% endcomment %}
-        <img src="{% static 'media/images/'%}{{people.name}}.jpeg" onerror="this.onerror=null; this.src='static/img/logo2.png'" alt="home" width=240px/>
+<div class="row bio-page-container">
+    <div class="col-md-3">
+        {% comment %} <img src="{% static 'media/images/'%}{{people.name}}.jpeg"
+            onerror="this.onerror=null; this.src='static/img/profile-img/default.png'" alt="home" width=240px />
+        {% endcomment %}
+        <img src="{% static 'media/images/'%}{{people.name}}.jpeg"
+            onerror="this.onerror=null; this.src='static/img/logo2.png'" alt="home" width=240px />
     </div>
 
-    <div class="profile-content">
-        {% comment %} <table class='table-tess'>
-            <tr id='idx-col'>
-                Name
-            </tr>
-            <tr id='val-col'>
-                {{people.name}}
-            </tr>
+    <div class="col-md-4 order-md-2 mb-4">
+        <h4 class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-muted">Profile Information</span>
+            <span class="badge badge-secondary badge-pill"></span>
+        </h4>
+        <ul class="list-group mb-3">
+            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <div>
+                    <h6 class="my-0">Name</h6>
+                    <small class="text-muted">Brief description</small>
+                </div>
+                <span class="text-muted">{{people.name}}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <div>
+                    <h6 class="my-0">Email</h6>
+                    <small class="text-muted">Brief description</small>
+                </div>
+                <span class="text-muted">{{people.email}}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <div>
+                    <h6 class="my-0">Position</h6>
+                    <small class="text-muted">Brief description</small>
+                </div>
+                <span class="text-muted">{{people.position}}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <div>
+                    <h6 class="my-0">Location</h6>
+                    <small class="text-muted">Brief description</small>
+                </div>
+                <span class="text-muted">{{people.location}}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <div>
+                    <h6 class="my-0">University</h6>
+                    <small class="text-muted">Brief description</small>
+                </div>
+                <span class="text-muted">{{people.university}}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <div>
+                    <h6 class="my-0">Major</h6>
+                    <small class="text-muted">Brief description</small>
+                </div>
+                <span class="text-muted">{{people.major}}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <div>
+                    <h6 class="my-0">Client</h6>
+                    <small class="text-muted">Brief description</small>
+                </div>
+                <span class="text-muted">{{people.client}}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <div>
+                    <h6 class="my-0">Introduction</h6>
+                    <small class="text-muted">Brief description</small>
+                </div>
+                <span class="text-muted">{{people.intro}}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <div>
+                    <h6 class="my-0">Bio</h6>
+                    <small class="text-muted">Brief description</small>
+                </div>
+                <span class="text-muted"><a href="/media/bio_ppt/{{people.name}}.pdf">Link</a></span>
+            </li>
+        </ul>
+    </div>
 
-        </table> {% endcomment %}
-        <h3> Basic Info </h3>
-        <table id='bio-table'>
-            <tr id='index-col'>
-                <td> Name </td>
-                <td> Email </td>
-                <td> Position </td>
-                <td> Location </td>
-                <td> University </td>
-                <td> Major </td>
-                {% comment %} <td> Industry Experience </td>
-                <td> Area of Expertise </td>
-                <td> Technique </td> {% endcomment %}
-                <td> Blend Client </td>
-                <td> Introduction </td>
-                <td> Bio </td>
-                {% comment %} <td> Business Domain </td> {% endcomment %}
-            </tr>
-            <tr>
-                <td> {{people.name}} </td>
-                <td> {{people.email}} </td>
-                <td> {{people.position}} </td>
-                <td> {{people.location}} </td>
-                <td> {{people.university}} </td>
-                <td> {{people.major}} </td>
-                {% comment %} <td> {{people.industry}} </td>
-                <td> {{people.skill}} </td>
-                <td> {{people.technique}} </td> {% endcomment %}
-                <td> {{people.client}} </td>
-                <td> {{people.intro}} </td>
-                <td> <a href="/media/bio_ppt/{{people.name}}.pdf"> Click on this Link </td>
-                {% comment %} <td> {{people.business_domain}} </td> {% endcomment %}
-            </tr>           
-        </table> 
-        </br>
-        <h3> Skillset Info </h3>
-        <table id="content-table">
-            <tr>
-                <th> Area of Expertise </th>
-                <th> Proficient Level </th>
-            </tr>
-
+    <div class="col-md-4 order-md-2 mb-4">
+        <h4 class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-muted">Experience Level</span>
+            <span class="badge badge-secondary badge-pill"></span>
+        </h4>
+        <ul class="list-group mb-3">
             {% for key, value in skill.items %}
-            <tr>
-                <td> {{key}} </td>
-                <td> {{value}} </td>
-            </tr>
+            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <div>
+                    <h6 class="my-0">{{key}}</h6>
+                    <small class="text-muted">Area of Expertise</small>
+                </div>
+                <span class="text-muted">{{value}}</span>
+            </li>
             {% endfor %}
-
-            <tr>
-                <th> Industry Experience </th>
-                <th> Proficient Level </th>
-            </tr>
-
             {% for key, value in industry.items %}
-            <tr>
-                <td> {{key}} </td>
-                <td> {{value}} </td>
-            </tr> 
+            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <div>
+                    <h6 class="my-0">{{key}}</h6>
+                    <small class="text-muted">Industry</small>
+                </div>
+                <span class="text-muted">{{value}}</span>
+            </li>
             {% endfor %}
-
-            <tr>
-                <th> Technique Skill </th>
-                <th> Proficient Level </th>
-            </tr>
-
             {% for key, value in technique.items %}
-            <tr>
-                <td> {{key}} </td>
-                <td> {{value}} </td>
-            </tr> 
+            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <div>
+                    <h6 class="my-0">{{key}}</h6>
+                    <small class="text-muted">Technical Skill</small>
+                </div>
+                <span class="text-muted">{{value}}</span>
+            </li>
             {% endfor %}
-            
-        </table>
+            {% for key, value in business_domain.items %}
+            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <div>
+                    <h6 class="my-0">{{key}}</h6>
+                    <small class="text-muted">Business Domain</small>
+                </div>
+                <span class="text-muted">{{value}}</span>
+            </li>
+            {% endfor %}
+        </ul>
 
+        
     </div>
 
-    {% comment %} <div class='create-botton' style="background-color:#04AA6D; width:20%; font-size:small; text-align:center;border-radius:5px; ">
-        <a href="/{{people.name}}/edit/" style="text-decoration: none; font-size:large; color:white; padding: 6px 6px 6px 6px;">  
+    {% comment %} <div class='create-botton'
+        style="background-color:#04AA6D; width:20%; font-size:small; text-align:center;border-radius:5px; ">
+        <a href="/{{people.name}}/edit/"
+            style="text-decoration: none; font-size:large; color:white; padding: 6px 6px 6px 6px;">
             Edit Profile
         </a>
     </div> {% endcomment %}
     {% comment %} <div class="bio-img">
-        <img src="{% static 'media/images/'%}{{people.name}}.pptx" onerror="this.onerror=null; this.src='static/img/profile-img/default.png'" alt="home" width=240px/>
+        <img src="{% static 'media/images/'%}{{people.name}}.pptx"
+            onerror="this.onerror=null; this.src='static/img/profile-img/default.png'" alt="home" width=240px />
     </div> {% endcomment %}
 
-</div>      
+</div>
 
 {% endblock %}
-

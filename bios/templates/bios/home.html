@@ -3,122 +3,152 @@
 {% block content %}
 
 <form action="/" method="get">
-    <div class='searchbar-container'>
-        <img class="search-icon" src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDU2Ljk2NiA1Ni45NjYiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDU2Ljk2NiA1Ni45NjY7IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iMTZweCIgaGVpZ2h0PSIxNnB4Ij4KPHBhdGggZD0iTTU1LjE0Niw1MS44ODdMNDEuNTg4LDM3Ljc4NmMzLjQ4Ni00LjE0NCw1LjM5Ni05LjM1OCw1LjM5Ni0xNC43ODZjMC0xMi42ODItMTAuMzE4LTIzLTIzLTIzcy0yMywxMC4zMTgtMjMsMjMgIHMxMC4zMTgsMjMsMjMsMjNjNC43NjEsMCw5LjI5OC0xLjQzNiwxMy4xNzctNC4xNjJsMTMuNjYxLDE0LjIwOGMwLjU3MSwwLjU5MywxLjMzOSwwLjkyLDIuMTYyLDAuOTIgIGMwLjc3OSwwLDEuNTE4LTAuMjk3LDIuMDc5LTAuODM3QzU2LjI1NSw1NC45ODIsNTYuMjkzLDUzLjA4LDU1LjE0Niw1MS44ODd6IE0yMy45ODQsNmM5LjM3NCwwLDE3LDcuNjI2LDE3LDE3cy03LjYyNiwxNy0xNywxNyAgcy0xNy03LjYyNi0xNy0xN1MxNC42MSw2LDIzLjk4NCw2eiIgZmlsbD0iIzAwMDAwMCIvPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8L3N2Zz4K" />
-        <input name='search-input' type='text' placeholder="Search..." class='searchbar'>
-        <button type="search" name="search" id="search-button"> Go! </button>
-    </div> 
+    <form class="form-outline my-2 my-md-0">
+        <input name='search-input' class="form-control" type="text" placeholder="Search" aria-label="Search">
+    </form>
 </form>
 
-<div class="sidenav">
-
-    <div class='filter'>
+<nav class="col-md-3">
+    <div>
+        <h4 class="mb-3"></h4>
         <form action="/" method="get">
-            <label for="skill"> Area of Expertise</label>
-            <select name="skill-dropdown" class="dropdown-multi" multiple>
-                {% comment %} <option value='' disabled selected>Skill Set</option> {% endcomment %}
-                {% for p in skill_distinct %}
-                <option value="{{ p }}"> {{ p }} </option>
-                {% endfor %}
-            </select>
-            {% comment %} <br></br> {% endcomment %}
+            <hr class="mb-4">
+            <div class="row">
+                <div class="mb-3">
+                    <label for="skill"> Area of Expertise</label>
+                    <select id="skill" class="custom-select d-block w-100" name="skill-dropdown">
+                        <option value="">Choose...</option>
+                        {% comment %} <option value='' disabled selected>Skill Set</option> {% endcomment %}
+                        {% for p in skill_distinct %}
+                        <option value="{{ p }}"> {{ p }} </option>
+                        {% endfor %}
+                    </select>
+                    {% comment %} {% endcomment %}
+                </div>
+                <div class="mb-3">
+                    <label for="skill-level"> Experience Level </label>
+                    <select id="skill-level" class="custom-select d-block w-100">
+                        <option value="">Choose...</option>
+                        {% comment %} <option value='' disabled selected>SELECT</option>{% endcomment %}
+                        <option value="1"> 1 - Unfamiliar</option>
+                        <option value="2"> 2 - Novice</option>
+                        <option value="3"> 3 - Proficient</option>
+                        <option value="4"> 4 - Advanced</option>
+                        <option value="5"> 5 - Expert</option>
+                    </select>
+                </div>
+            </div>
+            <hr class="mb-4">
+            <div class="row">
+                <div class = "mb-3">
+                    <label for="industry"> Industry Experience</label>
+                    <select class="custom-select d-block w-100" name="industry-dropdown">
+                        <option value="">Choose...</option>
+                        {% for p in industry_distinct %}
+                        <option value="{{ p }}"> {{ p }} </option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-            <label for="skill-level"> At least </label>
-            <select name="skill-level-dropdown" class="dropdown-single">
-                {% comment %} <option value='' disabled selected>SELECT</option>{% endcomment %}
-                <option value="1"> 1 - Unfamiliar</option> 
-                <option value="2"> 2 - Novice</option>
-                <option value="3"> 3 - Proficient</option>
-                <option value="4"> 4 - Advanced</option>
-                <option value="5"> 5 - Expert</option>
-            </select>
-            <br></br>
+                <div class = "mb-3">
+                    <label for="industry-level"> Experience Level </label>
+                    <select class="custom-select d-block w-100" name="industry-level-dropdown">
+                        <option value="">Choose...</option>
+                        <option value="1"> &lt;1 Year</option>
+                        <option value="2"> 1-3 Year</option>
+                        <option value="3"> 4-5 Year</option>
+                        <option value="4"> 5-10 Year</option>
+                        <option value="5"> &gt;10 Year</option>
+                    </select>
+                </div>
+            </div>
+            <hr class="mb-4">
+            <div class="row">
+                <div class = "mb-3">
+                    <label for="tech"> Technique Skill </label>
+                    <select class="custom-select d-block w-100" name="tech-dropdown">
+                        <option value="">Choose...</option>
+                        {% for p in tech_distinct %}
+                        <option value="{{ p }}"> {{ p }} </option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-            <label for="industry"> Industry Experience</label>
-            <select name="industry-dropdown" class="dropdown-multi" multiple>
-                {% for p in industry_distinct %}
-                <option value="{{ p }}"> {{ p }} </option>
-                {% endfor %}
-            </select>
-
-            <label for="industry-level"> At least </label>
-            <select name="industry-level-dropdown" class="dropdown-single">
-                <option value="1"> &lt;1 Year</option>
-                <option value="2"> 1-3 Year</option>
-                <option value="3"> 4-5 Year</option>
-                <option value="4"> 5-10 Year</option>
-                <option value="5"> &gt;10 Year</option>
-            </select>
-            <br></br>
-
-            <label for="tech"> Technique Skill </label>
-            <select name="tech-dropdown" class="dropdown-multi" multiple>
-                {% for p in tech_distinct %}
-                <option value="{{ p }}"> {{ p }} </option>
-                {% endfor %}
-            </select>
-
-            <label for="tech-level"> At least </label>
-            <select name="tech-level-dropdown" class="dropdown-single">
-                {% comment %} <option value='' disabled selected>SELECT</option>{% endcomment %}
-                <option value="1"> 1 - Unfamiliar</option> 
-                <option value="2"> 2 - Novice</option>
-                <option value="3"> 3 - Proficient</option>
-                <option value="4"> 4 - Advanced</option>
-                <option value="5"> 5 - Expert</option>
-            </select>
-            <br></br>
-
-            <label for="domain"> Business Domain </label>
-            <select name="domain-dropdown" class="dropdown-multi" multiple>
-                {% for p in domain_distinct %}
-                <option value="{{ p }}"> {{ p }} </option>
-                {% endfor %}
-            </select>
-
-            <label for="domain-level"> At least </label>
-            <select name="domain-level-dropdown" class="dropdown-single">
-                {% comment %} <option value='' disabled selected>SELECT</option>{% endcomment %}
-                <option value="1"> 1 - Unfamiliar</option> 
-                <option value="2"> 2 - Novice</option>
-                <option value="3"> 3 - Proficient</option>
-                <option value="4"> 4 - Advanced</option>
-                <option value="5"> 5 - Expert</option>
-            </select>
-            <br></br>
-
-            {% comment %} <select name="position-dropdown" class="dropdown-single">
-                <option value='' disabled selected>Position</option>
-                {% for p in position_distinct %}
-                <option value="{{ p.position }}"> {{ p.position }} </option>
-                {% endfor %}
-            </select>
-            <br></br>
-
-            <select name="location-dropdown" class="dropdown-single">
-                <option value='' disabled selected>Location</option>
-                {% for p in location_distinct %}
-                <option value="{{ p.location }}"> {{ p.location }} </option>
-                {% endfor %}
-            </select>
-            <br></br> {% endcomment %}
-
-
-            <input type="submit" id="filter-apply-button" value="Apply"/> 
+                <div class = "mb-3">
+                    <label for="tech-level"> Experience Level </label>
+                    <select class="custom-select d-block w-100" name="tech-level-dropdown">
+                        <option value="">Choose...</option>
+                        {% comment %} <option value='' disabled selected>SELECT</option>{% endcomment %}
+                        <option value="1"> 1 - Unfamiliar</option>
+                        <option value="2"> 2 - Novice</option>
+                        <option value="3"> 3 - Proficient</option>
+                        <option value="4"> 4 - Advanced</option>
+                        <option value="5"> 5 - Expert</option>
+                    </select>
+                </div>
+            </div>
+            <hr class="mb-4">
+            <div class="row">
+                <div class="mb-3">
+                    <label for="domain"> Business Domain </label>
+                    <select class="custom-select d-block w-100" name="domain-dropdown">
+                        <option value="">Choose...</option>
+                        {% for p in domain_distinct %}
+                        <option value="{{ p }}"> {{ p }} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="domain-level"> Experience Level </label>
+                    <select class="custom-select d-block w-100" name="domain-level-dropdown">
+                        <option value="">Choose...</option>
+                        {% comment %} <option value='' disabled selected>SELECT</option>{% endcomment %}
+                        <option value="1"> 1 - Unfamiliar</option>
+                        <option value="2"> 2 - Novice</option>
+                        <option value="3"> 3 - Proficient</option>
+                        <option value="4"> 4 - Advanced</option>
+                        <option value="5"> 5 - Expert</option>
+                    </select>
+                </div>
+            </div>
+            <hr class="mb-4">
+            <div class="row">
+                {% comment %} <select class="custom-select d-block w-100" name="position-dropdown">
+                    <option value='' disabled selected>Position</option>
+                    {% for p in position_distinct %}
+                    <option value="{{ p.position }}"> {{ p.position }} </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <hr class="mb-4">
+            <div class="row">
+                <select name="location-dropdown" class="dropdown-single">
+                    <option value='' disabled selected>Location</option>
+                    {% for p in location_distinct %}
+                    <option value="{{ p.location }}"> {{ p.location }} </option>
+                    {% endfor %}
+                </select> {% endcomment %}
+            </div>
+            <button class="btn btn-primary btn-lg btn-block" type="submit" value="Apply">
+                Apply
+            </button>
         </form>
-        <div class='create-botton' style="background-color:#04AA6D; width:90%; font-size:small; text-align:center;border-radius:5px;">
-            <a href="/create/" style="text-decoration: none; font-size:medium; color:white; padding: 6px 6px 6px 6px;" onclick='test()'>  
+        <!-- <div class='create-botton'
+            style="background-color:#04AA6D; width:90%; font-size:small; text-align:center;border-radius:5px;">
+            <a href="/create/" style="text-decoration: none; font-size:medium; color:white; padding: 6px 6px 6px 6px;"
+                onclick='test()'>
                 Create Profile
             </a>
-        </div>
+        </div> -->
         </br>
 
     </div>
-</div>
+</nav>
 
 
-<div class="main-section">
-    <table id="content-table">
+<main class="col-md-9 table-responsive">
+    <table class="table table-striped table-sm">
         <tr>
             <th> Name </th>
             <th> Area of Expertise </th>
@@ -129,18 +159,18 @@
             <th> Position </th>
         </tr>
         {% for person in people_number %}
-            <tr>
+        <tr>
             <td> <a href="/{{person.name}}">{{ person.name }} </td>
             <td> {{ person.skill }} </td>
             <td> {{ person.industry }} </td>
             <td> {{ person.technique }} </td>
             <td> {{ person.business_domain}} </td>
             <td> {{ person.client }} </td>
-            <td> {{ person.position }}</td>         
-            </tr>
+            <td> {{ person.position }}</td>
+        </tr>
         {% endfor %}
     </table>
-</div>
+</main>
 
 
 
