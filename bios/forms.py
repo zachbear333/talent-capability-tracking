@@ -218,7 +218,7 @@ class CreateNewProfile(forms.Form):
                                 widget=forms.TextInput(attrs={'placeholder':'Seperate Clients by Comma.',
                                                              'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:25px;'}))
     intro = forms.CharField(required=False, label="Intro", widget=forms.Textarea(attrs={
-                                                                'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;'}))
+                                                                'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:100px;'}))
 
 class EditProfile(forms.Form):
     location = forms.CharField(label="Location", widget=forms.Select(choices=LOCATION_CHOICES))
@@ -249,7 +249,7 @@ class EditProfile(forms.Form):
                                 widget=forms.TextInput(attrs={'placeholder':'Seperate Clients by Comma.',
                                                              'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:25px;'}))
     intro = forms.CharField(required=False, label="Intro", widget=forms.Textarea(attrs={
-                                                                'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;'}))
+                                                                'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:100px;'}))
 
 
 class testform(forms.Form):
