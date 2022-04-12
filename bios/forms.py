@@ -255,7 +255,7 @@ class EditProfile(forms.Form):
 class testform(forms.Form):
     name = forms.CharField(label="Name", max_length=200)
     skill = forms.MultipleChoiceField(required=False, label="Areas of Expertise", choices=SKILL_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={
-        'class':'skill-test',
+        'class':'skill form-check-input',
         'onchange':'test(event);',
         }))
 

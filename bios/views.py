@@ -20,7 +20,7 @@ def split(value, key):
         Returns the value turned into a list.
     """
     return value.split(key)
-
+    
 LOCATION_CHOICES = [
     ('Columbia, MD (HQ)', 'Columbia, MD (HQ)'),
     ('New York, NY', 'New York, NY'),
