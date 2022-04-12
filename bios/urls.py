@@ -11,6 +11,7 @@ urlpatterns = [
     path('create/', views.create, name='create'),
     path('test/', views.test, name='test'),
     path('upload_img/', views.upload_img, name='upload_img'),
+    path('talent_dashboard/', views.dashboard, name='dashboard'),
 ]
 
 # handler404 = 'bios.views.error_404'

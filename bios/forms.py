@@ -190,21 +190,21 @@ class CreateNewProfile(forms.Form):
     location = forms.CharField(label="Location", widget=forms.Select(choices=LOCATION_CHOICES))
     domain = forms.MultipleChoiceField(required=False, label="Business Domain", choices=DOMAIN_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={
     'class':'domain-test',
-    'onchange':'test(event);',
+    'onchange':'checkbox(event);',
     }))
 
     #skill = forms.MultipleChoiceField(required=False, label="Areas of Expertise", choices=SKILL_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={'onchange':'test(event);',}))
     skill = forms.MultipleChoiceField(required=False, label="Areas of Expertise", choices=SKILL_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={
     'class':'skill-test',
-    'onchange':'test(event);',
+    'onchange':'checkbox(event);',
     }))
     technique = forms.MultipleChoiceField(required=False, label="Techniques", choices=TECHNICUQE_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={
     'class':'tech-test',
-    'onchange':'test(event);',    
+    'onchange':'checkbox(event);',    
     }))
     industry = forms.MultipleChoiceField(required=False, label="Industry Experiences", choices=INDUSTRIES_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={
     'class':'industry-test',
-    'onchange':'test(event);',      
+    'onchange':'checkbox(event);',      
     }))
     university = forms.CharField(required=False, label="University", max_length=400,
                                 widget=forms.TextInput(attrs={

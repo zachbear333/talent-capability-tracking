@@ -20,21 +20,21 @@
                         <option value="">Choose...</option>
                         {% comment %} <option value='' disabled selected>Skill Set</option> {% endcomment %}
                         {% for p in skill_distinct %}
-                        <option value="{{ p }}"> {{ p }} </option>
+                        <option value="{{ p }}" {%if p in skill_query %} selected {%endif%}> {{ p }} </option>
                         {% endfor %}
                     </select>
                     {% comment %} {% endcomment %}
                 </div>
                 <div class="mb-3">
                     <label for="skill-level"> Experience Level </label>
-                    <select id="skill-level" class="custom-select d-block w-100">
+                    <select class="custom-select d-block w-100" name="skill-level-dropdown">
                         <option value="">Choose...</option>
                         {% comment %} <option value='' disabled selected>SELECT</option>{% endcomment %}
-                        <option value="1"> 1 - Unfamiliar</option>
-                        <option value="2"> 2 - Novice</option>
-                        <option value="3"> 3 - Proficient</option>
-                        <option value="4"> 4 - Advanced</option>
-                        <option value="5"> 5 - Expert</option>
+                        <option value="1" {%if skill_level == "1" %} selected {%endif%}> 1 - Unfamiliar</option>
+                        <option value="2" {%if skill_level == "2" %} selected {%endif%}> 2 - Novice</option>
+                        <option value="3" {%if skill_level == "3" %} selected {%endif%}> 3 - Proficient</option>
+                        <option value="4" {%if skill_level == "4" %} selected {%endif%}> 4 - Advanced</option>
+                        <option value="5" {%if skill_level == "5" %} selected {%endif%}> 5 - Expert</option>
                     </select>
                 </div>
             </div>
@@ -45,7 +45,7 @@
                     <select class="custom-select d-block w-100" name="industry-dropdown">
                         <option value="">Choose...</option>
                         {% for p in industry_distinct %}
-                        <option value="{{ p }}"> {{ p }} </option>
+                        <option value="{{ p }}" {%if p in industry_query %} selected {%endif%}> {{ p }} </option>
                         {% endfor %}
                     </select>
                 </div>
@@ -54,11 +54,11 @@
                     <label for="industry-level"> Experience Level </label>
                     <select class="custom-select d-block w-100" name="industry-level-dropdown">
                         <option value="">Choose...</option>
-                        <option value="1"> &lt;1 Year</option>
-                        <option value="2"> 1-3 Year</option>
-                        <option value="3"> 4-5 Year</option>
-                        <option value="4"> 5-10 Year</option>
-                        <option value="5"> &gt;10 Year</option>
+                        <option value="1" {%if industry_level == "1" %} selected {%endif%}> &lt;1 Year</option>
+                        <option value="2" {%if industry_level == "2" %} selected {%endif%}> 1-3 Year</option>
+                        <option value="3" {%if industry_level == "3" %} selected {%endif%}> 4-5 Year</option>
+                        <option value="4" {%if industry_level == "4" %} selected {%endif%}> 5-10 Year</option>
+                        <option value="5" {%if industry_level == "5" %} selected {%endif%}> &gt;10 Year</option>
                     </select>
                 </div>
             </div>
@@ -69,7 +69,7 @@
                     <select class="custom-select d-block w-100" name="tech-dropdown">
                         <option value="">Choose...</option>
                         {% for p in tech_distinct %}
-                        <option value="{{ p }}"> {{ p }} </option>
+                        <option value="{{ p }}" {%if p in technique_query %} selected {%endif%}> {{ p }} </option>
                         {% endfor %}
                     </select>
                 </div>
@@ -79,11 +79,11 @@
                     <select class="custom-select d-block w-100" name="tech-level-dropdown">
                         <option value="">Choose...</option>
                         {% comment %} <option value='' disabled selected>SELECT</option>{% endcomment %}
-                        <option value="1"> 1 - Unfamiliar</option>
-                        <option value="2"> 2 - Novice</option>
-                        <option value="3"> 3 - Proficient</option>
-                        <option value="4"> 4 - Advanced</option>
-                        <option value="5"> 5 - Expert</option>
+                        <option value="1" {%if tech_level == "1" %} selected {%endif%}> 1 - Unfamiliar</option>
+                        <option value="2" {%if tech_level == "2" %} selected {%endif%}> 2 - Novice</option>
+                        <option value="3" {%if tech_level == "3" %} selected {%endif%}> 3 - Proficient</option>
+                        <option value="4" {%if tech_level == "4" %} selected {%endif%}> 4 - Advanced</option>
+                        <option value="5" {%if tech_level == "5" %} selected {%endif%}> 5 - Expert</option>
                     </select>
                 </div>
             </div>
@@ -94,7 +94,7 @@
                     <select class="custom-select d-block w-100" name="domain-dropdown">
                         <option value="">Choose...</option>
                         {% for p in domain_distinct %}
-                        <option value="{{ p }}"> {{ p }} </option>
+                        <option value="{{ p }}" {%if p in domain_query %} selected {%endif%}> {{ p }} </option>
                         {% endfor %}
                     </select>
                 </div>
@@ -104,11 +104,11 @@
                     <select class="custom-select d-block w-100" name="domain-level-dropdown">
                         <option value="">Choose...</option>
                         {% comment %} <option value='' disabled selected>SELECT</option>{% endcomment %}
-                        <option value="1"> 1 - Unfamiliar</option>
-                        <option value="2"> 2 - Novice</option>
-                        <option value="3"> 3 - Proficient</option>
-                        <option value="4"> 4 - Advanced</option>
-                        <option value="5"> 5 - Expert</option>
+                        <option value="1" {%if domain_level == "1" %} selected {%endif%}> 1 - Unfamiliar</option>
+                        <option value="2" {%if domain_level == "2" %} selected {%endif%}> 2 - Novice</option>
+                        <option value="3" {%if domain_level == "3" %} selected {%endif%}> 3 - Proficient</option>
+                        <option value="4" {%if domain_level == "4" %} selected {%endif%}> 4 - Advanced</option>
+                        <option value="5" {%if domain_level == "5" %} selected {%endif%}> 5 - Expert</option>
                     </select>
                 </div>
             </div>

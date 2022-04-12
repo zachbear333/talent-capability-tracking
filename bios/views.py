@@ -11,6 +11,15 @@ from .forms import CreateNewProfile, EditProfile, FileUpload, testform
 from django.core.files.storage import FileSystemStorage
 # from io import BytesIO
 from django.template.loader import get_template
+from django import template
+
+register = template.Library()
+@register.filter(name='split')
+def split(value, key):
+    """
+        Returns the value turned into a list.
+    """
+    return value.split(key)
 
 LOCATION_CHOICES = [
     ('Columbia, MD (HQ)', 'Columbia, MD (HQ)'),
@@ -96,9 +105,7 @@ SKILL_CHOICES = [
     ('Latent Dirichlet Allocation', 'Latent Dirichlet Allocation'),
     ('Topic Modelling', 'Topic Modelling'),
 ]
-tmp = []
-for a, _ in SKILL_CHOICES:
-    tmp.append(a)
+
 
 INDUSTRIES_CHOICES = [
     ('Retail', 'Retail'),
@@ -193,12 +200,28 @@ SKILL_RUBRIC = {
     "5" : "Expert"
 }
 
+SKILL_RUBRIC_MAIN = {
+    "1" : "1 - Unfamiliar",
+    "2" : "2 - Novice",
+    "3" : "3 - Proficient",
+    "4" : "4 - Advanced",
+    "5" : "5 - Expert"
+}
+
 EXPERIENCE_RUBRIC = {
     "1" : "<1 YOE",
     "2" : "1-3 YOE",
     "3" : "4-5 YOE",
     "4" : "5-10 YOE",
     "5" : ">10 YOE" 
+}
+
+EXPERIENCE_RUBRIC_MAIN = {
+    "1" : "<1 Year",
+    "2" : "1-3 Year",
+    "3" : "4-5 Year",
+    "4" : "5-10 Year",
+    "5" : ">10 Year" 
 }
 
 REVERSE_RUBRIC = {
@@ -218,6 +241,22 @@ REVERSE_RUBRIC = {
     "5-10YOE" : "4",
     ">10YOE" : "5"    
 }
+
+tmp1 = []
+for a, _ in SKILL_CHOICES:
+    tmp1.append(a)
+
+tmp2 = []
+for a, _ in INDUSTRIES_CHOICES:
+    tmp2.append(a)
+
+tmp3 = []
+for a, _ in TECHNICUQE_CHOICES:
+    tmp3.append(a)
+
+tmp4 = []
+for a, _ in DOMAIN_CHOICES:
+    tmp4.append(a)
 
 def test(request):
     if request.method == "POST":
@@ -242,7 +281,7 @@ def index(response, name):
         else:
             skill_dict[s] = "1"
     skill_dict = sorted(skill_dict.items(), key=lambda x:x[1], reverse=True)
-    skill_dict = {k:SKILL_RUBRIC[v] for k, v in skill_dict}
+    skill_dict = {k:SKILL_RUBRIC_MAIN[v] for k, v in skill_dict}
 
     # industry experience table
     industry_tmp = item.industry
@@ -254,7 +293,7 @@ def index(response, name):
         else:
             industry_dict[s] = "1"
     industry_dict = sorted(industry_dict.items(), key=lambda x:x[1], reverse=True)
-    industry_dict = {k:EXPERIENCE_RUBRIC[v] for k, v in industry_dict}
+    industry_dict = {k:EXPERIENCE_RUBRIC_MAIN[v] for k, v in industry_dict}
 
     # technique skill table
     tech_tmp = item.technique
@@ -266,12 +305,26 @@ def index(response, name):
         else:
             tech_dict[s] = "1"
     tech_dict = sorted(tech_dict.items(), key=lambda x:x[1], reverse=True)
-    tech_dict = {k:SKILL_RUBRIC[v] for k, v in tech_dict}
+    tech_dict = {k:SKILL_RUBRIC_MAIN[v] for k, v in tech_dict}
+
+    # domain skill table
+    domain_tmp = item.business_domain
+    domain_dict = {}
+    if domain_tmp:
+        for s in domain_tmp.split(','):
+            if '(' in s:
+                idx = s.index('(')
+                domain_dict[s[:idx-1].strip()] = REVERSE_RUBRIC[s[idx+1:-1].strip()]
+            else:
+                domain_dict[s] = "1"
+        domain_dict = sorted(domain_dict.items(), key=lambda x:x[1], reverse=True)
+        domain_dict = {k:SKILL_RUBRIC_MAIN[v] for k, v in domain_dict}
 
     return render(response, 'bios/bio-info.html', {"people":item,
                                                    "skill":skill_dict,
                                                    "industry":industry_dict,
                                                    "technique":tech_dict,
+                                                   "domain":domain_dict,
                                                    })
 
 def distinct_features():
@@ -332,7 +385,17 @@ def distinct_features():
 
     return sorted(skill_res), sorted(industry_res), sorted(tech_res), sorted(domain_res)
 
+def filter_dict(option, level):
+    result = {}
+    for item in option:
+        if level:
+            result[item] = level
+        else:
+            result[item] = 1
+    return result
+
 def home(request):
+    print("Method =======>", request.method)
     # single selection
     position_query = request.GET.get('position-dropdown')
     location_query = request.GET.get('location-dropdown')
@@ -343,8 +406,17 @@ def home(request):
     industry_level_query = request.GET.get('industry-level-dropdown') # number
     tech_query = request.GET.getlist('tech-dropdown')
     tech_level_query = request.GET.get('tech-level-dropdown') # number
-    print(skill_level_query, industry_level_query, tech_level_query)
+    domain_query = request.GET.getlist('domain-dropdown')
+    domain_level_query = request.GET.get('domain-level-dropdown') # number
 
+    print(skill_query, industry_query, tech_query, domain_query)
+    print(skill_level_query, industry_level_query, tech_level_query, domain_level_query)
+
+    # skill_select = filter_dict(skill_query, skill_level_query)
+    # industry_select = filter_dict(industry_query, industry_level_query)
+    # technique_select = filter_dict(tech_query, tech_level_query)
+    # domain_select = filter_dict(domain_query, domain_level_query)
+    
     # search bar
     search_query = request.GET.get('search-input')
     # distinct options in filter
@@ -408,6 +480,23 @@ def home(request):
                         else:
                             people = people.exclude(id=person.id)
 
+    if domain_query:
+        for i in domain_query:
+            people = people.filter(business_domain__contains=i)
+            if domain_level_query:
+                for person in people:
+                    tmp_domain = person.business_domain
+                    for t in tmp_domain.split(','):
+                        if ")" in t[-1]:
+                            t = t.strip()
+                            if i in t:
+                                if REVERSE_RUBRIC[t.split(' ')[-1][1:-1]] < domain_level_query:
+                                    print(REVERSE_RUBRIC[t.split(' ')[-1][1:-1]], domain_level_query)
+                                    print(person.name, "excluded")
+                                    people = people.exclude(id=person.id)
+                        else:
+                            people = people.exclude(id=person.id)
+
     if search_query:
         search_sections = search_query.split(' ')
         search_list = [None] * len(search_sections)
@@ -437,6 +526,14 @@ def home(request):
                                               "industry_distinct": industry_dist,
                                               "tech_distinct": tech_dist,
                                               "domain_distinct": domain_dist,
+                                              "skill_query": skill_query,
+                                              "industry_query": industry_query,
+                                              "technique_query": tech_query,
+                                              "domain_query": domain_query,
+                                              "skill_level": skill_level_query,
+                                              "tech_level": tech_level_query,
+                                              "industry_level": industry_level_query,
+                                              "domain_level": domain_level_query,
                                               })   
 
 def create(request):
@@ -547,12 +644,13 @@ def upload_img(request):
 
 def edit(request, name):
     person = BioInfo.objects.get(name=name)
-    print(person.skill)
     # initial skills
     skills = person.skill.split(',')
     skill_init = []
     preselect_dict = {}
     for s in skills:
+        if 'N/A' in s:
+            continue
         flag = 0
         for i in range(len(s)):
             if s[i].isdigit() or s[i] == '(':
@@ -562,13 +660,17 @@ def edit(request, name):
         if flag != 0:
             skill_init.append(s[:flag-1].strip())
             print("SKILL ****>", skill_init)
-            preselect_dict['id_skill_{}'.format(tmp.index(s[:flag-1].strip()))] = ''.join(s.strip().split(" ")[-1])
+            preselect_dict['id_skill_{}'.format(tmp1.index(s[:flag-1].strip()))] = ''.join(s.strip().split(" ")[-1])
+        if flag == 0:
+            print(s[:flag-1].strip())
     print(skill_init)
 
     # initial industries
     industries = person.industry.split(',')
     industry_init = []
     for ins in industries:
+        if 'N/A' in ins:
+            continue
         flag = 0
         for i in range(len(ins)):
             if ins[i].isdigit() or ins[i] == '(':
@@ -577,13 +679,15 @@ def edit(request, name):
         if flag != 0:
             industry_init.append(ins[:flag-1].strip())
             print("INDUSTRY ****>", industry_init)
-            preselect_dict[ins[:flag-1]] = ''.join(ins.strip().split(" ")[-2:])
+            preselect_dict['id_industry_{}'.format(tmp2.index(ins[:flag-1].strip()))] = ''.join(ins.strip().split(" ")[-2:])
     print(industry_init)
 
     # initial techniques
     techniques = person.technique.split(',')
     tech_init = []
     for tech in techniques:
+        if 'N/A' in tech:
+            continue
         flag = 0
         for i in range(len(tech)):
             if tech[i].isdigit() or tech[i] == '(':
@@ -593,7 +697,7 @@ def edit(request, name):
             tech_init.append(tech[:flag-1].strip())
         if tech_init:
             print("TECH ****>", tech_init)
-            preselect_dict[tech[:flag-1]] = ''.join(tech.strip().split(" ")[-1])
+            preselect_dict['id_technique_{}'.format(tmp3.index(tech[:flag-1].strip()))] = ''.join(tech.strip().split(" ")[-1])
     print(tech_init)
 
     # initial domain
@@ -601,14 +705,18 @@ def edit(request, name):
     if person.business_domain:
         domain = person.business_domain.split(',')    
         for dom in domain:
+            if 'N/A' in dom:
+                continue
+            flag = 0
             for i in range(len(dom)):
                 if dom[i].isdigit() or dom[i] == '(':
                     flag = i
                     break
             if flag != 0:
                 domain_init.append(dom[:flag-1].strip())
-            print("DOMAIN ****>", domain_init)
-            preselect_dict[dom[:flag-1]] = ''.join(dom.strip().split(" ")[-1])
+            if domain_init:
+                print("DOMAIN ****>", domain_init)
+                preselect_dict['id_domain_{}'.format(tmp4.index(dom[:flag-1].strip()))] = ''.join(dom.strip().split(" ")[-1])
         print(domain_init)
 
     print(preselect_dict)
@@ -625,51 +733,64 @@ def edit(request, name):
 
         s = form.getlist('skill')
         if not s:
-            s = ['N/A']
+            s = ['N/A 1']
         for i in range(len(s)):
             level = s[i].split(' ')[-1]
-            for j in range(len(s[i])):
-                if s[i][j].isdigit():
-                    flag = j
-                    break
-            print("{} ({})".format(s[i][:flag-1], SKILL_RUBRIC[level]))
-            s[i] = "{} ({})".format(s[i][:flag-1], SKILL_RUBRIC[level])
+            if level.isdigit():
+                for j in range(len(s[i])):
+                    if s[i][j].isdigit():
+                        flag = j
+                        break
+                print("{} ({})".format(s[i][:flag-1], SKILL_RUBRIC[level]))
+                s[i] = "{} ({})".format(s[i][:flag-1], SKILL_RUBRIC[level])
+            else:
+                s[i] = "{} ({})".format(s[i], SKILL_RUBRIC['1'])
+
 
         tech = form.getlist('technique')
         if not tech:
-            tech = ['N/A']
+            tech = ['N/A 1']
         for i in range(len(tech)):
             level = tech[i].split(' ')[-1]
-            for j in range(len(tech[i])):
-                if tech[i][j].isdigit():
-                    flag = j
-                    break
-            print("{} ({})".format(tech[i][:flag-1], SKILL_RUBRIC[level]))
-            tech[i] = "{} ({})".format(tech[i][:flag-1], SKILL_RUBRIC[level])
+            if level.isdigit():
+                for j in range(len(tech[i])):
+                    if tech[i][j].isdigit():
+                        flag = j
+                        break
+                print("{} ({})".format(tech[i][:flag-1], SKILL_RUBRIC[level]))
+                tech[i] = "{} ({})".format(tech[i][:flag-1], SKILL_RUBRIC[level])
+            else:
+                tech[i] = "{} ({})".format(tech[i], SKILL_RUBRIC['1'])
 
         i = form.getlist('industry')
         if not i:
-            i = ['N/A']
+            i = ['N/A 1']
         for i_ in range(len(i)):
             level = i[i_].split(' ')[-1]
-            for j in range(len(i[i_])):
-                if i[i_][j].isdigit():
-                    flag = j
-                    break
-            print("{} ({})".format(i[i_][:flag-1], EXPERIENCE_RUBRIC[level]))
-            i[i_] = "{} ({})".format(i[i_][:flag-1], EXPERIENCE_RUBRIC[level])
+            if level.isdigit():
+                for j in range(len(i[i_])):
+                    if i[i_][j].isdigit():
+                        flag = j
+                        break
+                print("{} ({})".format(i[i_][:flag-1], EXPERIENCE_RUBRIC[level]))
+                i[i_] = "{} ({})".format(i[i_][:flag-1], EXPERIENCE_RUBRIC[level])
+            else:
+                i[i_] = "{} ({})".format(i[i_], EXPERIENCE_RUBRIC['1'])
     
         d = form.getlist('domain')
         if not d:
-            d = ['N/A']
+            d = ['N/A 1']
         for k in range(len(d)):
             level = d[k].split(' ')[-1]
-            for j in range(len(d[k])):
-                if d[k][j].isdigit():
-                    flag = j
-                    break
-            print("{} ({})".format(d[k][:flag-1], SKILL_RUBRIC[level]))
-            d[k] = "{} ({})".format(d[k][:flag-1], SKILL_RUBRIC[level])
+            if level.isdigit():
+                for j in range(len(d[k])):
+                    if d[k][j].isdigit():
+                        flag = j
+                        break
+                print("{} ({})".format(d[k][:flag-1], SKILL_RUBRIC[level]))
+                d[k] = "{} ({})".format(d[k][:flag-1], SKILL_RUBRIC[level])
+            else:
+                d[k] = "{} ({})".format(d[k], SKILL_RUBRIC['1'])
 
         c = form.get('client')
         if not c:
@@ -691,7 +812,7 @@ def edit(request, name):
         )
         t.save()
         
-        return HttpResponseRedirect("/")      
+        return HttpResponseRedirect("/{}".format(name))      
     else:
         form = EditProfile(initial={'skill' : skill_init,
                                     'industry' : industry_init,
@@ -706,4 +827,7 @@ def edit(request, name):
 def error_404(request, exception):
         data = {}
         return render(request,'certman/404.html', data)
+
+def dashboard(request):
+    return render(request, 'bios/dashboard.html')
         

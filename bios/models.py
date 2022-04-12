@@ -154,9 +154,57 @@ class BioInfo(models.Model):
     photo = models.ImageField(null=True, blank=True, upload_to="images/")
     bio_ppt = models.ImageField(null=True, blank=True)
 
+    date_modified = models.DateTimeField(auto_now=True)
+
     
     def __str__(self):
         return self.name
-    
+
+    def skill_split(self):
+        skill = []
+        skill_sections = self.skill.split(',')
+        for skill_tmp in skill_sections:
+            if '(' in skill_tmp:
+                idx = skill_tmp.index('(')
+                skill.append(skill_tmp[:idx-1])
+            else:
+                skill.append(skill_tmp)
+        return ', '.join(skill)
+
+    def industry_split(self):
+        industry = []
+        industry_sections = self.industry.split(',')
+        for industry_tmp in industry_sections:
+            if '(' in industry_tmp:
+                idx = industry_tmp.index('(')
+                industry.append(industry_tmp[:idx-1])
+            else:
+                industry.append(industry_tmp)
+        return ', '.join(industry)
+
+    def technique_split(self):
+        technique = []
+        technique_sections = self.technique.split(',')
+        for technique_tmp in technique_sections:
+            if '(' in technique_tmp:
+                idx = technique_tmp.index('(')
+                technique.append(technique_tmp[:idx-1])
+            else:
+                technique.append(technique_tmp)
+        return ', '.join(technique)
+
+    def business_domain_split(self):
+        domain = []
+        if self.business_domain:
+            domain_sections = self.business_domain.split(',')
+            for domain_tmp in domain_sections:
+                if '(' in domain_tmp:
+                    idx = domain_tmp.index('(')
+                    domain.append(domain_tmp[:idx-1])
+                else:
+                    domain.append(domain_tmp)
+            return ', '.join(domain)
+        else:
+            return 'N/A'
 
 
