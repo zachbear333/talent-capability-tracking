@@ -12,10 +12,11 @@
             <th> Photo (.jpeg only) </th>
             <th> Bio (.pdf only) </th>
         </tr>
-        <td> {{form.name}} </td>
+        {% comment %} <td> {{form.name}} </td> {% endcomment %}
+        <td> {{user.first_name}}_{{user.last_name}} </td>
         <td> {{form.photo}} </td>
         <td> {{form.bio_ppt}} </td>
-    </table>
+    </table>  
     <button class="btn btn-primary" type="submit">Upload</button>
 
 </form>

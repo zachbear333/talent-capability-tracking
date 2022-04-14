@@ -8,6 +8,7 @@ def path_and_rename(instance, filename):
     ext = filename.split('.')[-1]
     print(instance.name)
     filename = '{}.{}'.format(instance.name, ext)
+    print("===================>", filename)
     return os.path.join(upload_to, filename)
 
 def path_and_rename2(instance, filename):
@@ -15,7 +16,7 @@ def path_and_rename2(instance, filename):
     ext = filename.split('.')[-1]
     print(instance.name)
     filename = '{}.{}'.format(instance.name, ext)
-    print(filename)
+    print("===================>", filename)
     return os.path.join(upload_to, filename)
 
 class Student(models.Model):

@@ -28,6 +28,11 @@
         </h5>
         <nav class="my-2 my-md-0 mr-md-3">
             <a class="p-2 text-dark" href="/">Main Page</a>
+            {% if user.first_name == "Ziyu" or user.first_name == "Qizhe" %}
+                <a class="p-2 text-dark" href="/create/">
+                    Create Profile
+                </a>
+            {% endif %}
             <a class="p-2 text-dark" href="/{{user.first_name}}_{{user.last_name}}/edit/">
                 Edit Profile
             </a>

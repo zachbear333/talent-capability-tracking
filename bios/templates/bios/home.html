@@ -133,6 +133,10 @@
             <button class="btn btn-primary btn-lg btn-block" type="submit" value="Apply">
                 Apply
             </button>
+            {% comment %} <a href="#" onclick="reset_filter(event);">clear filter</a> {% endcomment %}
+            <button class="btn btn-primary btn-lg btn-block" onclick="reset_filter(event)">
+                Reset
+            </button>
         </form>
         <!-- <div class='create-botton'
             style="background-color:#04AA6D; width:90%; font-size:small; text-align:center;border-radius:5px;">
@@ -161,10 +165,10 @@
         {% for person in people_number %}
         <tr>
             <td> <a href="/{{person.name}}">{{ person.name }} </td>
-            <td> {{ person.skill }} </td>
-            <td> {{ person.industry }} </td>
-            <td> {{ person.technique }} </td>
-            <td> {{ person.business_domain}} </td>
+            <td> {{ person.skill_split }} </td>
+            <td> {{ person.industry_split }} </td>
+            <td> {{ person.technique_split }} </td>
+            <td> {{ person.business_domain_split}} </td>
             <td> {{ person.client }} </td>
             <td> {{ person.position }}</td>
         </tr>
@@ -172,6 +176,20 @@
     </table>
 </main>
 
+{% endblock %}
 
-
+{% block jsblock %}
+<script>
+    function reset_filter(event) {
+        option_tag = document.getElementsByTagName('option');
+        // console.log(option_tag[1].selected)
+        for (var i = 0; i < option_tag.length; i++) {
+           if (option_tag[i].selected == true && option_tag[i].value != '') {
+               console.log(option_tag[i].text);
+               option_tag[i].selected = false;
+               console.log(option_tag[i].selected);
+           }
+        }
+    }
+</script>
 {% endblock %}
