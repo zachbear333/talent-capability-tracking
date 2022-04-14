@@ -5,10 +5,7 @@
 {% block content %}
 
 <style>
-	.hidden {
-		display:none;
-        float:right;
-	}
+
 </style>
 <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
     crossorigin="anonymous">
@@ -770,7 +767,6 @@
 {% endblock %}
 
 {% block jsblock %}
-{% comment %} <script type='text/javascript' src="{% static '/js/test.js' %}"></script> {% endcomment %}
 <script>
     function test(event) {
         let checkbox = document.getElementById(event.target.id);
