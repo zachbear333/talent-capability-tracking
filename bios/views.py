@@ -1,17 +1,19 @@
 # show http requests, and the things showing up on the website
 
 from ast import If
+from email.policy import default
 from operator import itemgetter
 from re import search
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
-from .models import BioInfo
+from .models import BioInfo, Student
 from .forms import CreateNewProfile, EditProfile, FileUpload, testform
 # from django.views import View
 from django.core.files.storage import FileSystemStorage
 # from io import BytesIO
 from django.template.loader import get_template
 from django import template
+import os
 
 register = template.Library()
 @register.filter(name='split')
@@ -20,7 +22,7 @@ def split(value, key):
         Returns the value turned into a list.
     """
     return value.split(key)
-
+    
 LOCATION_CHOICES = [
     ('Columbia, MD (HQ)', 'Columbia, MD (HQ)'),
     ('New York, NY', 'New York, NY'),
@@ -314,11 +316,12 @@ def index(response, name):
         for s in domain_tmp.split(','):
             if '(' in s:
                 idx = s.index('(')
+                print(s[idx+1:-1].strip())
                 domain_dict[s[:idx-1].strip()] = REVERSE_RUBRIC[s[idx+1:-1].strip()]
             else:
                 domain_dict[s] = "1"
         domain_dict = sorted(domain_dict.items(), key=lambda x:x[1], reverse=True)
-        domain_dict = {k:SKILL_RUBRIC_MAIN[v] for k, v in domain_dict}
+        domain_dict = {k:EXPERIENCE_RUBRIC_MAIN[v] for k, v in domain_dict}
 
     return render(response, 'bios/bio-info.html', {"people":item,
                                                    "skill":skill_dict,
@@ -342,7 +345,7 @@ def distinct_features():
         # deal with skill
         for skill in skill_lst:
             skill = skill.strip()
-            if skill in skill_res or not skill or skill == 'N/A':
+            if skill in skill_res or not skill or skill == 'N/A' or 'N/A' in skill:
                 continue
             if "(" in skill:
                 if ' '.join(skill.split(' ')[:-1]) not in skill_res:
@@ -353,7 +356,7 @@ def distinct_features():
         # deal with industry
         for industry in industry_lst:
             industry = industry.strip()
-            if industry in industry_res or not industry or industry == 'N/A':
+            if industry in industry_res or not industry or industry == 'N/A' or 'N/A' in industry: 
                 continue
             if "(" in industry:
                 if ' '.join(industry.split(' ')[:-2]) not in industry_res:
@@ -364,7 +367,7 @@ def distinct_features():
         # deal with technology
         for tech in tech_lst:
             tech = tech.strip()
-            if tech in tech_res or not tech or tech == "N/A":
+            if tech in tech_res or not tech or tech == "N/A" or "N/A" in tech:
                 continue
             if "(" in tech:
                 if ' '.join(tech.split(' ')[:-1]) not in tech_res:
@@ -375,7 +378,7 @@ def distinct_features():
         # deal with technology
         for domain in domain_lst:
             domain = domain.strip()
-            if domain in domain_res or not domain or domain == "N/A":
+            if domain in domain_res or not domain or domain == "N/A" or "N/A" in domain:
                 continue
             if "(" in domain:
                 if ' '.join(domain.split(' ')[:-1]) not in domain_res:
@@ -385,17 +388,7 @@ def distinct_features():
 
     return sorted(skill_res), sorted(industry_res), sorted(tech_res), sorted(domain_res)
 
-def filter_dict(option, level):
-    result = {}
-    for item in option:
-        if level:
-            result[item] = level
-        else:
-            result[item] = 1
-    return result
-
 def home(request):
-    print("Method =======>", request.method)
     # single selection
     position_query = request.GET.get('position-dropdown')
     location_query = request.GET.get('location-dropdown')
@@ -411,11 +404,6 @@ def home(request):
 
     print(skill_query, industry_query, tech_query, domain_query)
     print(skill_level_query, industry_level_query, tech_level_query, domain_level_query)
-
-    # skill_select = filter_dict(skill_query, skill_level_query)
-    # industry_select = filter_dict(industry_query, industry_level_query)
-    # technique_select = filter_dict(tech_query, tech_level_query)
-    # domain_select = filter_dict(domain_query, domain_level_query)
     
     # search bar
     search_query = request.GET.get('search-input')
@@ -430,7 +418,7 @@ def home(request):
     if location_query:
         people = people.filter(location=location_query)
 
-    if skill_query:
+    if skill_query != ['']:
         for i in skill_query:
             people = people.filter(skill__contains=i)
             if skill_level_query:
@@ -444,10 +432,12 @@ def home(request):
                                     print(REVERSE_RUBRIC[t.split(' ')[-1][1:-1]], skill_level_query)
                                     print(person.name, "excluded")
                                     people = people.exclude(id=person.id)
+                        elif ")" not in t[-1] and skill_level_query == 1:
+                            continue
                         else:
                             people = people.exclude(id=person.id)
 
-    if industry_query:
+    if industry_query != ['']:
         for i in industry_query:
             people = people.filter(industry__contains=i)
             if industry_level_query:
@@ -461,9 +451,12 @@ def home(request):
                                     print(REVERSE_RUBRIC[''.join(t.split(' ')[-2:])[1:-1]], industry_level_query)
                                     print(person.name, "excluded")
                                     people = people.exclude(id=person.id)
+                        elif ")" not in t[-1] and industry_level_query == 1:
+                            continue
                         else:
                             people = people.exclude(id=person.id)
-    if tech_query:
+
+    if tech_query != ['']:
         for i in tech_query:
             people = people.filter(technique__contains=i)
             if tech_level_query:
@@ -477,10 +470,12 @@ def home(request):
                                     print(REVERSE_RUBRIC[t.split(' ')[-1][1:-1]], tech_level_query)
                                     print(person.name, "excluded")
                                     people = people.exclude(id=person.id)
+                        elif ")" not in t[-1] and tech_level_query == 1:
+                            continue
                         else:
                             people = people.exclude(id=person.id)
 
-    if domain_query:
+    if domain_query != ['']:
         for i in domain_query:
             people = people.filter(business_domain__contains=i)
             if domain_level_query:
@@ -494,6 +489,8 @@ def home(request):
                                     print(REVERSE_RUBRIC[t.split(' ')[-1][1:-1]], domain_level_query)
                                     print(person.name, "excluded")
                                     people = people.exclude(id=person.id)
+                        elif ")" not in t[-1] and domain_level_query == 1:
+                            continue                        
                         else:
                             people = people.exclude(id=person.id)
 
@@ -518,7 +515,6 @@ def home(request):
                 people = search_list[i] & search_list[i - 1]            
             
 
-
     return render(request, 'bios/home.html', {"people_number": people,
                                               "position_distinct": position_dist,
                                               "location_distinct": location_dist,
@@ -534,7 +530,7 @@ def home(request):
                                               "tech_level": tech_level_query,
                                               "industry_level": industry_level_query,
                                               "domain_level": domain_level_query,
-                                              })   
+                                              })
 
 def create(request):
     if request.method == "POST":
@@ -547,38 +543,44 @@ def create(request):
         s = form.getlist('skill')
         if not s:
             s = ['N/A']
-        for i in range(len(s)):
-            level = s[i].split(' ')[-1]
-            for j in range(len(s[i])):
-                if s[i][j].isdigit():
-                    flag = j
-                    break
-            print("{} ({})".format(s[i][:flag-1], SKILL_RUBRIC[level]))
-            s[i] = "{} ({})".format(s[i][:flag-1], SKILL_RUBRIC[level])
+        else:
+            for i in range(len(s)):
+                level = s[i].split(' ')[-1]
+                flag = 0
+                for j in range(len(s[i])):
+                    if s[i][j].isdigit():
+                        flag = j
+                        break
+                print("{} ({})".format(s[i][:flag-1], SKILL_RUBRIC[level]))
+                s[i] = "{} ({})".format(s[i][:flag-1], SKILL_RUBRIC[level])
 
         tech = form.getlist('technique')
         if not tech:
             tech = ['N/A']
-        for i in range(len(tech)):
-            level = tech[i].split(' ')[-1]
-            for j in range(len(tech[i])):
-                if tech[i][j].isdigit():
-                    flag = j
-                    break
-            print("{} ({})".format(tech[i][:flag-1], SKILL_RUBRIC[level]))
-            tech[i] = "{} ({})".format(tech[i][:flag-1], SKILL_RUBRIC[level])
+        else:
+            for i in range(len(tech)):
+                level = tech[i].split(' ')[-1]
+                flag = 0
+                for j in range(len(tech[i])):
+                    if tech[i][j].isdigit():
+                        flag = j
+                        break
+                print("{} ({})".format(tech[i][:flag-1], SKILL_RUBRIC[level]))
+                tech[i] = "{} ({})".format(tech[i][:flag-1], SKILL_RUBRIC[level])
 
         i = form.getlist('industry')
         if not i:
             i = ['N/A']
-        for i_ in range(len(i)):
-            level = i[i_].split(' ')[-1]
-            for j in range(len(i[i_])):
-                if i[i_][j].isdigit():
-                    flag = j
-                    break
-            print("{} ({})".format(i[i_][:flag-1], EXPERIENCE_RUBRIC[level]))
-            i[i_] = "{} ({})".format(i[i_][:flag-1], EXPERIENCE_RUBRIC[level])
+        else:
+            for i_ in range(len(i)):
+                level = i[i_].split(' ')[-1]
+                flag = 0
+                for j in range(len(i[i_])):
+                    if i[i_][j].isdigit():
+                        flag = j
+                        break
+                print("{} ({})".format(i[i_][:flag-1], EXPERIENCE_RUBRIC[level]))
+                i[i_] = "{} ({})".format(i[i_][:flag-1], EXPERIENCE_RUBRIC[level])
 
         u = form.get('university')
         if not u:
@@ -598,14 +600,16 @@ def create(request):
         d = form.getlist('domain')
         if not d:
             d = ['N/A']
-        for k in range(len(d)):
-            level = d[k].split(' ')[-1]
-            for j in range(len(d[k])):
-                if d[k][j].isdigit():
-                    flag = j
-                    break
-            # print("{} ({})".format(d[k][:flag-1], SKILL_RUBRIC[level]))
-            d[k] = "{} ({})".format(d[k][:flag-1], SKILL_RUBRIC[level])
+        else:
+            for k in range(len(d)):
+                level = d[k].split(' ')[-1]
+                flag = 0
+                for j in range(len(d[k])):
+                    if d[k][j].isdigit():
+                        flag = j
+                        break
+                # print("{} ({})".format(d[k][:flag-1], SKILL_RUBRIC[level]))
+                d[k] = "{} ({})".format(d[k][:flag-1], SKILL_RUBRIC[level])
         t, _ = BioInfo.objects.update_or_create(
             name = n,
             defaults={
@@ -629,18 +633,73 @@ def create(request):
     return render(request, "bios/create.html", {"form" : form})
 
 def upload_img(request):
-    try:
-        if request.method == "POST":
-            form = FileUpload(request.POST, request.FILES)
-            # print(request.FILES[0].name)
-            if form.is_valid():
-                form.save()
-            return HttpResponseRedirect("/")
+    if request.method == "POST":
+        print(os.listdir('bios/static/media/images'))
+        form = request.FILES
+        # no object related to the names
+        existed_file = []
+        try:
+            existed_file = Student.objects.get(name="{}_{}".format(request.user.first_name,request.user.last_name))
+        except:
+            pass
+        if not existed_file:
+            print("Creating new object!!!")
+            file, _ = Student.objects.update_or_create(
+                name = "{}_{}".format(request.user.first_name,request.user.last_name),
+                defaults = {
+                    "photo" : request.FILES['photo'],
+                    "bio_ppt" : request.FILES['bio_ppt'], 
+                }
+            )
+            file.save()
         else:
-            form = FileUpload()
-            return render(request, "bios/upload.html", {"form" : form})
-    except:
-        raise("CHECK YOUR FILE FORMAT!!")
+            existed_file = Student.objects.get(name="{}_{}".format(request.user.first_name,request.user.last_name))
+            print("Updating existed object!!!")
+            if existed_file.photo:
+                print("hell yes")
+                existed_file.photo.delete()
+            if existed_file.bio_ppt:
+                print("hell no")
+                existed_file.bio_ppt.delete()
+            for filename, file in form.items():
+                print('======================')
+                print(filename, request.FILES[filename].name)
+                if request.FILES[filename].name.split('.')[-1] == 'jpeg':
+                    request.FILES[filename].name = "{}_{}.jpeg".format(request.user.first_name,request.user.last_name)
+                else:
+                    request.FILES[filename].name = "{}_{}.pdf".format(request.user.first_name,request.user.last_name)
+                print(filename, request.FILES[filename].name)
+
+            print(request.FILES['photo'].name)
+            file, _ = Student.objects.update_or_create(
+                name = "{}_{}".format(request.user.first_name,request.user.last_name),
+                defaults = {
+                    "photo" : request.FILES['photo'],
+                    "bio_ppt" : request.FILES['bio_ppt'], 
+                }
+            )
+            file.save()
+        return HttpResponseRedirect("/{}".format(request.user.first_name+'_'+request.user.last_name))
+    else:
+        form = FileUpload()
+        return render(request, "bios/upload.html", {"form" : form})
+        
+    
+    
+    # try:
+    #     if request.method == "POST":
+    #         print(request.user.last_name, request.user.first_name)
+    #         form = FileUpload(request.POST, request.FILES)
+    #         form.name = "{}_{}".format(request.user.first_name, request.user.last_name)
+    #         print(form.is_valid())
+    #         if form.is_valid():
+    #             form.save()
+    #         return HttpResponseRedirect("/")
+    #     else:
+    #         form = FileUpload()
+    #         return render(request, "bios/upload.html", {"form" : form})
+    # except:
+    #     raise("CHECK YOUR FILE FORMAT!!")
 
 def edit(request, name):
     person = BioInfo.objects.get(name=name)
@@ -792,6 +851,14 @@ def edit(request, name):
             else:
                 d[k] = "{} ({})".format(d[k], SKILL_RUBRIC['1'])
 
+        uni = form.get('university')
+        if not uni:
+            uni = ' '
+
+        major = form.get('major')
+        if not major:
+            major = ' '
+
         c = form.get('client')
         if not c:
             c = 'N/A'
@@ -804,6 +871,8 @@ def edit(request, name):
                 "location" : l, 
                 "skill" : ', '.join(s),
                 "technique" : ', '.join(tech), 
+                "university": uni,
+                "major": major,
                 "industry" : ', '.join(i), 
                 "client" : c, 
                 "intro" : intro,
@@ -819,7 +888,10 @@ def edit(request, name):
                                     'technique' : tech_init, 
                                     'client' : person.client,
                                     'intro' : person.intro,
-                                    'domain':domain_init,})
+                                    'domain':domain_init,
+                                    'university':person.university,
+                                    'major': person.major,
+                                    })
         return render(request, "bios/edit.html", {"form":form,
                                                   "person":person,
                                                   "preselect":preselect_dict})
