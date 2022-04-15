@@ -636,28 +636,28 @@ def upload_img(request):
     if request.method == "POST":
         print(os.listdir('bios/static/media/images'))
         form = request.FILES
-        # no object related to the names
-        existed_file = []
-        try:
-            existed_file = Student.objects.get(name="{}_{}".format(request.user.first_name,request.user.last_name))
-        except:
-            pass
+        existed_file = Student.objects.filter(name="{}_{}".format(request.user.first_name,request.user.last_name))
+        print(existed_file)
+        print('photo' in request.FILES, 'bio_ppt' in request.FILES)
+        
         if not existed_file:
             print("Creating new object!!!")
             file, _ = Student.objects.update_or_create(
                 name = "{}_{}".format(request.user.first_name,request.user.last_name),
                 defaults = {
-                    "photo" : request.FILES['photo'],
-                    "bio_ppt" : request.FILES['bio_ppt'], 
+                    "photo" : request.FILES['photo'] if 'photo' in request.FILES else None,
+                    "bio_ppt" : request.FILES['bio_ppt'] if 'bio_ppt' in request.FILES else None, 
                 }
             )
             file.save()
         else:
             existed_file = Student.objects.get(name="{}_{}".format(request.user.first_name,request.user.last_name))
             print("Updating existed object!!!", os.listdir('bios/static/media/images'))
-            existed_file.photo.delete()
-            existed_file.bio_ppt.delete()
-            existed_file.delete()
+            if 'photo' in request.FILES:
+                existed_file.photo.delete()
+            if 'bio_ppt' in request.FILES:
+                existed_file.bio_ppt.delete()
+            # existed_file.delete()
             print(os.listdir('bios/static/media/images'))
             # if existed_file.photo:
             #     print("hell yes")
@@ -667,6 +667,9 @@ def upload_img(request):
             #     if os.path.exists('bios/static/media/images/{}_{}.jpeg'.format(request.user.first_name,request.user.last_name)):
             #         os.remove("bios/static/media/images/{}_{}.jpeg".format(request.user.first_name,request.user.last_name))
             #         print("PHOTO REMOVED!!!")
+            if os.path.exists('bios/static/media/images/{}_{}.jpeg'.format(request.user.first_name,request.user.last_name)) and "photo" in request.FILES:
+                os.remove("bios/static/media/images/{}_{}.jpeg".format(request.user.first_name,request.user.last_name))
+                print("PHOTO REMOVED!!!")
 
             # if existed_file.bio_ppt:
             #     print("hell no")
@@ -676,6 +679,10 @@ def upload_img(request):
             #     if os.path.exists('bios/static/media/bio_ppt/{}_{}.pdf'.format(request.user.first_name,request.user.last_name)):
             #         os.remove("bios/static/media/bio_ppt/{}_{}.pdf".format(request.user.first_name,request.user.last_name))
             #         print("BIO PPT REMOVED!!!")
+            if os.path.exists('bios/static/media/bio_ppt/{}_{}.pdf'.format(request.user.first_name,request.user.last_name)) and "bio_ppt" in request.FILES:
+                os.remove("bios/static/media/bio_ppt/{}_{}.pdf".format(request.user.first_name,request.user.last_name))
+                print("BIO PPT REMOVED!!!")
+            
             
             # rename the file
             for filename, file in form.items():
@@ -691,8 +698,8 @@ def upload_img(request):
             file, _ = Student.objects.update_or_create(
                 name = "{}_{}".format(request.user.first_name,request.user.last_name),
                 defaults = {
-                    "photo" : request.FILES['photo'],
-                    "bio_ppt" : request.FILES['bio_ppt'], 
+                    "photo" : request.FILES['photo'] if 'photo' in request.FILES else None,
+                    "bio_ppt" : request.FILES['bio_ppt'] if 'bio_ppt' in request.FILES else None, 
                 }
             )
             file.save()
