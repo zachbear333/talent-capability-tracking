@@ -316,7 +316,7 @@ def index(response, name):
         for s in domain_tmp.split(','):
             if '(' in s:
                 idx = s.index('(')
-                print(s[idx+1:-1].strip())
+                # print(s[idx+1:-1].strip())
                 domain_dict[s[:idx-1].strip()] = REVERSE_RUBRIC[s[idx+1:-1].strip()]
             else:
                 domain_dict[s] = "1"
@@ -654,13 +654,30 @@ def upload_img(request):
             file.save()
         else:
             existed_file = Student.objects.get(name="{}_{}".format(request.user.first_name,request.user.last_name))
-            print("Updating existed object!!!")
-            if existed_file.photo:
-                print("hell yes")
-                existed_file.photo.delete()
-            if existed_file.bio_ppt:
-                print("hell no")
-                existed_file.bio_ppt.delete()
+            print("Updating existed object!!!", os.listdir('bios/static/media/images'))
+            existed_file.photo.delete()
+            existed_file.bio_ppt.delete()
+            existed_file.delete()
+            print(os.listdir('bios/static/media/images'))
+            # if existed_file.photo:
+            #     print("hell yes")
+            #     existed_file.photo.delete()
+            #     print(os.listdir('bios/static/media/images'))
+            #     # print("{}_{}.jpeg".format(request.user.first_name,request.user.last_name) in os.listdir('bios/static/media/images'))
+            #     if os.path.exists('bios/static/media/images/{}_{}.jpeg'.format(request.user.first_name,request.user.last_name)):
+            #         os.remove("bios/static/media/images/{}_{}.jpeg".format(request.user.first_name,request.user.last_name))
+            #         print("PHOTO REMOVED!!!")
+
+            # if existed_file.bio_ppt:
+            #     print("hell no")
+            #     existed_file.bio_ppt.delete()
+            #     print(os.listdir('bios/static/media/bio_ppt'))
+            #     # print("{}_{}.pdf".format(request.user.first_name,request.user.last_name) in os.listdir('bios/static/media/bio_ppt'))
+            #     if os.path.exists('bios/static/media/bio_ppt/{}_{}.pdf'.format(request.user.first_name,request.user.last_name)):
+            #         os.remove("bios/static/media/bio_ppt/{}_{}.pdf".format(request.user.first_name,request.user.last_name))
+            #         print("BIO PPT REMOVED!!!")
+            
+            # rename the file
             for filename, file in form.items():
                 print('======================')
                 print(filename, request.FILES[filename].name)
@@ -670,7 +687,7 @@ def upload_img(request):
                     request.FILES[filename].name = "{}_{}.pdf".format(request.user.first_name,request.user.last_name)
                 print(filename, request.FILES[filename].name)
 
-            print(request.FILES['photo'].name)
+            # print(request.FILES['photo'].name)
             file, _ = Student.objects.update_or_create(
                 name = "{}_{}".format(request.user.first_name,request.user.last_name),
                 defaults = {
