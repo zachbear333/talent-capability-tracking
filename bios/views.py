@@ -275,6 +275,10 @@ def test(request):
 
 def index(response, name):
     item = BioInfo.objects.get(name=name)
+    try:
+        item_file = Student.objects.get(name=name)
+    except:
+        item_file = None
     # area of expertise table
     skill_tmp = item.skill
     skill_dict = {}
@@ -330,6 +334,7 @@ def index(response, name):
                                                    "industry":industry_dict,
                                                    "technique":tech_dict,
                                                    "domain":domain_dict,
+                                                   "file":item_file,
                                                    })
 
 def distinct_features():
@@ -639,10 +644,6 @@ def upload_img(request):
         print(os.listdir('bios/static/media/images'))
         form = request.FILES
 
-        # if 'photo' in form and form['photo'].name.split('.')[-1] != 'jpeg':
-        #     messages.error(request, 'The wrong format detected! Use this link to convert your profile image https://cloudconvert.com/jpeg-converter') 
-
-
         existed_file = Student.objects.filter(name="{}_{}".format(request.user.first_name,request.user.last_name))
         print(existed_file)
         print('photo' in request.FILES, 'bio_ppt' in request.FILES)
@@ -695,8 +696,8 @@ def upload_img(request):
             for filename, file in form.items():
                 print('======================')
                 print(filename, request.FILES[filename].name)
-                if request.FILES[filename].name.split('.')[-1] == 'jpeg':
-                    request.FILES[filename].name = "{}_{}.jpeg".format(request.user.first_name,request.user.last_name)
+                if request.FILES[filename].name.split('.')[-1] in ['jpeg', 'jpg', 'png']:
+                    request.FILES[filename].name = "{}_{}.{}".format(request.user.first_name,request.user.last_name, request.FILES[filename].name.split('.')[-1])
                 else:
                     request.FILES[filename].name = "{}_{}.pdf".format(request.user.first_name,request.user.last_name)
                 print(filename, request.FILES[filename].name)
@@ -763,6 +764,8 @@ def edit(request, name):
             continue
         flag = 0
         for i in range(len(ins)):
+            if ins[i] == "2" and ins[i-1] == "B" and ins[i+1] == "B":
+                continue   
             if ins[i].isdigit() or ins[i] == '(':
                 flag = i
                 break

@@ -8,11 +8,9 @@
 <div class="row bio-page-container">
     <div class="col-md-3 align-items-center">
         {% comment %} <img src="{% static 'media/images/'%}{{people.name}}.jpeg"
-            onerror="this.onerror=null; this.src='static/img/profile-img/default.png'" alt="home" width=240px />
-        {% endcomment %}
-        <img src="{% static 'media/images/'%}{{people.name}}.jpeg"
-            onerror="this.onerror=null; this.src='static/img/logo2.png'" alt="home" width=240px />
-
+            onerror="this.onerror=null; this.src='static/img/logo2.png'" alt="home" width=240px /> {% endcomment %}
+        <img src="{{ file.photo.url }}"
+        onerror="this.onerror=null; this.src='static/img/logo2.png'" alt="home" width=240px />
         {%if people.name == user.first_name|add:"_"|add:user.last_name%}
         <button class="btn btn-primary btn-lg btn-block" type="submit" value="Apply" style='margin-top:10px;'>
             <a class="p-2 text-light" href="/{{user.first_name}}_{{user.last_name}}/edit/">
@@ -109,17 +107,13 @@
         <ul class="list-group mb-3">
             Industry
             {% for key, value in industry.items %}
-                {% if industry|length == 1 and key == 'N/A' %}
-                    <h6 class="my-0"> No industry experience added </h6>
-                {% else %}
-                    <li class="list-group-item d-flex justify-content-between lh-condensed">
-                        <div>
-                            <h6 class="my-0">{{key}}</h6>
-                            <small class="text-muted"></small>
-                        </div>
-                        <span class="text-muted">{{value}}</span>
-                    </li>
-                {% endif %}
+            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <div>
+                    <h6 class="my-0">{{key}}</h6>
+                    <small class="text-muted"></small>
+                </div>
+                <span class="text-muted">{{value}}</span>
+            </li>
             {% endfor %}
         </ul>
         {% endif %}
