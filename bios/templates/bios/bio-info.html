@@ -6,7 +6,7 @@
 {% load static%}
 
 <div class="row bio-page-container">
-    <div class="col-md-3">
+    <div class="col-md-3 align-items-center">
         {% comment %} <img src="{% static 'media/images/'%}{{people.name}}.jpeg"
             onerror="this.onerror=null; this.src='static/img/profile-img/default.png'" alt="home" width=240px />
         {% endcomment %}
@@ -14,7 +14,7 @@
             onerror="this.onerror=null; this.src='static/img/logo2.png'" alt="home" width=240px />
 
         {%if people.name == user.first_name|add:"_"|add:user.last_name%}
-        <button class="btn btn-primary btn-lg btn-block" type="submit" value="Apply">
+        <button class="btn btn-primary btn-lg btn-block" type="submit" value="Apply" style='margin-top:10px;'>
             <a class="p-2 text-light" href="/{{user.first_name}}_{{user.last_name}}/edit/">
                 Edit Profile
             </a>
