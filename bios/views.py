@@ -14,6 +14,8 @@ from django.core.files.storage import FileSystemStorage
 from django.template.loader import get_template
 from django import template
 import os
+from django.contrib import messages
+
 
 register = template.Library()
 @register.filter(name='split')
@@ -627,7 +629,7 @@ def create(request):
             }
         )
         t.save()
-        return HttpResponseRedirect("/upload_img/")
+        return HttpResponseRedirect("/")
     else:    
         form = CreateNewProfile()
     return render(request, "bios/create.html", {"form" : form})
@@ -636,10 +638,15 @@ def upload_img(request):
     if request.method == "POST":
         print(os.listdir('bios/static/media/images'))
         form = request.FILES
+
+        # if 'photo' in form and form['photo'].name.split('.')[-1] != 'jpeg':
+        #     messages.error(request, 'The wrong format detected! Use this link to convert your profile image https://cloudconvert.com/jpeg-converter') 
+
+
         existed_file = Student.objects.filter(name="{}_{}".format(request.user.first_name,request.user.last_name))
         print(existed_file)
         print('photo' in request.FILES, 'bio_ppt' in request.FILES)
-        
+
         if not existed_file:
             print("Creating new object!!!")
             file, _ = Student.objects.update_or_create(
