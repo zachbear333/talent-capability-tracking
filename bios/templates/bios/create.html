@@ -9,17 +9,6 @@
         display: none;
     }
 
-        {
-        % comment %
-    }
-
-    .unhide {
-        align: center;
-    }
-
-    {
-        % endcomment %
-    }
 </style>
 <form method='post' action='/create/' enctype="multipart/form-data">
     {% csrf_token %}
@@ -39,144 +28,6 @@
             <td> {{form.location}} </td>
             {% comment %} <td> {{form.domain}} </td> {% endcomment %}
         </table>
-        <table id="create-table">
-            <tr>
-                <th> Area of Expertise </th>
-            </tr>
-            <td>
-                {% for s in form.skill %}
-
-                {% if forloop.counter0 == 0 %}
-                <a style="font-weight:bolder;">Data Engineering </a>
-                {% endif %}
-                {% if forloop.counter0 == 3 %}
-                <a style="font-weight:bolder;">BI </a>
-                {% endif %}
-                {% if forloop.counter0 == 6 %}
-                <a style="font-weight:bolder;">Process Infrastructure </a>
-                {% endif %}
-                {% if forloop.counter0 == 11 %}
-                <a style="font-weight:bolder;">Analytics Application </a>
-                {% endif %}
-                {% if forloop.counter0 == 26 %}
-                <a style="font-weight:bolder;">Statistics / ML </a>
-                {% endif %}
-                {% if forloop.counter0 == 44 %}
-                <a style="font-weight:bolder;">Deep Learning / NLP </a>
-                {% endif %}
-                <div class="hahah" id="{{forloop.counter0}}" style="display:flex;margin-left:15px;">
-                    {{s}}
-                    <div class="hidden" id="id_skill_{{forloop.counter0}}" align='left'>
-                        <div id="skill_select_{{forloop.counter0}}">
-                            <input type="radio" name="id_skill_{{forloop.counter0}}" value="1" onchange="select_level(event);"> 1 - Unfamiliar
-                            <input type="radio" name="id_skill_{{forloop.counter0}}" value="2" onchange="select_level(event);"> 2 - Novice
-                            <input type="radio" name="id_skill_{{forloop.counter0}}" value="3" onchange="select_level(event);"> 3 - Proficient
-                            <input type="radio" name="id_skill_{{forloop.counter0}}" value="4" onchange="select_level(event);"> 4 - Advanced
-                            <input type="radio" name="id_skill_{{forloop.counter0}}" value="5" onchange="select_level(event);"> 5 - Expert
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </td>
-
-            <tr>
-                <th> Industry Experience </th>
-            </tr>
-            <td>
-                {% for s in form.industry %}
-                <div class="hahah" id="{{forloop.counter0}}" style="display:flex;margin-left:15px;">
-                    {{s}}
-                    <div class="hidden" id="id_industry_{{forloop.counter0}}">
-                        <div id="industry_select_{{forloop.counter0}}">
-                            <input type="radio" name="id_industry_{{forloop.counter0}}" value="1" onchange="select_level(event);"> &lt;1 YOE
-                            <input type="radio" name="id_industry_{{forloop.counter0}}" value="2" onchange="select_level(event);"> 1-3 YOE
-                            <input type="radio" name="id_industry_{{forloop.counter0}}" value="3" onchange="select_level(event);"> 4-5 YOE
-                            <input type="radio" name="id_industry_{{forloop.counter0}}" value="4" onchange="select_level(event);"> 5-10 YOE
-                            <input type="radio" name="id_industry_{{forloop.counter0}}" value="5" onchange="select_level(event);"> &gt;10 YOE
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </td>
-
-            <tr>
-                <th> Technique </th>
-            </tr>
-            <td style="vertical-align:top; width:30%">
-                {% for s in form.technique %}
-                {% if forloop.counter0 == 0 %}
-                <a style="font-weight:bolder;">Cloud Computing Services </a>
-                {% endif %}
-                {% if forloop.counter0 == 5 %}
-                <a style="font-weight:bolder;"> Progamming Language </a>
-                {% endif %}
-                {% if forloop.counter0 == 12 %}
-                <a style="font-weight:bolder;"> Data Visualization</a>
-                {% endif %}
-                {% if forloop.counter0 == 16 %}
-                <a style="font-weight:bolder;">Database Management </a>
-                {% endif %}
-                {% if forloop.counter0 == 20 %}
-                <a style="font-weight:bolder;">Others</a>
-                {% endif %}
-                <div class="hahah" id="{{forloop.counter0}}" style="display:flex;margin-left:15px;">
-                    {{s}}
-                    <div class="hidden" id="id_technique_{{forloop.counter0}}">
-                        <div id="technique_select_{{forloop.counter0}}">
-                            <input type="radio" name="id_technique_{{forloop.counter0}}" value="1" onchange="select_level(event);"> 1 - Unfamiliar
-                            <input type="radio" name="id_technique_{{forloop.counter0}}" value="2" onchange="select_level(event);"> 2 - Novice
-                            <input type="radio" name="id_technique_{{forloop.counter0}}" value="3" onchange="select_level(event);"> 3 - Proficient
-                            <input type="radio" name="id_technique_{{forloop.counter0}}" value="4" onchange="select_level(event);"> 4 - Advanced
-                            <input type="radio" name="id_technique_{{forloop.counter0}}" value="5" onchange="select_level(event);"> 5 - Expert
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </td>
-            <tr>
-                <th> Business Domain </th>
-            </tr>
-            <td>
-                {% for s in form.domain %}
-                <div class="hahah" id="{{forloop.counter0}}" style="display:flex;margin-left:15px;">
-                    {{s}}
-                    <div class="hidden" id="id_domain_{{forloop.counter0}}">
-                        <div id="domain_select_{{forloop.counter0}}">
-                            <input type="radio" name="id_domain_{{forloop.counter0}}" value="1" onchange="select_level(event);"> 1 - Unfamiliar
-                            <input type="radio" name="id_domain_{{forloop.counter0}}" value="2" onchange="select_level(event);"> 2 - Novice
-                            <input type="radio" name="id_domain_{{forloop.counter0}}" value="3" onchange="select_level(event);"> 3 - Proficient
-                            <input type="radio" name="id_domain_{{forloop.counter0}}" value="4" onchange="select_level(event);"> 4 - Advanced
-                            <input type="radio" name="id_domain_{{forloop.counter0}}" value="5" onchange="select_level(event);"> 5 - Expert
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </td>
-        </table>
-
-        <table id="create-table">
-            <tr>
-                <th> University </th>
-                <th> Major </th>
-            </tr>
-            <td> {{form.university}} </td>
-            <td> {{form.major}} </td>
-        </table>
-
-
-        <table id="create-table">
-            <tr>
-                <th> Client </th>
-            </tr>
-            <td> {{ form.client }} </td>
-        </table>
-
-        <table id="create-table">
-            <tr>
-                <th> Self-Intro </th>
-            </tr>
-            <td> {{ form.intro }} </td>
-        </table>
 
     </div>
     <button type="submit" , name="save"> Create / Update Profile </button>
@@ -186,9 +37,7 @@
 {% endblock %}
 
 {% block jsblock %}
-{% comment %} <script type='text/javascript' src="{% static '/js/test.js' %}"></script> {% endcomment %}
 <script>
-
     // onchange() is generated by django form
     function checkbox(event) {
         let checkbox = document.getElementById(event.target.id);
