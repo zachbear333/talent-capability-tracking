@@ -22,7 +22,12 @@ def split(value, key):
         Returns the value turned into a list.
     """
     return value.split(key)
-    
+
+@register.filter
+def addstr(arg1, arg2):
+    """concatenate arg1 & arg2"""
+    return str(arg1) + str(arg2)
+
 LOCATION_CHOICES = [
     ('Columbia, MD (HQ)', 'Columbia, MD (HQ)'),
     ('New York, NY', 'New York, NY'),

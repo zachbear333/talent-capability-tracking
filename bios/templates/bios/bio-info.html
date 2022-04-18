@@ -12,6 +12,14 @@
         {% endcomment %}
         <img src="{% static 'media/images/'%}{{people.name}}.jpeg"
             onerror="this.onerror=null; this.src='static/img/logo2.png'" alt="home" width=240px />
+
+        {%if people.name == user.first_name|add:"_"|add:user.last_name%}
+        <button class="btn btn-primary btn-lg btn-block" type="submit" value="Apply">
+            <a class="p-2 text-light" href="/{{user.first_name}}_{{user.last_name}}/edit/">
+                Edit Profile
+            </a>
+        </button>
+        {%endif%}
     </div>
 
     <div class="col-md-4 order-md-2 mb-4">
