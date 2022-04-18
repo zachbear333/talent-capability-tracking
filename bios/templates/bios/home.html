@@ -162,8 +162,9 @@
             <th> Position </th>
         </tr>
         {% for person in people_number %}
+        {% load replace%}
         <tr>
-            <td> <a href="/{{person.name}}">{{ person.name }} </td>
+            <td> <a href="/{{person.name}}">{{ person.name|replace }} </td>
             <td> {{ person.skill_split }} </td>
             <td> {{ person.industry_split }} </td>
             <td> {{ person.technique_split }} </td>

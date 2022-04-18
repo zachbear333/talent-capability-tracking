@@ -26,7 +26,8 @@
                     <th> Location </th>
                 </tr>
             </thead>
-            <td> {{person.name}} </td>
+            {% load replace%}
+            <td> {{person.name|replace}} </td>
             <td> {{person.email}} </td>
             <td> {{person.position}} </td>
             <td> {{form.location}} </td>
