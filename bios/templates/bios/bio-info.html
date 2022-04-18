@@ -9,10 +9,10 @@
     <div class="col-md-3 align-items-center">
         {% comment %} <img src="{% static 'media/images/'%}{{people.name}}.jpeg"
             onerror="this.onerror=null; this.src='static/img/logo2.png'" alt="home" width=240px /> {% endcomment %}
-        <img src="{{ file.photo.url }}"
+        <img class="img-fluid mx-auto d-block" src="{{ file.photo.url }}"
         onerror="this.onerror=null; this.src='static/img/logo2.png'" alt="home" width=240px />
         {%if people.name == user.first_name|add:"_"|add:user.last_name%}
-        <button class="btn btn-primary btn-lg btn-block" type="submit" value="Apply" style='margin-top:10px;'>
+        <button class="btn btn-primary btn-sm btn-block" type="submit" value="Apply" style='margin:10px 0;'>
             <a class="p-2 text-light" href="/{{user.first_name}}_{{user.last_name}}/edit/">
                 Edit Profile
             </a>
