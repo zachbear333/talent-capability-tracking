@@ -113,22 +113,47 @@
             </div>
             <hr class="mb-4">
             <div class="row">
-                {% comment %} <select class="custom-select d-block w-100" name="position-dropdown">
-                    <option value='' disabled selected>Position</option>
-                    {% for p in position_distinct %}
-                    <option value="{{ p.position }}"> {{ p.position }} </option>
+                <div class="mb-3">
+                    <label for="university"> University </label>
+                    <select class="custom-select d-block w-100" name="university-dropdown">
+                        <option value=''>Choose...</option>
+                        {% for p in university_distinct %}
+                        <option value="{{ p }}" {%if p in university_query %} selected {%endif%}> {{ p }} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="major"> Major </label>
+                <select class="custom-select d-block w-100" name="major-dropdown">
+                    <option value=''>Choose...</option>
+                    {% for p in major_distinct %}
+                    <option value="{{ p }}" {%if p in major_query %} selected {%endif%}> {{ p }} </option>
                     {% endfor %}
                 </select>
             </div>
+
+            <div class="mb-3">
+                <label for="degree"> Degree </label>
+                <select class="custom-select d-block w-100" name="degree-dropdown">
+                    <option value="">Choose...</option>
+                    <option value="B.S." {%if degree_query == "B.S." %} selected {%endif%}> B.S.</option>
+                    <option value="M.S." {%if degree_query == "M.S." %} selected {%endif%}> M.S.</option>
+                    <option value="PhD" {%if degree_query == "PhD" %} selected {%endif%}> PhD</option>
+                    <option value="Other" {%if degree_query == "Other" %} selected {%endif%}> Other</option>
+                </select>
+            </div>
+            
             <hr class="mb-4">
-            <div class="row">
+            {% comment %} <div class="row">
                 <select name="location-dropdown" class="dropdown-single">
                     <option value='' disabled selected>Location</option>
                     {% for p in location_distinct %}
                     <option value="{{ p.location }}"> {{ p.location }} </option>
                     {% endfor %}
-                </select> {% endcomment %}
-            </div>
+                </select>
+            </div> {% endcomment %}
             <button class="btn btn-primary btn-lg btn-block" type="submit" value="Apply">
                 Apply
             </button>
@@ -158,7 +183,7 @@
             <th> Industry Experience </th>
             <th> Technique Skill </th>
             <th> Business Domain </th>
-            <th> Blend Client </th>
+            <th> Education </th>
             <th> Position </th>
         </tr>
         {% for person in people_number %}
@@ -169,7 +194,7 @@
             <td> {{ person.industry_split }} </td>
             <td> {{ person.technique_split }} </td>
             <td> {{ person.business_domain_split}} </td>
-            <td> {{ person.client }} </td>
+            <td> {{ person.major }}, {{ person.university }}, {{ person.client }} </td>
             <td> {{ person.position }}</td>
         </tr>
         {% endfor %}

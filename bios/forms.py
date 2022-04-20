@@ -182,6 +182,13 @@ LEVEL_CHOICES = [
     ('5', '5'),
 ]
 
+DEGREE_CHOICE = [
+    ('B.S.', 'B.S.'),
+    ('M.S.', 'M.S.'),
+    ('PhD', 'PhD'),
+    ('Other', 'Other'),
+]
+
 class CreateNewProfile(forms.Form):
     name = forms.CharField(label="Name", max_length=200)
     email = forms.CharField(label="Email", max_length=200)
@@ -214,8 +221,8 @@ class CreateNewProfile(forms.Form):
                                                              'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:25px;'}))
 
     # client = forms.MultipleChoiceField(label="Blend Client", choices=CLIENT_CHOICES, widget=forms.CheckboxSelectMultiple)
-    client = forms.CharField(required=False, label="Client", max_length=400,
-                                widget=forms.TextInput(attrs={'placeholder':'Seperate Clients by Comma.',
+    degree = forms.CharField(required=False, label="Degree", max_length=400,
+                                widget=forms.TextInput(attrs={
                                                              'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:25px;'}))
     intro = forms.CharField(required=False, label="Intro", widget=forms.Textarea(attrs={
                                                                 'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:100px;'}))
@@ -245,9 +252,7 @@ class EditProfile(forms.Form):
     major = forms.CharField(required=False, label="Major", max_length=400,
                                 widget=forms.TextInput(attrs={
                                                              'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:25px;'}))
-    client = forms.CharField(required=False, label="Client", max_length=400,
-                                widget=forms.TextInput(attrs={'placeholder':'Seperate Clients by Comma.',
-                                                             'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:25px;'}))
+    degree = forms.CharField(required=False, label="Degree", widget=forms.Select(choices=DEGREE_CHOICE))
     intro = forms.CharField(required=False, label="Intro", widget=forms.Textarea(attrs={
                                                                 'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:100px;'}))
 

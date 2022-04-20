@@ -12,11 +12,20 @@
         <img class="img-fluid mx-auto d-block" src="{{ file.photo.url }}"
         onerror="this.onerror=null; this.src='static/img/logo2.png'" alt="home" width=240px />
         {%if people.name == user.first_name|add:"_"|add:user.last_name%}
-        <button class="btn btn-primary btn-sm btn-block" type="submit" value="Apply" style='margin:10px 0;'>
+        <a class="p-2 text-light" href="/{{user.first_name}}_{{user.last_name}}/edit/">
+
+            <button class="btn btn-primary btn-sm btn-block" type="submit" value="Apply" style='margin:10px 0;'>
+            
+            Edit Profile
+            
+            </button>
+            
+        </a>
+        {% comment %} <button class="btn btn-primary btn-sm btn-block" type="submit" value="Apply" style='margin:10px 0;'>
             <a class="p-2 text-light" href="/{{user.first_name}}_{{user.last_name}}/edit/">
                 Edit Profile
             </a>
-        </button>
+        </button> {% endcomment %}
         {%endif%}
     </div>
 
@@ -71,7 +80,7 @@
             </li>
             <li class="list-group-item d-flex justify-content-between lh-condensed">
                 <div>
-                    <h6 class="my-0">Client</h6>
+                    <h6 class="my-0">Degree</h6>
                     <small class="text-muted"></small>
                 </div>
                 <span class="text-muted">{{people.client}}</span>

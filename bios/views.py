@@ -338,7 +338,8 @@ def index(response, name):
                                                    })
 
 def distinct_features():
-    skill_res, industry_res, tech_res, domain_res = [], [], [], []
+    skill_res, industry_res, tech_res, domain_res= [], [], [], []
+    university_res, major_res, degree_res = [], [], []
     people_all = BioInfo.objects.all()
     # loop thru all the people
     for person in people_all:
@@ -349,6 +350,8 @@ def distinct_features():
             domain_lst = person.business_domain.split(',')
         else:
             domain_lst = []
+        university_lst = person.university.split(';')
+        major_lst = person.major.split(',')
         # deal with skill
         for skill in skill_lst:
             skill = skill.strip()
@@ -382,7 +385,7 @@ def distinct_features():
             else:
                 tech_res.append(tech)
 
-        # deal with technology
+        # deal with business domain
         for domain in domain_lst:
             domain = domain.strip()
             if domain in domain_res or not domain or domain == "N/A" or "N/A" in domain:
@@ -393,7 +396,32 @@ def distinct_features():
             else:
                 domain_res.append(domain)
 
-    return sorted(skill_res), sorted(industry_res), sorted(tech_res), sorted(domain_res)
+        # deal with university
+        for uni in university_lst:
+            uni = uni.strip()
+            if uni in university_res or not uni or uni == "N/A" or "N/A" in uni:
+                continue
+            uni_section = uni.split(',')
+            if uni_section[0] not in university_res:
+                university_res.append(uni_section[0])
+
+        # deal with major
+        for major in major_lst:
+            major = major.strip()
+            if major in major_res or not major or major == "N/A" or "N/A" in major:
+                continue
+            major_res.append(major)
+
+        # deal with university
+        for uni in university_lst:
+            uni = uni.strip()
+            if uni in university_res or not uni or uni == "N/A" or "N/A" in uni:
+                continue
+            uni_section = uni.split(',')
+            if uni_section[0] not in university_res:
+                university_res.append(uni_section[0])
+
+    return sorted(skill_res), sorted(industry_res), sorted(tech_res), sorted(domain_res), sorted(university_res), sorted(major_res)
 
 def home(request):
     # single selection
@@ -408,22 +436,29 @@ def home(request):
     tech_level_query = request.GET.get('tech-level-dropdown') # number
     domain_query = request.GET.getlist('domain-dropdown')
     domain_level_query = request.GET.get('domain-level-dropdown') # number
-
-    print(skill_query, industry_query, tech_query, domain_query)
-    print(skill_level_query, industry_level_query, tech_level_query, domain_level_query)
-    
+    # education background
+    university_query = request.GET.get('university-dropdown')
+    major_query = request.GET.get('major-dropdown')
+    degree_query = request.GET.get('degree-dropdown')
+    print("degree here", degree_query)
     # search bar
     search_query = request.GET.get('search-input')
     # distinct options in filter
     people = BioInfo.objects.all()
     position_dist = BioInfo.objects.values('position').distinct()
     location_dist = BioInfo.objects.values('location').distinct()
-    skill_dist, industry_dist, tech_dist, domain_dist = distinct_features()
+    skill_dist, industry_dist, tech_dist, domain_dist, university_dist, major_dist = distinct_features()
 
     if position_query:
         people = people.filter(position=position_query)
     if location_query:
         people = people.filter(location=location_query)
+    if university_query:
+        people = people.filter(university=university_query)
+    if major_query:
+        people = people.filter(major=major_query)
+    if degree_query:
+        people = people.filter(client=degree_query)
 
     if skill_query != ['']:
         for i in skill_query:
@@ -529,6 +564,8 @@ def home(request):
                                               "industry_distinct": industry_dist,
                                               "tech_distinct": tech_dist,
                                               "domain_distinct": domain_dist,
+                                              "university_distinct": university_dist,
+                                              "major_distinct": major_dist,
                                               "skill_query": skill_query,
                                               "industry_query": industry_query,
                                               "technique_query": tech_query,
@@ -537,6 +574,9 @@ def home(request):
                                               "tech_level": tech_level_query,
                                               "industry_level": industry_level_query,
                                               "domain_level": domain_level_query,
+                                              'university_query': university_query,
+                                              'major_query': major_query,
+                                              'degree_query':degree_query,
                                               })
 
 def create(request):
@@ -597,7 +637,7 @@ def create(request):
         if not m:
             m = 'N/A'
 
-        c = form.get('client')
+        c = form.get('degree')
         if not c:
             c = 'N/A'
         intro = form.get('intro')
@@ -765,6 +805,7 @@ def edit(request, name):
         flag = 0
         for i in range(len(ins)):
             if ins[i] == "2" and ins[i-1] == "B" and ins[i+1] == "B":
+                print('warning here')
                 continue   
             if ins[i].isdigit() or ins[i] == '(':
                 flag = i
@@ -862,6 +903,9 @@ def edit(request, name):
             level = i[i_].split(' ')[-1]
             if level.isdigit():
                 for j in range(len(i[i_])):
+                    if i[i_][j] == 2 and i[i_][j-1] == 'B' and i[i_][j+1] == 'B':
+                        print(i[i_])
+                        continue
                     if i[i_][j].isdigit():
                         flag = j
                         break
@@ -869,6 +913,7 @@ def edit(request, name):
                 i[i_] = "{} ({})".format(i[i_][:flag-1], EXPERIENCE_RUBRIC[level])
             else:
                 i[i_] = "{} ({})".format(i[i_], EXPERIENCE_RUBRIC['1'])
+        print(i)
     
         d = form.getlist('domain')
         if not d:
@@ -893,7 +938,7 @@ def edit(request, name):
         if not major:
             major = ' '
 
-        c = form.get('client')
+        c = form.get('degree')
         if not c:
             c = 'N/A'
         intro = form.get('intro')
