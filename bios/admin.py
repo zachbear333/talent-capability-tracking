@@ -9,7 +9,6 @@ from django import forms
 class CsvImportForm(forms.Form):
     csv_upload = forms.FileField()
 
-
 class UserAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'position')
 
@@ -25,21 +24,25 @@ class UserAdmin(admin.ModelAdmin):
             # print(file_data)
             file_data = csv_file.read().decode('utf-8')
             csv_data = file_data.split('\n')
-
+            print(len(csv_data))
             for i, x in enumerate(csv_data):
-                if i == 0:
+                if i == 0 or i == len(csv_data) - 1:
                     continue
                 fields = x.split(',')
+                # print(i, fields[4], fields[1])
                 created = BioInfo.objects.update_or_create(
-                    name = fields[1].replace(';', ','),
-                    email = fields[2].replace(';', ','),
-                    position = fields[3].replace(';', ','),
-                    location = fields[4].replace(';', ','),
-                    industry = fields[5].replace(';', ','),
-                    skill = fields[8].replace(';', ','),
-                    technique = fields[9].replace(';', ','),
-                    client = fields[10].replace(';', ','),
-                    intro = fields[11],
+                    name = fields[3],
+                    email = fields[1],
+                    position = fields[2].replace(';', ','),
+                    location = 'Columbia, MD (HQ)',
+                    industry = 'N/A',
+                    skill = 'N/A',
+                    technique = 'N/A',
+                    client = 'N/A',
+                    university = 'N/A',
+                    major = 'N/A',
+                    intro = 'N/A',
+                    business_domain = 'N/A',
                 )
 
         form = CsvImportForm()

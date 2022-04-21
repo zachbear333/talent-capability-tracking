@@ -11,8 +11,8 @@
             onerror="this.onerror=null; this.src='static/img/logo2.png'" alt="home" width=240px /> {% endcomment %}
         <img class="img-fluid mx-auto d-block" src="{{ file.photo.url }}"
         onerror="this.onerror=null; this.src='static/img/logo2.png'" alt="home" width=240px />
-        {%if people.name == user.first_name|add:"_"|add:user.last_name%}
-        <a class="p-2 text-light" href="/{{user.first_name}}_{{user.last_name}}/edit/">
+        {%if people.name == user.first_name.split|join:'_'|add:"_"|add:user.last_name%}
+        <a class="p-2 text-light" href="/{{user.first_name.split|join:'_'}}_{{user.last_name}}/edit/">
 
             <button class="btn btn-primary btn-sm btn-block" type="submit" value="Apply" style='margin:10px 0;'>
             

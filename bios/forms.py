@@ -253,6 +253,30 @@ class EditProfile(forms.Form):
                                 widget=forms.TextInput(attrs={
                                                              'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:25px;'}))
     degree = forms.CharField(required=False, label="Degree", widget=forms.Select(choices=DEGREE_CHOICE))
+    
+    
+    university_2 = forms.CharField(required=False, label="University2", max_length=400,
+                                widget=forms.TextInput(attrs={
+                                                             'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:25px;'}))
+    major_2 = forms.CharField(required=False, label="Major2", max_length=400,
+                                widget=forms.TextInput(attrs={
+                                                             'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:25px;'}))
+
+    # client = forms.MultipleChoiceField(label="Blend Client", choices=CLIENT_CHOICES, widget=forms.CheckboxSelectMultiple)
+    degree_2 = forms.CharField(required=False, label="Degree", widget=forms.Select(choices=DEGREE_CHOICE)) 
+
+    university_3 = forms.CharField(required=False, label="University3", max_length=400,
+                                widget=forms.TextInput(attrs={
+                                                             'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:25px;'}))
+    major_3 = forms.CharField(required=False, label="Major3", max_length=400,
+                                widget=forms.TextInput(attrs={
+                                                             'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:25px;'}))
+
+    # client = forms.MultipleChoiceField(label="Blend Client", choices=CLIENT_CHOICES, widget=forms.CheckboxSelectMultiple)
+    degree_3 = forms.CharField(required=False, label="Degree", widget=forms.Select(choices=DEGREE_CHOICE))
+    
+    
+    
     intro = forms.CharField(required=False, label="Intro", widget=forms.Textarea(attrs={
                                                                 'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:100px;'}))
 

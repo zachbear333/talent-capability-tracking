@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'user',
     # ms azure
     'django_auth_adfs',
+
+    # sso admin
+    'admin_sso',
 ]
 
 MIDDLEWARE = [
@@ -145,11 +148,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # ms azure
 AUTHENTICATION_BACKENDS = (
     'django_auth_adfs.backend.AdfsAuthCodeBackend',
+    'admin_sso.auth.DjangoSSOAuthBackend',
+    'django.contrib.auth.backends.ModelBackend',    
 )
 
 client_id = '1602ed5b-59e1-4cbc-a040-ba579351ff72'
-client_secret = ''
+client_secret = 'iwi7Q~-E4mnG.6hxBSC~R~FpPSz9b7u4rVJyf'
 tenant_id = 'b1aae949-a5ef-4815-b7af-f7c4aa546b28'
+
+DJANGO_ADMIN_SSO_OAUTH_CLIENT_ID = '1602ed5b-59e1-4cbc-a040-ba579351ff72'
+DJANGO_ADMIN_SSO_OAUTH_CLIENT_SECRET = 'iwi7Q~-E4mnG.6hxBSC~R~FpPSz9b7u4rVJyf'
 
 # client_id = '23e86757-05df-472a-af77-9b79228ffcb4'
 # client_secret = 'vDO7Q~RYd3GynmcZNVGWLlXHpA41ZSIG39Cz1'
