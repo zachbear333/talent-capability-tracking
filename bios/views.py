@@ -329,12 +329,20 @@ def index(response, name):
         domain_dict = sorted(domain_dict.items(), key=lambda x:x[1], reverse=True)
         domain_dict = {k:EXPERIENCE_RUBRIC_MAIN[v] for k, v in domain_dict}
 
+    # if link existed
+    if "{}.pdf".format(item.name) in os.listdir('bios/static/media/bio_ppt'):
+        bio_obj = 1
+    else:
+        bio_obj = 0
+    
+
     return render(response, 'bios/bio-info.html', {"people":item,
                                                    "skill":skill_dict,
                                                    "industry":industry_dict,
                                                    "technique":tech_dict,
                                                    "domain":domain_dict,
                                                    "file":item_file,
+                                                   "bio_obj": bio_obj,
                                                    })
 
 def distinct_features():
@@ -668,11 +676,26 @@ def create(request):
                 "industry" : ', '.join(i), 
                 "university" : u,
                 "major" : m,
-                "client" : c, 
+                "degree" : c, 
+                "university2" : u,
+                "major2" : m,
+                "degree2" : c,
+                "university3" : u,
+                "major3" : m,
+                "degree3" : c,
                 "intro" : intro,
                 "business_domain" : ', '.join(d),
             }
         )
+
+        stu, _ = Student.objects.update_or_create(
+            name = n,
+            defaults={
+                'photo': 'images/logo2.png',
+                'bio_ppt': 'bio_ppt/Blank_Bio.pdf',
+            }
+        )
+
         t.save()
         return HttpResponseRedirect("/")
     else:    
@@ -685,52 +708,53 @@ def upload_img(request):
         form = request.FILES
 
         existed_file = Student.objects.filter(name="{}_{}".format(request.user.first_name,request.user.last_name))
-        print(existed_file)
+        # print(existed_file['photo'].url)
         print('photo' in request.FILES, 'bio_ppt' in request.FILES)
 
         if not existed_file:
             print("Creating new object!!!")
+            # remove the existing file that already has the name
+            print("{}_{}.pdf".format(request.user.first_name,request.user.last_name), os.listdir('bios/static/media/bio_ppt'))
+            if 'bio_ppt' in request.FILES and "{}_{}.pdf".format(request.user.first_name,request.user.last_name) in os.listdir('bios/static/media/bio_ppt'):
+                print("check check bio!")
+                os.remove("bios/static/media/bio_ppt/{}_{}.pdf".format(request.user.first_name,request.user.last_name))
+                print(os.listdir('bios/static/media/bio_ppt'))
+            print("==========================")
+            print("{}_{}.pdf".format(request.user.first_name,request.user.last_name), os.listdir('bios/static/media/images'))
+            if 'photo' in request.FILES and "{}_{}.{}".format(request.user.first_name,request.user.last_name, request.FILES['photo'].name.split('.')[-1]) in os.listdir('bios/static/media/images'):
+                print("check check photo!")
+                os.remove("bios/static/media/images/{}_{}.{}".format(request.user.first_name,request.user.last_name, request.FILES['photo'].name.split('.')[-1]))
+                print(os.listdir('bios/static/media/images'))
+
             file, _ = Student.objects.update_or_create(
                 name = "{}_{}".format(request.user.first_name,request.user.last_name),
                 defaults = {
-                    "photo" : request.FILES['photo'] if 'photo' in request.FILES else None,
-                    "bio_ppt" : request.FILES['bio_ppt'] if 'bio_ppt' in request.FILES else None, 
+                    "photo" : request.FILES['photo'] if 'photo' in request.FILES else 'images/logo2.png',
+                    "bio_ppt" : request.FILES['bio_ppt'] if 'bio_ppt' in request.FILES else 'bio_ppt/Blank_Bio.pdf', 
                 }
             )
             file.save()
         else:
             existed_file = Student.objects.get(name="{}_{}".format(request.user.first_name,request.user.last_name))
             print("Updating existed object!!!", os.listdir('bios/static/media/images'))
-            if 'photo' in request.FILES:
+            if 'photo' in request.FILES and existed_file.photo != 'images/logo2.png':
+                print('checkpoint 1')
+                print(os.listdir('bios/static/media/images'), existed_file.photo)
                 existed_file.photo.delete()
-            if 'bio_ppt' in request.FILES:
+            if 'bio_ppt' in request.FILES and existed_file.bio_ppt != 'bio_ppt/Blank_Bio.pdf':
+                print('checkpoint 2')
+                print(os.listdir('bios/static/media/images'), existed_file.photo)
                 existed_file.bio_ppt.delete()
-            # existed_file.delete()
-            print(os.listdir('bios/static/media/images'))
-            # if existed_file.photo:
-            #     print("hell yes")
-            #     existed_file.photo.delete()
-            #     print(os.listdir('bios/static/media/images'))
-            #     # print("{}_{}.jpeg".format(request.user.first_name,request.user.last_name) in os.listdir('bios/static/media/images'))
-            #     if os.path.exists('bios/static/media/images/{}_{}.jpeg'.format(request.user.first_name,request.user.last_name)):
-            #         os.remove("bios/static/media/images/{}_{}.jpeg".format(request.user.first_name,request.user.last_name))
-            #         print("PHOTO REMOVED!!!")
+
             if os.path.exists('bios/static/media/images/{}_{}.jpeg'.format(request.user.first_name,request.user.last_name)) and "photo" in request.FILES:
                 os.remove("bios/static/media/images/{}_{}.jpeg".format(request.user.first_name,request.user.last_name))
                 print("PHOTO REMOVED!!!")
+                print(os.listdir('bios/static/media/images'), existed_file.photo)
 
-            # if existed_file.bio_ppt:
-            #     print("hell no")
-            #     existed_file.bio_ppt.delete()
-            #     print(os.listdir('bios/static/media/bio_ppt'))
-            #     # print("{}_{}.pdf".format(request.user.first_name,request.user.last_name) in os.listdir('bios/static/media/bio_ppt'))
-            #     if os.path.exists('bios/static/media/bio_ppt/{}_{}.pdf'.format(request.user.first_name,request.user.last_name)):
-            #         os.remove("bios/static/media/bio_ppt/{}_{}.pdf".format(request.user.first_name,request.user.last_name))
-            #         print("BIO PPT REMOVED!!!")
             if os.path.exists('bios/static/media/bio_ppt/{}_{}.pdf'.format(request.user.first_name,request.user.last_name)) and "bio_ppt" in request.FILES:
                 os.remove("bios/static/media/bio_ppt/{}_{}.pdf".format(request.user.first_name,request.user.last_name))
                 print("BIO PPT REMOVED!!!")
-            
+                print(os.listdir('bios/static/media/images'), existed_file.photo)       
             
             # rename the file
             for filename, file in form.items():
@@ -741,13 +765,14 @@ def upload_img(request):
                 else:
                     request.FILES[filename].name = "{}_{}.pdf".format(request.user.first_name,request.user.last_name)
                 print(filename, request.FILES[filename].name)
+            print('after rename file')
+            print(os.listdir('bios/static/media/images'), existed_file.photo)
 
-            # print(request.FILES['photo'].name)
             file, _ = Student.objects.update_or_create(
                 name = "{}_{}".format(request.user.first_name,request.user.last_name),
                 defaults = {
-                    "photo" : request.FILES['photo'] if 'photo' in request.FILES else None,
-                    "bio_ppt" : request.FILES['bio_ppt'] if 'bio_ppt' in request.FILES else None, 
+                    "photo" : request.FILES['photo'] if 'photo' in request.FILES else existed_file.photo,
+                    "bio_ppt" : request.FILES['bio_ppt'] if 'bio_ppt' in request.FILES else existed_file.photo, 
                 }
             )
             file.save()
@@ -755,23 +780,6 @@ def upload_img(request):
     else:
         form = FileUpload()
         return render(request, "bios/upload.html", {"form" : form})
-        
-    
-    
-    # try:
-    #     if request.method == "POST":
-    #         print(request.user.last_name, request.user.first_name)
-    #         form = FileUpload(request.POST, request.FILES)
-    #         form.name = "{}_{}".format(request.user.first_name, request.user.last_name)
-    #         print(form.is_valid())
-    #         if form.is_valid():
-    #             form.save()
-    #         return HttpResponseRedirect("/")
-    #     else:
-    #         form = FileUpload()
-    #         return render(request, "bios/upload.html", {"form" : form})
-    # except:
-    #     raise("CHECK YOUR FILE FORMAT!!")
 
 def edit(request, name):
     person = BioInfo.objects.get(name=name)
@@ -794,7 +802,7 @@ def edit(request, name):
             preselect_dict['id_skill_{}'.format(tmp1.index(s[:flag-1].strip()))] = ''.join(s.strip().split(" ")[-1])
         if flag == 0:
             print(s[:flag-1].strip())
-    print(skill_init)
+    print("skill initial", skill_init)
 
     # initial industries
     industries = person.industry.split(',')
@@ -814,7 +822,7 @@ def edit(request, name):
             industry_init.append(ins[:flag-1].strip())
             print("INDUSTRY ****>", industry_init)
             preselect_dict['id_industry_{}'.format(tmp2.index(ins[:flag-1].strip()))] = ''.join(ins.strip().split(" ")[-2:])
-    print(industry_init)
+    print("industry initial", industry_init)
 
     # initial techniques
     techniques = person.technique.split(',')
@@ -832,7 +840,7 @@ def edit(request, name):
         if tech_init:
             print("TECH ****>", tech_init)
             preselect_dict['id_technique_{}'.format(tmp3.index(tech[:flag-1].strip()))] = ''.join(tech.strip().split(" ")[-1])
-    print(tech_init)
+    print('technique skill initial', tech_init)
 
     # initial domain
     domain_init = []
@@ -851,7 +859,7 @@ def edit(request, name):
             if domain_init:
                 print("DOMAIN ****>", domain_init)
                 preselect_dict['id_domain_{}'.format(tmp4.index(dom[:flag-1].strip()))] = ''.join(dom.strip().split(" ")[-1])
-        print(domain_init)
+    print('domain initial', domain_init)
 
     print(preselect_dict)
     print("====================")
@@ -900,11 +908,12 @@ def edit(request, name):
         if not i:
             i = ['N/A 1']
         for i_ in range(len(i)):
+            # print(i[i_])
             level = i[i_].split(' ')[-1]
             if level.isdigit():
                 for j in range(len(i[i_])):
-                    if i[i_][j] == 2 and i[i_][j-1] == 'B' and i[i_][j+1] == 'B':
-                        print(i[i_])
+                    if i[i_][j] == "2" and i[i_][j-1] == 'B' and i[i_][j+1] == 'B':
+                        print("B2B special", i[i_])
                         continue
                     if i[i_][j].isdigit():
                         flag = j
@@ -930,17 +939,24 @@ def edit(request, name):
             else:
                 d[k] = "{} ({})".format(d[k], SKILL_RUBRIC['1'])
 
-        uni = form.get('university')
-        if not uni:
-            uni = ' '
+        uni_1 = form.get('university')
+        major_1 = form.get('major')
+        degree_1 = form.get('degree')
+        if not uni_1 or not major_1 or not degree_1:
+            uni_1, major_1, degree_1 = 'N/A', 'N/A', 'N/A'
 
-        major = form.get('major')
-        if not major:
-            major = ' '
+        uni_2 = form.get('university_2')
+        major_2 = form.get('major_2')
+        degree_2 = form.get('degree_2')
+        if not uni_2 or not major_2 or not degree_2:
+            uni_2, major_2, degree_2 = 'N/A', 'N/A', 'N/A'
 
-        c = form.get('degree')
-        if not c:
-            c = 'N/A'
+        uni_3 = form.get('university_3')
+        major_3 = form.get('major_3')
+        degree_3 = form.get('degree_3')
+        if not uni_3 or not major_3 or not degree_3:
+            uni_3, major_3, degree_3 = 'N/A', 'N/A', 'N/A'
+
         intro = form.get('intro')
         if not intro:
             intro = 'N/A'
@@ -950,26 +966,50 @@ def edit(request, name):
                 "location" : l, 
                 "skill" : ', '.join(s),
                 "technique" : ', '.join(tech), 
-                "university": uni,
-                "major": major,
+                "university": uni_1,
+                "major": major_1,
                 "industry" : ', '.join(i), 
-                "client" : c, 
+                "degree" : degree_1, 
                 "intro" : intro,
-                "business_domain" : ', '.join(d)
+                "business_domain" : ', '.join(d),
+                "university2": uni_2,
+                "major2": major_2,
+                "degree2": degree_2,
+                "university3": uni_3,
+                "major3": major_3,
+                "degree3": degree_3,   
             }
         )
         t.save()
         
         return HttpResponseRedirect("/{}".format(name))      
     else:
+        u1 = person.university if person.university != 'N/A' else ''
+        u2 = person.university2 if person.university2 != 'N/A' else ''
+        u3 = person.university3 if person.university3 != 'N/A' else ''
+        m1 = person.major if person.major != 'N/A' else ''
+        m2 = person.major2 if person.major2 != 'N/A' else ''
+        m3 = person.major3 if person.major3 != 'N/A' else ''
+        d1 = person.degree if person.degree != 'N/A' else ''
+        d2 = person.degree2 if person.degree2 != 'N/A' else ''
+        d3 = person.degree3 if person.degree3 != 'N/A' else ''
+        intro = person.intro if person.intro != 'N/A' else ''
+
         form = EditProfile(initial={'skill' : skill_init,
                                     'industry' : industry_init,
                                     'technique' : tech_init, 
-                                    'client' : person.client,
-                                    'intro' : person.intro,
+                                    'degree' : person.degree,
+                                    'intro' : intro,
                                     'domain':domain_init,
-                                    'university':person.university,
-                                    'major': person.major,
+                                    'university':u1,
+                                    'major': m1,
+                                    'degree': d1,
+                                    'university_2':u2,
+                                    'major_2': m2,
+                                    'degree_2': d2,
+                                    'university_3':u3,
+                                    'major_3': m3,
+                                    'degree_3': d3,
                                     })
         return render(request, "bios/edit.html", {"form":form,
                                                   "person":person,

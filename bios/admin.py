@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from django.shortcuts import render
-from .models import BioInfo
+from .models import BioInfo, Student
 from django import forms
 
 # Register your models here.
@@ -38,11 +38,23 @@ class UserAdmin(admin.ModelAdmin):
                     industry = 'N/A',
                     skill = 'N/A',
                     technique = 'N/A',
-                    client = 'N/A',
+                    degree = 'N/A',
                     university = 'N/A',
                     major = 'N/A',
+                    degree2 = 'N/A',
+                    university2 = 'N/A',
+                    major2 = 'N/A',
+                    degree3 = 'N/A',
+                    university3 = 'N/A',
+                    major3 = 'N/A',
                     intro = 'N/A',
                     business_domain = 'N/A',
+                )
+
+                created_ = Student.objects.update_or_create(
+                    name = fields[3],
+                    photo = 'images/logo2.png',
+                    bio_ppt = 'bio_ppt/Blank_Bio.pdf',
                 )
 
         form = CsvImportForm()
