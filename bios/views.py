@@ -743,7 +743,7 @@ def upload_img(request):
                 existed_file.photo.delete()
             if 'bio_ppt' in request.FILES and existed_file.bio_ppt != 'bio_ppt/Blank_Bio.pdf':
                 print('checkpoint 2')
-                print(os.listdir('bios/static/media/images'), existed_file.photo)
+                print(os.listdir('bios/static/media/bio_ppt'), existed_file.bio_ppt)
                 existed_file.bio_ppt.delete()
 
             if os.path.exists('bios/static/media/images/{}_{}.jpeg'.format(request.user.first_name,request.user.last_name)) and "photo" in request.FILES:
@@ -754,7 +754,7 @@ def upload_img(request):
             if os.path.exists('bios/static/media/bio_ppt/{}_{}.pdf'.format(request.user.first_name,request.user.last_name)) and "bio_ppt" in request.FILES:
                 os.remove("bios/static/media/bio_ppt/{}_{}.pdf".format(request.user.first_name,request.user.last_name))
                 print("BIO PPT REMOVED!!!")
-                print(os.listdir('bios/static/media/images'), existed_file.photo)       
+                print(os.listdir('bios/static/media/bio_ppt'), existed_file.bio_ppt)       
             
             # rename the file
             for filename, file in form.items():
