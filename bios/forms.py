@@ -87,6 +87,7 @@ SKILL_CHOICES = [
     ('Sentiment analysis', 'Sentiment analysis'),
     ('Latent Dirichlet Allocation', 'Latent Dirichlet Allocation'),
     ('Topic Modelling', 'Topic Modelling'),
+    ('Named Entity Recognition', 'Named Entity Recognition'),
 ]
 
 INDUSTRIES_CHOICES = [
@@ -143,6 +144,7 @@ TECHNICUQE_CHOICES = [
     ('Power BI', 'Power BI'),
     ('Dashboard Design', 'Dashboard Design'),
     ('Plotly', 'Plotly'),
+    ('Streamlit', 'Streamlit'),
     # DATABASE
     ('SQL', "SQL"),
     ('MySQL', 'MySQL'),
@@ -154,7 +156,8 @@ TECHNICUQE_CHOICES = [
     ('Linux', 'Linux'),
     ('Git', 'Git'),
     ('PyTorch', 'PyTorch'),
-    ('Tensorflow', 'Tensorflow')
+    ('Tensorflow', 'Tensorflow'),
+    ('Keras', 'Keras'),
 ]
 
 POSITION_CHOICES = [

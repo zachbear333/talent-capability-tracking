@@ -108,6 +108,7 @@ SKILL_CHOICES = [
     ('Sentiment analysis', 'Sentiment analysis'),
     ('Latent Dirichlet Allocation', 'Latent Dirichlet Allocation'),
     ('Topic Modelling', 'Topic Modelling'),
+    ('Named Entity Recognition', 'Named Entity Recognition'),
 ]
 
 
@@ -165,6 +166,7 @@ TECHNICUQE_CHOICES = [
     ('Power BI', 'Power BI'),
     ('Dashboard Design', 'Dashboard Design'),
     ('Plotly', 'Plotly'),
+    ('Streamlit', 'Streamlit'),
     # DATABASE
     ('SQL', "SQL"),
     ('MySQL', 'MySQL'),
@@ -176,7 +178,8 @@ TECHNICUQE_CHOICES = [
     ('Linux', 'Linux'),
     ('Git', 'Git'),
     ('PyTorch', 'PyTorch'),
-    ('Tensorflow', 'Tensorflow')
+    ('Tensorflow', 'Tensorflow'),
+    ('Keras', 'Keras'),
 ]
 
 POSITION_CHOICES = [
@@ -359,7 +362,11 @@ def distinct_features():
         else:
             domain_lst = []
         university_lst = person.university.split(';')
+        university_lst2 = person.university2.split(';')
+        university_lst3 = person.university3.split(';')
         major_lst = person.major.split(',')
+        major_lst2 = person.major2.split(',')
+        major_lst3 = person.major3.split(',')
         # deal with skill
         for skill in skill_lst:
             skill = skill.strip()
@@ -413,21 +420,41 @@ def distinct_features():
             if uni_section[0] not in university_res:
                 university_res.append(uni_section[0])
 
-        # deal with major
-        for major in major_lst:
-            major = major.strip()
-            if major in major_res or not major or major == "N/A" or "N/A" in major:
-                continue
-            major_res.append(major)
-
         # deal with university
-        for uni in university_lst:
+        for uni in university_lst2:
             uni = uni.strip()
             if uni in university_res or not uni or uni == "N/A" or "N/A" in uni:
                 continue
             uni_section = uni.split(',')
             if uni_section[0] not in university_res:
                 university_res.append(uni_section[0])
+
+        for uni in university_lst3:
+            uni = uni.strip()
+            if uni in university_res or not uni or uni == "N/A" or "N/A" in uni:
+                continue
+            uni_section = uni.split(',')
+            if uni_section[0] not in university_res:
+                university_res.append(uni_section[0])
+        
+        # deal with major
+        for major in major_lst:
+            major = major.strip()
+            if major in major_res or not major or major == "N/A" or "N/A" in major:
+                continue
+            major_res.append(major)
+            
+        for major in major_lst2:
+            major = major.strip()
+            if major in major_res or not major or major == "N/A" or "N/A" in major:
+                continue
+            major_res.append(major)
+        
+        for major in major_lst3:
+            major = major.strip()
+            if major in major_res or not major or major == "N/A" or "N/A" in major:
+                continue
+            major_res.append(major)
 
     return sorted(skill_res), sorted(industry_res), sorted(tech_res), sorted(domain_res), sorted(university_res), sorted(major_res)
 
@@ -457,16 +484,21 @@ def home(request):
     location_dist = BioInfo.objects.values('location').distinct()
     skill_dist, industry_dist, tech_dist, domain_dist, university_dist, major_dist = distinct_features()
 
+    # university_dist = list(set().union(university_dist, university_dist2, university_dist3))
     if position_query:
         people = people.filter(position=position_query)
     if location_query:
         people = people.filter(location=location_query)
     if university_query:
-        people = people.filter(university=university_query)
+        people = people.filter(university=university_query) | \
+                        people.filter(university2=university_query) | \
+                        people.filter(university3=university_query) 
     if major_query:
-        people = people.filter(major=major_query)
+        people = people.filter(major=major_query) | \
+                    people.filter(major2=major_query) | \
+                    people.filter(major3=major_query) 
     if degree_query:
-        people = people.filter(client=degree_query)
+        people = people.filter(degree=degree_query)
 
     if skill_query != ['']:
         for i in skill_query:
