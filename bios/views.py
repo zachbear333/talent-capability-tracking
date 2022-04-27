@@ -15,6 +15,9 @@ from django.template.loader import get_template
 from django import template
 import os
 from django.contrib import messages
+import csv
+from datetime import datetime
+from django.core.exceptions import PermissionDenied
 
 
 register = template.Library()
@@ -67,7 +70,7 @@ SKILL_CHOICES = [
     ('Personalization', 'Personalization'),
     ('Customer Segmentation and Insights', 'Customer Segmentation and Insights'),
     ('LTV', 'LTV'),
-    ('Unit Testing (QA)', 'Unit Testing (QA)'),
+    ('Unit Testing / QA', 'Unit Testing / QA'),
     ('Digital Analytics', 'Digital Analytics'),
     ('Factor Analysis', 'Factor Analysis'),
     ('Insight Generation', 'Insight Generation'),
@@ -264,6 +267,27 @@ for a, _ in TECHNICUQE_CHOICES:
 tmp4 = []
 for a, _ in DOMAIN_CHOICES:
     tmp4.append(a)
+
+def export(response):
+    if response.user.first_name != 'Ziyu':
+        raise PermissionDenied("Custom message")
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="tct{}.csv"'.format(datetime.now().strftime("%Y%m%d"))
+
+    writer = csv.writer(response)
+    writer.writerow(['name','email', 'position', 'location', 'skill', 'technique', 
+                        'industry', 'business_domain', 'university', 'major', 'degree',
+                        'university2', 'major2', 'degree2', 'university3', 'major3', 'degree3',
+                        'intro', 'date_modified'])
+
+    users = BioInfo.objects.all().values_list('name','email', 'position', 'location', 'skill', 'technique', 
+                                            'industry', 'business_domain', 'university', 'major', 'degree',
+                                            'university2', 'major2', 'degree2', 'university3', 'major3', 'degree3',
+                                            'intro', 'date_modified')
+    for user in users:
+        writer.writerow(user)
+
+    return response
 
 def test(request):
     if request.method == "POST":
@@ -617,6 +641,7 @@ def home(request):
                                               'university_query': university_query,
                                               'major_query': major_query,
                                               'degree_query':degree_query,
+                                              'search_query':search_query
                                               })
 
 def create(request):
@@ -792,7 +817,7 @@ def upload_img(request):
             for filename, file in form.items():
                 print('======================')
                 print(filename, request.FILES[filename].name)
-                if request.FILES[filename].name.split('.')[-1] in ['jpeg', 'jpg', 'png']:
+                if request.FILES[filename].name.split('.')[-1] in ['jpeg', 'jpg', 'png', 'JPG', 'JPEG', 'PNG']:
                     request.FILES[filename].name = "{}_{}.{}".format(request.user.first_name,request.user.last_name, request.FILES[filename].name.split('.')[-1])
                 else:
                     request.FILES[filename].name = "{}_{}.pdf".format(request.user.first_name,request.user.last_name)
@@ -804,7 +829,7 @@ def upload_img(request):
                 name = "{}_{}".format(request.user.first_name,request.user.last_name),
                 defaults = {
                     "photo" : request.FILES['photo'] if 'photo' in request.FILES else existed_file.photo,
-                    "bio_ppt" : request.FILES['bio_ppt'] if 'bio_ppt' in request.FILES else existed_file.photo, 
+                    "bio_ppt" : request.FILES['bio_ppt'] if 'bio_ppt' in request.FILES else existed_file.bio_ppt, 
                 }
             )
             file.save()
@@ -814,6 +839,8 @@ def upload_img(request):
         return render(request, "bios/upload.html", {"form" : form})
 
 def edit(request, name):
+    if name != request.user.first_name.replace(" ", "_") + '_' + request.user.last_name:
+        raise PermissionDenied('You are not allowed')
     person = BioInfo.objects.get(name=name)
     # initial skills
     skills = person.skill.split(',')
@@ -892,6 +919,10 @@ def edit(request, name):
                 print("DOMAIN ****>", domain_init)
                 preselect_dict['id_domain_{}'.format(tmp4.index(dom[:flag-1].strip()))] = ''.join(dom.strip().split(" ")[-1])
     print('domain initial', domain_init)
+
+    location_init = ''
+    if person.location and person.location != 'N/A':
+        location_init = person.location
 
     print(preselect_dict)
     print("====================")
@@ -1027,7 +1058,8 @@ def edit(request, name):
         d3 = person.degree3 if person.degree3 != 'N/A' else ''
         intro = person.intro if person.intro != 'N/A' else ''
 
-        form = EditProfile(initial={'skill' : skill_init,
+        form = EditProfile(initial={'location' : location_init,
+                                    'skill' : skill_init,
                                     'industry' : industry_init,
                                     'technique' : tech_init, 
                                     'degree' : person.degree,
@@ -1047,9 +1079,8 @@ def edit(request, name):
                                                   "person":person,
                                                   "preselect":preselect_dict})
 
-def error_404(request, exception):
-        data = {}
-        return render(request,'certman/404.html', data)
+# def error_404(request):
+#     return render(request,'404.html')
 
 def dashboard(request):
     return render(request, 'bios/dashboard.html')

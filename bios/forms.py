@@ -46,7 +46,7 @@ SKILL_CHOICES = [
     ('Personalization', 'Personalization'),
     ('Customer Segmentation and Insights', 'Customer Segmentation and Insights'),
     ('LTV', 'LTV'),
-    ('Unit Testing (QA)', 'Unit Testing (QA)'),
+    ('Unit Testing / QA', 'Unit Testing / QA'),
     ('Digital Analytics', 'Digital Analytics'),
     ('Factor Analysis', 'Factor Analysis'),
     ('Insight Generation', 'Insight Generation'),

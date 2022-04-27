@@ -10,6 +10,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('create/', views.create, name='create'),
     path('test/', views.test, name='test'),
+    path('export/', views.export, name='export'),
     path('upload_img/', views.upload_img, name='upload_img'),
     path('talent_dashboard/', views.dashboard, name='dashboard'),
 ]
