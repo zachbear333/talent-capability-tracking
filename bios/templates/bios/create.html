@@ -14,14 +14,16 @@
     {% csrf_token %}
 
     <div>
-        <table id="create-table">
-            <tr>
-                <th> Name </th>
-                <th> Email </th>
-                <th> Position </th>
-                <th> Location </th>
-                {% comment %} <th> Business Domain </th> {% endcomment %}
-            </tr>
+        <table class="table table-sm">
+            <thead class="thead-light">
+                <tr>
+                    <th> Name </th>
+                    <th> Email </th>
+                    <th> Position </th>
+                    <th> Location </th>
+                    {% comment %} <th> Business Domain </th> {% endcomment %}
+                </tr>
+            </thead>
             <td> {{form.name}} </td>
             <td> {{form.email}} </td>
             <td> {{form.position}} </td>
@@ -30,7 +32,9 @@
         </table>
 
     </div>
-    <button type="submit" , name="save"> Create / Update Profile </button>
+    <button class="btn btn-primary" type="submit" name="save">
+        Create Profile
+    </button>
 </form>
 
 
