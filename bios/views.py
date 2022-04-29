@@ -20,13 +20,12 @@ from datetime import datetime
 from django.core.exceptions import PermissionDenied
 
 
-register = template.Library()
-@register.filter(name='split')
-def split(value, key):
-    """
-        Returns the value turned into a list.
-    """
-    return value.split(key)
+# register = template.Library()
+# @register.filter(name="remove_par")
+# def remove_par(value):
+#     value = value.replace('(', '')
+#     value = value.replace(')', '')
+#     return value
 
 LOCATION_CHOICES = [
     ('Columbia, MD (HQ)', 'Columbia, MD (HQ)'),
@@ -357,7 +356,8 @@ def index(response, name):
         domain_dict = {k:EXPERIENCE_RUBRIC_MAIN[v] for k, v in domain_dict}
 
     # if link existed
-    if "{}.pdf".format(item.name) in os.listdir('bios/static/media/bio_ppt'):
+    tmp_file_name = "{}.pdf".format(item.name)
+    if tmp_file_name in os.listdir('bios/static/media/bio_ppt') or tmp_file_name.replace('(','').replace(')', '') in os.listdir('bios/static/media/bio_ppt'):
         bio_obj = 1
     else:
         bio_obj = 0
@@ -483,6 +483,8 @@ def distinct_features():
     return sorted(skill_res), sorted(industry_res), sorted(tech_res), sorted(domain_res), sorted(university_res), sorted(major_res)
 
 def home(request):
+    # user in our database
+    user_db = BioInfo.objects.values('name').distinct()
     # single selection
     position_query = request.GET.get('position-dropdown')
     location_query = request.GET.get('location-dropdown')
@@ -641,7 +643,8 @@ def home(request):
                                               'university_query': university_query,
                                               'major_query': major_query,
                                               'degree_query':degree_query,
-                                              'search_query':search_query
+                                              'search_query':search_query,
+                                              'all_user_name': user_db,
                                               })
 
 def create(request):
@@ -764,23 +767,23 @@ def upload_img(request):
         print(os.listdir('bios/static/media/images'))
         form = request.FILES
 
-        existed_file = Student.objects.filter(name="{}_{}".format(request.user.first_name,request.user.last_name))
+        existed_file = Student.objects.filter(name="{}_{}".format(request.user.first_name.replace(' ', '_'),request.user.last_name.replace(' ', '_')))
         # print(existed_file['photo'].url)
         print('photo' in request.FILES, 'bio_ppt' in request.FILES)
 
         if not existed_file:
             print("Creating new object!!!")
             # remove the existing file that already has the name
-            print("{}_{}.pdf".format(request.user.first_name,request.user.last_name), os.listdir('bios/static/media/bio_ppt'))
-            if 'bio_ppt' in request.FILES and "{}_{}.pdf".format(request.user.first_name,request.user.last_name) in os.listdir('bios/static/media/bio_ppt'):
+            print("{}_{}.pdf".format(request.user.first_name.replace(' ', '_'),request.user.last_name.replace(' ', '_')), os.listdir('bios/static/media/bio_ppt'))
+            if 'bio_ppt' in request.FILES and "{}_{}.pdf".format(request.user.first_name.replace(' ', '_'),request.user.last_name.replace(' ', '_')) in os.listdir('bios/static/media/bio_ppt'):
                 print("check check bio!")
-                os.remove("bios/static/media/bio_ppt/{}_{}.pdf".format(request.user.first_name,request.user.last_name))
+                os.remove("bios/static/media/bio_ppt/{}_{}.pdf".format(request.user.first_name.replace(' ', '_'),request.user.last_name.replace(' ', '_')))
                 print(os.listdir('bios/static/media/bio_ppt'))
             print("==========================")
-            print("{}_{}.pdf".format(request.user.first_name,request.user.last_name), os.listdir('bios/static/media/images'))
-            if 'photo' in request.FILES and "{}_{}.{}".format(request.user.first_name,request.user.last_name, request.FILES['photo'].name.split('.')[-1]) in os.listdir('bios/static/media/images'):
+            print("{}_{}.pdf".format(request.user.first_name.replace(' ', '_'),request.user.last_name.replace(' ', '_')), os.listdir('bios/static/media/images'))
+            if 'photo' in request.FILES and "{}_{}.{}".format(request.user.first_name.replace(' ', '_'),request.user.last_name.replace(' ', '_'), request.FILES['photo'].name.split('.')[-1]) in os.listdir('bios/static/media/images'):
                 print("check check photo!")
-                os.remove("bios/static/media/images/{}_{}.{}".format(request.user.first_name,request.user.last_name, request.FILES['photo'].name.split('.')[-1]))
+                os.remove("bios/static/media/images/{}_{}.{}".format(request.user.first_name.replace(' ', '_'),request.user.last_name.replace(' ', '_'), request.FILES['photo'].name.split('.')[-1]))
                 print(os.listdir('bios/static/media/images'))
 
             file, _ = Student.objects.update_or_create(
@@ -792,8 +795,9 @@ def upload_img(request):
             )
             file.save()
         else:
-            existed_file = Student.objects.get(name="{}_{}".format(request.user.first_name,request.user.last_name))
+            existed_file = Student.objects.get(name="{}_{}".format(request.user.first_name.replace(' ', '_'),request.user.last_name.replace(' ', '_')))
             print("Updating existed object!!!", os.listdir('bios/static/media/images'))
+            print("Updating existed object!!!", os.listdir('bios/static/media/bio_ppt'))
             if 'photo' in request.FILES and existed_file.photo != 'images/logo2.png':
                 print('checkpoint 1')
                 print(os.listdir('bios/static/media/images'), existed_file.photo)
@@ -803,13 +807,13 @@ def upload_img(request):
                 print(os.listdir('bios/static/media/bio_ppt'), existed_file.bio_ppt)
                 existed_file.bio_ppt.delete()
 
-            if os.path.exists('bios/static/media/images/{}_{}.jpeg'.format(request.user.first_name,request.user.last_name)) and "photo" in request.FILES:
-                os.remove("bios/static/media/images/{}_{}.jpeg".format(request.user.first_name,request.user.last_name))
+            if os.path.exists('bios/static/media/images/{}_{}.jpeg'.format(request.user.first_name.replace(' ', '_'),request.user.last_name.replace(' ', '_'))) and "photo" in request.FILES:
+                os.remove("bios/static/media/images/{}_{}.jpeg".format(request.user.first_name.replace(' ', '_'),request.user.last_name.replace(' ', '_')))
                 print("PHOTO REMOVED!!!")
                 print(os.listdir('bios/static/media/images'), existed_file.photo)
 
-            if os.path.exists('bios/static/media/bio_ppt/{}_{}.pdf'.format(request.user.first_name,request.user.last_name)) and "bio_ppt" in request.FILES:
-                os.remove("bios/static/media/bio_ppt/{}_{}.pdf".format(request.user.first_name,request.user.last_name))
+            if os.path.exists('bios/static/media/bio_ppt/{}_{}.pdf'.format(request.user.first_name.replace(' ', '_'),request.user.last_name.replace(' ', '_'))) and "bio_ppt" in request.FILES:
+                os.remove("bios/static/media/bio_ppt/{}_{}.pdf".format(request.user.first_name.replace(' ', '_'),request.user.last_name.replace(' ', '_')))
                 print("BIO PPT REMOVED!!!")
                 print(os.listdir('bios/static/media/bio_ppt'), existed_file.bio_ppt)       
             
@@ -818,28 +822,32 @@ def upload_img(request):
                 print('======================')
                 print(filename, request.FILES[filename].name)
                 if request.FILES[filename].name.split('.')[-1] in ['jpeg', 'jpg', 'png', 'JPG', 'JPEG', 'PNG']:
-                    request.FILES[filename].name = "{}_{}.{}".format(request.user.first_name,request.user.last_name, request.FILES[filename].name.split('.')[-1])
+                    request.FILES[filename].name = "{}_{}.{}".format(request.user.first_name.replace(' ', '_'),request.user.last_name.replace(' ', '_'), request.FILES[filename].name.split('.')[-1])
                 else:
-                    request.FILES[filename].name = "{}_{}.pdf".format(request.user.first_name,request.user.last_name)
+                    request.FILES[filename].name = "{}_{}.pdf".format(request.user.first_name.replace(' ', '_'),request.user.last_name.replace(' ', '_'))
                 print(filename, request.FILES[filename].name)
             print('after rename file')
             print(os.listdir('bios/static/media/images'), existed_file.photo)
-
+            print(os.listdir('bios/static/media/bio_ppt'), existed_file.bio_ppt)
+            # print(request.FILES["bio_ppt"])
             file, _ = Student.objects.update_or_create(
-                name = "{}_{}".format(request.user.first_name,request.user.last_name),
+                name = "{}_{}".format(request.user.first_name.replace(' ', '_'),request.user.last_name.replace(' ', '_')),
                 defaults = {
                     "photo" : request.FILES['photo'] if 'photo' in request.FILES else existed_file.photo,
                     "bio_ppt" : request.FILES['bio_ppt'] if 'bio_ppt' in request.FILES else existed_file.bio_ppt, 
                 }
             )
+            # if file.bio_ppt == "static/media/bio_ppt/Cheng_Yu_Jacob_Li.pdf":
+            #     os.rename("static/media/bio_ppt/Cheng_Yu_Jacob_Li.pdf", "static/media/bio_ppt/Cheng_Yu_(Jacob)_Li.pdf")
             file.save()
-        return HttpResponseRedirect("/{}".format(request.user.first_name+'_'+request.user.last_name))
+        return HttpResponseRedirect("/{}".format(request.user.first_name.replace(' ', '_')+'_'+request.user.last_name.replace(' ', '_')))
+
     else:
         form = FileUpload()
         return render(request, "bios/upload.html", {"form" : form})
 
 def edit(request, name):
-    if name != request.user.first_name.replace(" ", "_") + '_' + request.user.last_name:
+    if name != request.user.first_name.replace(" ", "_") + '_' + request.user.last_name.replace(' ', '_'):
         raise PermissionDenied('You are not allowed')
     person = BioInfo.objects.get(name=name)
     # initial skills

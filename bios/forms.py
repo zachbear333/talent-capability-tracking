@@ -186,6 +186,7 @@ LEVEL_CHOICES = [
 ]
 
 DEGREE_CHOICE = [
+    ('B.A.', 'B.A.'),
     ('B.S.', 'B.S.'),
     ('M.S.', 'M.S.'),
     ('PhD', 'PhD'),

@@ -132,10 +132,11 @@
                     <small class="text-muted"></small>
                 </div>
                 {% if bio_obj == 1 %}
+                    {% comment %} {% load remove_par %} {% endcomment %}
                     {% comment %} <span class="text-muted"><a href="{{ file.bio_ppt.url }}" onerror="">Link</a></span> {% endcomment %}
-                    <span class="text-muted"><a href="/media/bio_ppt/{{people.name}}.pdf" onerror="">Link</a></span>
+                    <span class="text-muted"><a href="/media/bio_ppt/{{ people.name|remove_par }}.pdf" onerror="">Link</a></span>
                 {% else %}
-                    <span class="text-muted">No Bio Found</a></span>
+                    <span class="text-muted">No Bio Found {{ people.name|remove_par }}</a></span>
                 {% endif %}
             </li>
             <li class="list-group-item d-flex justify-content-between lh-condensed">

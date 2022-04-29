@@ -37,7 +37,7 @@
                 Homepage
             </a>
             {% comment %} <a class="p-2 text-dark" href="/{{user.first_name}}_{{user.last_name}}"> {% endcomment %}
-            <a class="p-2 text-dark" href="/{{user.first_name.split|join:'_'}}_{{user.last_name}}">    
+            <a class="p-2 text-dark" href="/{{user.first_name.split|join:'_'}}_{{user.last_name.split|join:'_'}}">    
                 My Profile
             </a>
             <a class="p-2 text-dark" href="/upload_img/">

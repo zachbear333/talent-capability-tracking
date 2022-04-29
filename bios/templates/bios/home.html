@@ -138,6 +138,7 @@
                 <label for="degree"> Degree </label>
                 <select class="custom-select d-block w-100" name="degree-dropdown">
                     <option value="">Choose...</option>
+                    <option value="B.A." {%if degree_query == "B.A." %} selected {%endif%}> B.A.</option>
                     <option value="B.S." {%if degree_query == "B.S." %} selected {%endif%}> B.S.</option>
                     <option value="M.S." {%if degree_query == "M.S." %} selected {%endif%}> M.S.</option>
                     <option value="PhD" {%if degree_query == "PhD" %} selected {%endif%}> PhD</option>
