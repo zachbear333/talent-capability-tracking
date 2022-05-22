@@ -24,39 +24,63 @@ class UserAdmin(admin.ModelAdmin):
             # print(file_data)
             file_data = csv_file.read().decode('utf-8')
             csv_data = file_data.split('\n')
+            error_lst = []
             print(len(csv_data))
             for i, x in enumerate(csv_data):
+                print(i, x)
                 if i == 0 or i == len(csv_data) - 1:
                     continue
                 fields = x.split(',')
-                # print(i, fields[4], fields[1])
-                created = BioInfo.objects.update_or_create(
-                    name = fields[3],
-                    email = fields[1],
-                    position = fields[2].replace(';', ','),
-                    location = 'Columbia, MD (HQ)',
-                    industry = 'N/A',
-                    skill = 'N/A',
-                    technique = 'N/A',
-                    degree = 'N/A',
-                    university = 'N/A',
-                    major = 'N/A',
-                    degree2 = 'N/A',
-                    university2 = 'N/A',
-                    major2 = 'N/A',
-                    degree3 = 'N/A',
-                    university3 = 'N/A',
-                    major3 = 'N/A',
-                    intro = 'N/A',
-                    business_domain = 'N/A',
-                )
+                try:
+                    created = BioInfo.objects.update_or_create(
+                        # load existing db from csv file
+                        name = fields[0].replace(';', ','),
+                        email = fields[1].replace(';', ','),
+                        position = fields[2].replace(';', ','),
+                        location = fields[3].replace(';', ','), 
+                        skill = fields[4].replace(';', ','),
+                        technique = fields[5].replace(';', ','),
+                        industry = fields[6].replace(';', ','),
+                        business_domain = fields[7].replace(';', ','),
+                        university = fields[8].replace(';', ','),
+                        major = fields[9].replace(';', ','),
+                        degree = fields[10].replace(';', ','),
+                        university2 = fields[11].replace(';', ','),
+                        major2 = fields[12].replace(';', ','),
+                        degree2 = fields[13].replace(';', ','),
+                        university3 = fields[14].replace(';', ','),
+                        major3 = fields[15].replace(';', ','),
+                        degree3 = fields[16].replace(';', ','),
+                        intro =  fields[17].replace(';', ','),
+                        # first run
+                        # name = fields[3],
+                        # email = fields[1],
+                        # position = fields[2].replace(';', ','),
+                        # location = 'Columbia, MD (HQ)',
+                        # industry = 'N/A',
+                        # skill = 'N/A',
+                        # technique = 'N/A',
+                        # degree = 'N/A',
+                        # university = 'N/A',
+                        # major = 'N/A',
+                        # degree2 = 'N/A',
+                        # university2 = 'N/A',
+                        # major2 = 'N/A',
+                        # degree3 = 'N/A',
+                        # university3 = 'N/A',
+                        # major3 = 'N/A',
+                        # intro = 'N/A',
+                        # business_domain = 'N/A',
+                    )
 
-                created_ = Student.objects.update_or_create(
-                    name = fields[3],
-                    photo = 'images/logo2.png',
-                    bio_ppt = 'bio_ppt/Blank_Bio.pdf',
-                )
-
+                    created_ = Student.objects.update_or_create(
+                        name = fields[3],
+                        photo = 'images/logo2.png',
+                        bio_ppt = 'bio_ppt/Blank_Bio.pdf',
+                    )
+                except:
+                    error_lst.append(i)
+        print(error_lst)
         form = CsvImportForm()
         data = {"form" : form}
         return render(request, 'admin/csv_upload.html', data)

@@ -11,8 +11,9 @@
             onerror="this.onerror=null; this.src='static/img/logo2.png'" alt="home" width=240px /> {% endcomment %}
         <img class="img-fluid mx-auto d-block" src="{{ file.photo.url }}"
         onerror="this.onerror=null; this.src='static/img/logo2.png'" alt="home" width=240px />
-        {%if people.name == user.first_name.split|join:'_'|add:"_"|add:user.last_name%}
-        <a class="p-2 text-light" href="/{{user.first_name.split|join:'_'}}_{{user.last_name}}/edit/">
+        {% comment %} {% if people.name == user.first_name.split|join:'_'|add:"_"|add:user.last_name.split|join:'_' %} {% endcomment %}
+        {% if people.name == user.first_name.split|join:'_'|add:"_"|add:user.last_name or people.name == user_first|add:"_"|add:user_last %}
+        <a class="p-2 text-light" href="/{{user.first_name.split|join:'_'}}_{{user.last_name.split|join:'_'}}/edit/">
 
             <button class="btn btn-primary btn-sm btn-block" type="submit" value="Apply" style='margin:10px 0;'>
             
@@ -26,7 +27,7 @@
                 Edit Profile
             </a>
         </button> {% endcomment %}
-        {%endif%}
+        {% endif %}
     </div>
 
     <div class="col-md-4 order-md-2 mb-4">

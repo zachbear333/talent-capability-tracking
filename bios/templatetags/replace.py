@@ -11,3 +11,7 @@ def remove_par(value):
     value = value.replace('(', '')
     value = value.replace(')', '')
     return value
+
+@register.filter(name="my_split")
+def my_split(value):
+    return value.replace(' ', '_')

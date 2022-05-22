@@ -298,8 +298,17 @@ def test(request):
     # return render(request, "bios/create.html", {"form" : form})
     return render(request, 'bios/test.html', {"form" : form})
 
-
 def index(response, name):
+    # user in our database
+    user_db = []
+    for person in BioInfo.objects.all():
+        if person.name not in user_db:
+            user_db.append(person.name)
+    # in_db
+    name_str = response.user.first_name.replace(' ', '_') + '_' + response.user.last_name.replace(' ', '_')
+    in_db = 1 if name_str in user_db else 0
+    print("in_db here: ", in_db)  
+
     item = BioInfo.objects.get(name=name)
     try:
         item_file = Student.objects.get(name=name)
@@ -362,7 +371,9 @@ def index(response, name):
     else:
         bio_obj = 0
     
-
+    # preprocess the user name
+    user_first_name = response.user.first_name.replace(' ', '_')
+    user_last_name = response.user.last_name.replace(' ', '_')
     return render(response, 'bios/bio-info.html', {"people":item,
                                                    "skill":skill_dict,
                                                    "industry":industry_dict,
@@ -370,6 +381,9 @@ def index(response, name):
                                                    "domain":domain_dict,
                                                    "file":item_file,
                                                    "bio_obj": bio_obj,
+                                                   'in_db': in_db,
+                                                   'user_first': user_first_name,
+                                                   'user_last': user_last_name,
                                                    })
 
 def distinct_features():
@@ -484,7 +498,14 @@ def distinct_features():
 
 def home(request):
     # user in our database
-    user_db = BioInfo.objects.values('name').distinct()
+    user_db = []
+    for person in BioInfo.objects.all():
+        if person.name not in user_db:
+            user_db.append(person.name)
+    # in_db
+    name_str = request.user.first_name.replace(' ', '_') + '_' + request.user.last_name.replace(' ', '_')
+    in_db = 1 if name_str in user_db else 0
+    print("in_db here: ", in_db)
     # single selection
     position_query = request.GET.get('position-dropdown')
     location_query = request.GET.get('location-dropdown')
@@ -644,10 +665,19 @@ def home(request):
                                               'major_query': major_query,
                                               'degree_query':degree_query,
                                               'search_query':search_query,
-                                              'all_user_name': user_db,
+                                              'in_db': in_db,
                                               })
 
 def create(request):
+    # user in our database
+    user_db = []
+    for person in BioInfo.objects.all():
+        if person.name not in user_db:
+            user_db.append(person.name)
+    # in_db
+    name_str = request.user.first_name.replace(' ', '_') + '_' + request.user.last_name.replace(' ', '_')
+    in_db = 1 if name_str in user_db else 0
+    print("in_db here: ", in_db)  
     if request.method == "POST":
         form = request.POST
         n = form.get('name')
@@ -760,9 +790,19 @@ def create(request):
         return HttpResponseRedirect("/")
     else:    
         form = CreateNewProfile()
-    return render(request, "bios/create.html", {"form" : form})
+    return render(request, "bios/create.html", {"form" : form,
+                                                "in_db": in_db,})
 
 def upload_img(request):
+    # user in our database
+    user_db = []
+    for person in BioInfo.objects.all():
+        if person.name not in user_db:
+            user_db.append(person.name)
+    # in_db
+    name_str = request.user.first_name.replace(' ', '_') + '_' + request.user.last_name.replace(' ', '_')
+    in_db = 1 if name_str in user_db else 0
+    print("in_db here: ", in_db)  
     if request.method == "POST":
         print(os.listdir('bios/static/media/images'))
         form = request.FILES
@@ -844,12 +884,25 @@ def upload_img(request):
 
     else:
         form = FileUpload()
-        return render(request, "bios/upload.html", {"form" : form})
+        return render(request, "bios/upload.html", {"form" : form,
+                                                    'in_db': in_db})
 
 def edit(request, name):
     if name != request.user.first_name.replace(" ", "_") + '_' + request.user.last_name.replace(' ', '_'):
         raise PermissionDenied('You are not allowed')
+    
+    # user in our database
+    user_db = []
+    for person in BioInfo.objects.all():
+        if person.name not in user_db:
+            user_db.append(person.name)
+    # in_db
+    name_str = request.user.first_name.replace(' ', '_') + '_' + request.user.last_name.replace(' ', '_')
+    in_db = 1 if name_str in user_db else 0
+    print("in_db here: ", in_db)  
+
     person = BioInfo.objects.get(name=name)
+
     # initial skills
     skills = person.skill.split(',')
     skill_init = []
@@ -1085,11 +1138,14 @@ def edit(request, name):
                                     })
         return render(request, "bios/edit.html", {"form":form,
                                                   "person":person,
-                                                  "preselect":preselect_dict})
+                                                  "preselect":preselect_dict,
+                                                  'in_db':in_db})
 
 # def error_404(request):
 #     return render(request,'404.html')
 
 def dashboard(request):
+    data = BioInfo.objects.all()
+    print(len(data))
     return render(request, 'bios/dashboard.html')
         
