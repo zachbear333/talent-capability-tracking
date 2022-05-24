@@ -6,5 +6,95 @@
 
 Welcome to Talent Statistics Dashboard!!!
 
+<form action="/talent_dashboard/" method="get">
+    <div class="row">
+        <div class="mb-3">
+            <label for="skill"> Area of Expertise</label>
+            <select id="skill" class="custom-select d-block w-100" name="skill-dropdown">
+                <option value="">Choose...</option>
+                {% comment %} <option value='' disabled selected>Skill Set</option> {% endcomment %}
+                {% for p in skill_distinct %}
+                <option value="{{ p }}" {%if p in skill_query %} selected {%endif%}> {{ p }} </option>
+                {% endfor %}
+            </select>
+            {% comment %} {% endcomment %}
+        </div>
+    <button class="btn btn-primary btn-lg btn-block" type="submit" value="Apply">
+        Apply
+    </button>
+</form>
+
+<div id="container" style="width: 75%;">
+    <canvas id="pie-chart"></canvas>
+    <canvas id="bar-chart"></canvas>
+</div>
+
 {% endblock %}
+
+{%block jsblock%}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+<script type="text/javascript">
+    function decodeEntity(inputStr) {
+        var textarea = document.createElement("textarea");
+        textarea.innerHTML = inputStr;
+        return textarea.value;
+    }
+    var color = "{{sns_color}}";
+    color = decodeEntity(color);
+    console.log(color);
+    var config = {
+        type: 'doughnut',
+        data: {
+          datasets: [{
+            data: {{ data|safe }},
+            // backgroundColor: [
+            //    '#696969', '#808080', '#A9A9A9', '#C0C0C0', '#D3D3D3'
+            // ],
+            backgroundColor : [
+                    '#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3', '#a6d854', 
+                    '#ffd92f', '#e5c494', '#b3b3b3'
+                    ],
+            label: 'Degree'
+          }],
+          labels: {{ labels|safe }}
+        },
+        options: {
+          responsive: true
+        }
+      };
+
+      var config2 = {
+        type: 'bar',
+        data: {
+          datasets: [{
+            data: {{ data|safe }},
+            backgroundColor : [
+                    '#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3', '#a6d854', 
+                    '#ffd92f', '#e5c494', '#b3b3b3'
+                    ],
+            label: 'hahaha',
+          }],
+          labels: {{ labels|safe }}
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            },
+            responsive: true
+        }
+      };
+  
+      window.onload = function() {
+        var ctx = document.getElementById('pie-chart').getContext('2d');
+        window.myPie = new Chart(ctx, config);
+        var ctx = document.getElementById('bar-chart').getContext('2d');
+        window.myBar = new Chart(ctx, config2);
+      };
+
+</script>
+{%endblock jsblock%}
 

@@ -1,5 +1,7 @@
 # show http requests, and the things showing up on the website
-
+# from math import dist
+import pandas as pd
+import seaborn as sns
 from ast import If
 from email.policy import default
 from operator import itemgetter
@@ -1145,7 +1147,32 @@ def edit(request, name):
 #     return render(request,'404.html')
 
 def dashboard(request):
-    data = BioInfo.objects.all()
-    print(len(data))
-    return render(request, 'bios/dashboard.html')
+    people = BioInfo.objects.all()
+    # sorted(skill_res), sorted(industry_res), sorted(tech_res), sorted(domain_res), 
+    # sorted(university_res), sorted(major_res)
+    feature_lst = distinct_features()
+    skill_query = request.GET.getlist('skill-dropdown')
+    if skill_query:
+        people = people.filter(skill__contains=skill_query[0])
+    res_freq = {}
+    if skill_query:
+        for item in people:
+            skills = item.skill.split(',')
+            for skill in skills:
+                if skill_query[0] in skill:
+                    res_freq[skill.split(' ')[-1]] = res_freq.get(skill.split(' ')[-1], 0) + 1
+                # print(skill.split(' ')[-1])
+                # print(' '.join(skill.split(' ')[:-1]))
+                # if ' '.join(skill.split(' ')[:-1]).strip() == skill_query[0]:
+                #     res_freq[skill.split(' ')[-1]] = res_freq.get(skill.split(' ')[-1], 0) + 1
+
+    # degree_freq = {}
+    # for item in people:
+    #     degree_freq[item.degree] = degree_freq.get(item.degree, 0) + 1
+    a = str(sns.color_palette("Set2").as_hex())
+
+    return render(request, 'bios/dashboard.html', {'labels':list(res_freq.keys()),
+                                                   'data':list(res_freq.values()),
+                                                   'sns_color':a,
+                                                   'skill_distinct':feature_lst[0]})
         
