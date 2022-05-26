@@ -645,30 +645,30 @@ def home(request):
 
                 people = search_list[i] & search_list[i - 1]            
             
-
     return render(request, 'bios/home.html', {"people_number": people,
-                                              "position_distinct": position_dist,
-                                              "location_distinct": location_dist,
-                                              "skill_distinct": skill_dist,
-                                              "industry_distinct": industry_dist,
-                                              "tech_distinct": tech_dist,
-                                              "domain_distinct": domain_dist,
-                                              "university_distinct": university_dist,
-                                              "major_distinct": major_dist,
-                                              "skill_query": skill_query,
-                                              "industry_query": industry_query,
-                                              "technique_query": tech_query,
-                                              "domain_query": domain_query,
-                                              "skill_level": skill_level_query,
-                                              "tech_level": tech_level_query,
-                                              "industry_level": industry_level_query,
-                                              "domain_level": domain_level_query,
-                                              'university_query': university_query,
-                                              'major_query': major_query,
-                                              'degree_query':degree_query,
-                                              'search_query':search_query,
-                                              'in_db': in_db,
-                                              })
+                                            "position_distinct": position_dist,
+                                            "location_distinct": location_dist,
+                                            "skill_distinct": skill_dist,
+                                            "industry_distinct": industry_dist,
+                                            "tech_distinct": tech_dist,
+                                            "domain_distinct": domain_dist,
+                                            "university_distinct": university_dist,
+                                            "major_distinct": major_dist,
+                                            "skill_query": skill_query,
+                                            "industry_query": industry_query,
+                                            "technique_query": tech_query,
+                                            "domain_query": domain_query,
+                                            "skill_level": skill_level_query,
+                                            "tech_level": tech_level_query,
+                                            "industry_level": industry_level_query,
+                                            "domain_level": domain_level_query,
+                                            'university_query': university_query,
+                                            'major_query': major_query,
+                                            'degree_query':degree_query,
+                                            'search_query':search_query,
+                                            'in_db': in_db,
+                                            "request_len": len(request.GET)
+                                            })
 
 def create(request):
     # user in our database

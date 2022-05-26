@@ -25,29 +25,44 @@
             <span>
                 <img class="img-fluid mx-auto"  src="{% static "img/logo.svg" %}" alt="home" width=180px />
             </span>
-            Talent Capability Tracker
+            {% if request_len == 0 %}{% else %}Talent Capability Tracker{% endif %}
         </h3>
         <nav class="my-2 my-md-0 mr-md-3">
-            {% if user.first_name == "Ziyu" or user.first_name == "Qizhe" or user.first_name == "Yue" %}
-                <a class="p-2 text-dark" href="/create/">
-                    Create Profile
+            {% if request_len == 0 %}
+                {% if in_db == 1 %}
+                    <a class="p-2 text-dark" href="/{{user.first_name.split|join:'_'}}_{{user.last_name.split|join:'_'}}">    
+                        My Profile
+                    </a>
+                    <a class="p-2 text-dark" href="/upload_img/">
+                        Upload Profile Image/Bio
+                    </a>
+                {% endif %}
+                <a class="p-2 text-dark" href="/talent_dashboard/">
+                    Talent Statistics
+                </a> 
+            {% else %}
+                {% if user.first_name == "Ziyu" or user.first_name == "Qizhe" or user.first_name == "Yue" %}
+                    <a class="p-2 text-dark" href="/create/">
+                        Create Profile
+                    </a>
+                {% endif %}
+                <a class="p-2 text-dark" href="/">
+                    Home
                 </a>
+                {% comment %} <a class="p-2 text-dark" href="/{{user.first_name}}_{{user.last_name}}"> {% endcomment %}
+                {% if in_db == 1 %}
+                    <a class="p-2 text-dark" href="/{{user.first_name.split|join:'_'}}_{{user.last_name.split|join:'_'}}">    
+                        My Profile
+                    </a>
+                    <a class="p-2 text-dark" href="/upload_img/">
+                        Upload Profile Image/Bio
+                    </a>
+                {% endif %}
+                <a class="p-2 text-dark" href="/talent_dashboard/">
+                    Talent Statistics
+                </a>            
             {% endif %}
-            <a class="p-2 text-dark" href="/">
-                Homepage
-            </a>
-            {% comment %} <a class="p-2 text-dark" href="/{{user.first_name}}_{{user.last_name}}"> {% endcomment %}
-            {% if in_db == 1 %}
-                <a class="p-2 text-dark" href="/{{user.first_name.split|join:'_'}}_{{user.last_name.split|join:'_'}}">    
-                    My Profile
-                </a>
-                <a class="p-2 text-dark" href="/upload_img/">
-                    Upload Profile Image/Bio
-                </a>
-            {% endif %}
-            <a class="p-2 text-dark" href="/talent_dashboard/">
-                Talent Statistics
-            </a>
+
         </nav>
         <a class="btn btn-outline-primary" href="/oauth2/logout">Logout</a>
 
