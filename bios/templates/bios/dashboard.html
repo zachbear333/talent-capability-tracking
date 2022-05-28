@@ -4,27 +4,77 @@
 
 {% block content %}
 
-Welcome to Talent Statistics Dashboard!!!
+{% comment %} Welcome to Talent Statistics Dashboard!!! {% endcomment %}
 
-<form action="/talent_dashboard/" method="get">
-    <div class="row">
-        <div class="mb-3">
-            <label for="skill"> Area of Expertise</label>
-            <select id="skill" class="custom-select d-block w-100" name="skill-dropdown">
-                <option value="">Choose...</option>
-                {% comment %} <option value='' disabled selected>Skill Set</option> {% endcomment %}
-                {% for p in skill_distinct %}
-                <option value="{{ p }}" {%if p in skill_query %} selected {%endif%}> {{ p }} </option>
-                {% endfor %}
-            </select>
-            {% comment %} {% endcomment %}
-        </div>
-    <button class="btn btn-primary btn-lg btn-block" type="submit" value="Apply">
-        Apply
-    </button>
-</form>
+<nav class="col-md-3">
+    <div>
+        {% comment %} <hr class="mb-4"> {% endcomment %}
+        <form action="/talent_dashboard/" method="get">
+            <div class="row">
+                <div class="mb-3">
+                    <label for="skill">  Skill </label>
+                    <select id="skill" class="custom-select d-block w-100" name="skill-dropdown">
+                        <option value="">Choose...</option>
+                        {% comment %} <option value='' disabled selected>Skill Set</option> {% endcomment %}
+                        {% comment %} <option value=""> <b>Area of Expertise</b> </option> {% endcomment %}
+                        {% for p in skill_distinct %}
+                            <option value="{{ p }}"> {{ p }} </option>
+                        {% endfor %}
 
-<div id="container" style="width: 75%;">
+                        {% for q in tech_distinct %}
+                            <option value="{{ q }}"> {{ q }} </option>
+                        {% endfor %}
+
+                    </select>
+                    {% comment %} {% endcomment %}
+                </div>
+            </div>
+            <hr class="mb-4">
+            <div class="row">
+                <div class = "mb-3">
+                    <label for="industry"> Industry Experience</label>
+                    <select class="custom-select d-block w-100" name="industry-dropdown">
+                        <option value="">Choose...</option>
+                        {% for p in industry_distinct %}
+                        <option value="{{ p }}" {%if p in industry_query %} selected {%endif%}> {{ p }} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <hr class="mb-4">
+            <div class="row">
+                <div class = "mb-3">
+                    <label for="tech"> Technique Skill </label>
+                    <select class="custom-select d-block w-100" name="tech-dropdown">
+                        <option value="">Choose...</option>
+                        {% for p in tech_distinct %}
+                        <option value="{{ p }}" {%if p in technique_query %} selected {%endif%}> {{ p }} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <hr class="mb-4">
+            <div class="row">
+                <div class="mb-3">
+                    <label for="domain"> Business Domain </label>
+                    <select class="custom-select d-block w-100" name="domain-dropdown">
+                        <option value="">Choose...</option>
+                        {% for p in domain_distinct %}
+                        <option value="{{ p }}" {%if p in domain_query %} selected {%endif%}> {{ p }} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+
+            <button class="btn btn-primary btn-lg btn-block" type="submit" value="Apply">
+                Apply
+            </button>
+        </form>
+    </div>
+</nav>
+
+<div id="container" style="width: 50%; margin:auto;">
     <canvas id="pie-chart"></canvas>
     <canvas id="bar-chart"></canvas>
 </div>

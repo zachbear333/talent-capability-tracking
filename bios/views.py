@@ -235,6 +235,14 @@ EXPERIENCE_RUBRIC_MAIN = {
     "5" : ">10 Year" 
 }
 
+ADJUST_EXP = {
+    "<1YOE" : "<1 Year",
+    "1-3YOE" : "1-3 Year",
+    "4-5YOE" : "4-5 Year",
+    "5-10YOE" : "5-10 Year",
+    ">10YOE" : ">10 Year"    
+}
+
 REVERSE_RUBRIC = {
     "Unfamiliar" : "1",
     "Novice" : "2",
@@ -1143,36 +1151,54 @@ def edit(request, name):
                                                   "preselect":preselect_dict,
                                                   'in_db':in_db})
 
-# def error_404(request):
-#     return render(request,'404.html')
-
 def dashboard(request):
     people = BioInfo.objects.all()
     # sorted(skill_res), sorted(industry_res), sorted(tech_res), sorted(domain_res), 
     # sorted(university_res), sorted(major_res)
     feature_lst = distinct_features()
+
     skill_query = request.GET.getlist('skill-dropdown')
-    if skill_query:
+    industry_query = request.GET.getlist('industry-dropdown')
+    if skill_query and skill_query != ['']:
         people = people.filter(skill__contains=skill_query[0])
+    # print(skill_query, len(people))
+    if industry_query and industry_query != ['']:
+        people = people.filter(industry__contains=industry_query[0])
+    # print(industry_query, len(people))
+
+    # generate the data passed to visualization
     res_freq = {}
-    if skill_query:
+    if skill_query and skill_query != ['']:
+        print('skill filter checked!!!')
         for item in people:
             skills = item.skill.split(',')
             for skill in skills:
                 if skill_query[0] in skill:
-                    res_freq[skill.split(' ')[-1]] = res_freq.get(skill.split(' ')[-1], 0) + 1
-                # print(skill.split(' ')[-1])
-                # print(' '.join(skill.split(' ')[:-1]))
-                # if ' '.join(skill.split(' ')[:-1]).strip() == skill_query[0]:
-                #     res_freq[skill.split(' ')[-1]] = res_freq.get(skill.split(' ')[-1], 0) + 1
+                    res_freq[skill.split(' ')[-1][1:-1]] = res_freq.get(skill.split(' ')[-1][1:-1], 0) + 1
 
-    # degree_freq = {}
-    # for item in people:
-    #     degree_freq[item.degree] = degree_freq.get(item.degree, 0) + 1
+
+    print(len(people), len(res_freq))
+    # res_freq = {}
+    if industry_query and industry_query != ['']:
+        for item in people:
+            industries = item.industry.split(',')
+            if industries == ['N/A']:
+                continue
+            for industry in industries:
+                exp = ''.join(industry.split(' ')[-2:])[1:-1]
+                if industry_query[0] in industry:
+                    res_freq[ADJUST_EXP[exp]] = res_freq.get(ADJUST_EXP[exp], 0) + 1
+    print(res_freq)
     a = str(sns.color_palette("Set2").as_hex())
 
     return render(request, 'bios/dashboard.html', {'labels':list(res_freq.keys()),
                                                    'data':list(res_freq.values()),
                                                    'sns_color':a,
-                                                   'skill_distinct':feature_lst[0]})
+                                                   'skill_distinct':feature_lst[0],
+                                                   'skill_query':skill_query,
+                                                   'industry_distinct':feature_lst[1],
+                                                   'industry_query':industry_query,
+                                                   'tech_distinct':feature_lst[2],
+                                                   'domain_distinct':feature_lst[3],
+                                                   })
         
