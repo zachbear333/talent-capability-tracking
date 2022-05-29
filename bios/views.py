@@ -1,6 +1,6 @@
 # show http requests, and the things showing up on the website
 # from math import dist
-import pandas as pd
+# import pandas as pd
 import seaborn as sns
 from ast import If
 from email.policy import default
@@ -20,6 +20,7 @@ from django.contrib import messages
 import csv
 from datetime import datetime
 from django.core.exceptions import PermissionDenied
+import collections
 
 
 # register = template.Library()
@@ -653,30 +654,30 @@ def home(request):
 
                 people = search_list[i] & search_list[i - 1]            
             
-
     return render(request, 'bios/home.html', {"people_number": people,
-                                              "position_distinct": position_dist,
-                                              "location_distinct": location_dist,
-                                              "skill_distinct": skill_dist,
-                                              "industry_distinct": industry_dist,
-                                              "tech_distinct": tech_dist,
-                                              "domain_distinct": domain_dist,
-                                              "university_distinct": university_dist,
-                                              "major_distinct": major_dist,
-                                              "skill_query": skill_query,
-                                              "industry_query": industry_query,
-                                              "technique_query": tech_query,
-                                              "domain_query": domain_query,
-                                              "skill_level": skill_level_query,
-                                              "tech_level": tech_level_query,
-                                              "industry_level": industry_level_query,
-                                              "domain_level": domain_level_query,
-                                              'university_query': university_query,
-                                              'major_query': major_query,
-                                              'degree_query':degree_query,
-                                              'search_query':search_query,
-                                              'in_db': in_db,
-                                              })
+                                            "position_distinct": position_dist,
+                                            "location_distinct": location_dist,
+                                            "skill_distinct": skill_dist,
+                                            "industry_distinct": industry_dist,
+                                            "tech_distinct": tech_dist,
+                                            "domain_distinct": domain_dist,
+                                            "university_distinct": university_dist,
+                                            "major_distinct": major_dist,
+                                            "skill_query": skill_query,
+                                            "industry_query": industry_query,
+                                            "technique_query": tech_query,
+                                            "domain_query": domain_query,
+                                            "skill_level": skill_level_query,
+                                            "tech_level": tech_level_query,
+                                            "industry_level": industry_level_query,
+                                            "domain_level": domain_level_query,
+                                            'university_query': university_query,
+                                            'major_query': major_query,
+                                            'degree_query':degree_query,
+                                            'search_query':search_query,
+                                            'in_db': in_db,
+                                            "request_len": len(request.GET)
+                                            })
 
 def create(request):
     # user in our database
@@ -1157,42 +1158,86 @@ def dashboard(request):
     # sorted(university_res), sorted(major_res)
     feature_lst = distinct_features()
 
+    ###############################################
+    ## filter people out ##
+    ###############################################
     skill_query = request.GET.getlist('skill-dropdown')
     industry_query = request.GET.getlist('industry-dropdown')
+    filter_count = 0
     if skill_query and skill_query != ['']:
         people = people.filter(skill__contains=skill_query[0])
-    # print(skill_query, len(people))
+        filter_count += 1
     if industry_query and industry_query != ['']:
         people = people.filter(industry__contains=industry_query[0])
-    # print(industry_query, len(people))
+        filter_count += 1
+    print(len(people), people, filter_count)
 
-    # generate the data passed to visualization
-    res_freq = {}
-    if skill_query and skill_query != ['']:
-        print('skill filter checked!!!')
-        for item in people:
-            skills = item.skill.split(',')
-            for skill in skills:
-                if skill_query[0] in skill:
-                    res_freq[skill.split(' ')[-1][1:-1]] = res_freq.get(skill.split(' ')[-1][1:-1], 0) + 1
+    ###############################################
+    ## generate the data passed to visualization ##
+    ###############################################
+    if filter_count == 2:
+        res_freq = collections.defaultdict(list)
 
+        if skill_query and skill_query != ['']:
+            for item in people:
+                # find the skill level
+                skills = item.skill.split(',')
+                for skill in skills:
+                    if skill_query[0] in skill:
+                        skill_lvl = skill.split(' ')[-1][1:-1]
+                        # print(skill_query[0], skill_lvl)
+                # find the industry level
+                industries = item.industry.split(',')
+                if industries == ['N/A']:
+                    continue
+                for industry in industries:
+                    exp = ''.join(industry.split(' ')[-2:])[1:-1]
+                    if industry_query[0] and industry_query[0] in industry:   
+                        industry_lvl = ADJUST_EXP[exp]
+                        print('=========> check here', len(industry_query[0]))
+                        print(industry_query[0])
+                        # print(industry_query[0], industry_lvl)
+                # dictionary {
+                #   unfamiliar: [<1 Year, <1 Year, 1-3 Year, 1-3 Year],
+                #   advanced: [5-10 Year]
+                # }
+                res_freq[skill_lvl].append(industry_lvl)
+        print(res_freq)
 
-    print(len(people), len(res_freq))
-    # res_freq = {}
-    if industry_query and industry_query != ['']:
-        for item in people:
-            industries = item.industry.split(',')
-            if industries == ['N/A']:
+        data = [[0 for _ in range(5)] for _ in range(5)]
+        for i, sk_opt in enumerate(SKILL_RUBRIC.values()):
+            if sk_opt not in res_freq:
                 continue
-            for industry in industries:
-                exp = ''.join(industry.split(' ')[-2:])[1:-1]
-                if industry_query[0] in industry:
-                    res_freq[ADJUST_EXP[exp]] = res_freq.get(ADJUST_EXP[exp], 0) + 1
-    print(res_freq)
+            this_lvl = res_freq[sk_opt]
+            lvl_freq = collections.Counter(this_lvl)
+            for j, ins_opt in enumerate(EXPERIENCE_RUBRIC.values()):
+                data[i][j] = lvl_freq.get(ADJUST_EXP[ins_opt.replace(' ', '')], 0)
+            
+        print(data)
+    else:
+        res_freq = {}
+        if skill_query and skill_query != ['']:
+            for item in people:
+                skills = item.skill.split(',')
+                for skill in skills:
+                    if skill_query[0] in skill:
+                        res_freq[skill.split(' ')[-1][1:-1]] = res_freq.get(skill.split(' ')[-1][1:-1], 0) + 1
+
+        if industry_query and industry_query != ['']:
+            for item in people:
+                industries = item.industry.split(',')
+                if industries == ['N/A']:
+                    continue
+                for industry in industries:
+                    exp = ''.join(industry.split(' ')[-2:])[1:-1]
+                    if industry_query[0] in industry:
+                        res_freq[ADJUST_EXP[exp]] = res_freq.get(ADJUST_EXP[exp], 0) + 1
+        data = res_freq.values()
     a = str(sns.color_palette("Set2").as_hex())
 
     return render(request, 'bios/dashboard.html', {'labels':list(res_freq.keys()),
-                                                   'data':list(res_freq.values()),
+                                                   'single_data':list(res_freq.values()),
+                                                   'data':data,
                                                    'sns_color':a,
                                                    'skill_distinct':feature_lst[0],
                                                    'skill_query':skill_query,
@@ -1200,5 +1245,6 @@ def dashboard(request):
                                                    'industry_query':industry_query,
                                                    'tech_distinct':feature_lst[2],
                                                    'domain_distinct':feature_lst[3],
+                                                   'filter_count': filter_count,
                                                    })
         

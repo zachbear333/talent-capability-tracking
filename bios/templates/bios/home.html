@@ -1,7 +1,20 @@
 {% extends 'bios/base.html'%}
 
+
 {% block content %}
 
+{% if request_len == 0 %}
+<div class = "text-center" style = "width: 100%;max-width: 600px;margin: 0 auto;margin-top:10%;">
+    <span>
+    </span>
+    <h3 class="cover-heading">Talent Capability Tracker</h3>
+    <form action="/" method="get">
+        <form class="form-outline my-2 my-md-0">
+            <input name='search-input' class="form-control" type="text" placeholder="Search" aria-label="Search">
+        </form>
+    </form>
+</div>
+{% else %}
 <form action="/" method="get">
     <form class="form-outline my-2 my-md-0">
         <input name='search-input' class="form-control" type="text" placeholder="Search" aria-label="Search">
@@ -197,11 +210,13 @@
             <td> {{ person.major }}, {{ person.degree }}, {{ person.university }}</td>
             <td> {{ person.position }}</td>
         </tr>
+        
         {% endfor %}
     </table>
 </main>
-
+{% endif %}
 {% endblock %}
+
 
 {% block jsblock %}
 <script>
