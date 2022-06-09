@@ -3,37 +3,38 @@
 {% load static %}
 
 {% block content %}
-<style>
-	.hidden {
-		display:none;
-	}
-</style>
-<form method='post' action='/test/' enctype="multipart/form-data">
-    {% csrf_token %}
-	<p> Name </p>
-	{{ form.name }}
-	<p> Skill </p>
-	{% comment %} {{ form.skill }} {% endcomment %}
-	{% for s in form.skill %}
-
-	{% if forloop.counter0 == 0 %}
-		Cloud Computing Services
-	{% endif %}
-	<div class="hahah" id="{{forloop.counter0}}" style="margin-left:30px;">
-		{{s}}
-		<div class="hidden" id="id_skill_{{forloop.counter0}}">
-			<div id="skill_select_{{forloop.counter0}}">
-				<input type="radio" name="id_skill_{{forloop.counter0}}" value="1" onchange="test2(event);"> 1
-				<input type="radio" name="id_skill_{{forloop.counter0}}" value="2" onchange="test2(event);"> 2
-				<input type="radio" name="id_skill_{{forloop.counter0}}" value="3" onchange="test2(event);"> 3
-			</div>
-		</div>
-	</div>
-	{% endfor %}
-	<button type="submit", name="save"> Create / Update Profile </button>
-
-</form>
-
+<main class="col-md-9 table-responsive">
+    <table class="table table-striped table-sm">
+        <tr>
+            <th> Name</th>
+            <th> Area of Expertise </th>
+            <th> Industry Experience </th>
+            <th> Technique Skill </th>
+            <th> Business Domain </th>
+            <th> Education </th>
+            <th> Position </th>
+        </tr>
+        {% for person in result %}
+        {% load replace %}
+        <tr>
+            <td> <a href="/{{person.name}}">
+                {% if person.nickname != " " %}
+                    {{ person.nickname|replace }}
+                {% else %}
+                    {{ person.name|replace }} 
+                {% endif %}
+            </td>
+            <td> {{ person.skill_split }} </td>
+            <td> {{ person.industry_split }} </td>
+            <td> {{ person.technique_split }} </td>
+            <td> {{ person.business_domain_split}} </td>
+            <td> {{ person.major }}, {{ person.degree }}, {{ person.university }}</td>
+            <td> {{ person.position }}</td>
+        </tr>
+        
+        {% endfor %}
+    </table>
+</main>
 
 {% endblock %}
 

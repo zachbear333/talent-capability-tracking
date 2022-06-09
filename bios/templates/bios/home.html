@@ -200,9 +200,15 @@
             <th> Position </th>
         </tr>
         {% for person in people_number %}
-        {% load replace%}
+        {% load replace %}
         <tr>
-            <td> <a href="/{{person.name}}">{{ person.name|replace }} </td>
+            <td> <a href="/{{person.name}}">
+                {% if person.nickname != " " %}
+                    {{ person.nickname|replace }}
+                {% else %}
+                    {{ person.name|replace }} 
+                {% endif %}
+            </td>
             <td> {{ person.skill_split }} </td>
             <td> {{ person.industry_split }} </td>
             <td> {{ person.technique_split }} </td>

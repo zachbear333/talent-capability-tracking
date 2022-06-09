@@ -21,6 +21,7 @@
             <thead class="thead-light">
                 <tr>
                     <th> Name </th>
+                    <th> Nickname </th>
                     <th> Email </th>
                     <th> Position </th>
                     <th> Location </th>
@@ -28,6 +29,7 @@
             </thead>
             {% load replace%}
             <td> {{person.name|replace}} </td>
+            <td> {{form.nickname}} </td>
             <td> {{person.email}} </td>
             <td> {{person.position}} </td>
             <td> {{form.location}} </td>

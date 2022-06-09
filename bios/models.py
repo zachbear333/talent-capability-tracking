@@ -140,7 +140,6 @@ class BioInfo(models.Model):
 
     name = models.CharField(max_length=200)
     email = models.CharField(max_length=200)
-    # nickname = models.CharField(max_length=200, default=None)
     position = models.CharField(max_length=100, choices=POSITION_CHOICES, default=None)
     location = models.CharField(max_length=100, choices=LOCATION_CHOICES, default=None)
     skill = models.CharField(max_length=300, choices=SKILL_CHOICES, default=None)
@@ -156,6 +155,7 @@ class BioInfo(models.Model):
     university3 = models.CharField(max_length=300)
     major3 =  models.CharField(max_length=300)
     degree3 = models.CharField(max_length=300)
+    nickname = models.CharField(max_length=300)
     intro = models.TextField()
     photo = models.ImageField(null=True, blank=True, upload_to="images/")
     bio_ppt = models.ImageField(null=True, blank=True)

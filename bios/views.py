@@ -30,6 +30,10 @@ import collections
 #     value = value.replace(')', '')
 #     return value
 
+SUB_CATEGORY = {
+    'Process': ['Automation & Job Scheduling', 'Process efficiency', 'Version Controlling',
+            'Project Management', 'Space Management'],
+}
 LOCATION_CHOICES = [
     ('Columbia, MD (HQ)', 'Columbia, MD (HQ)'),
     ('New York, NY', 'New York, NY'),
@@ -307,15 +311,39 @@ def export(response):
 
     return response
 
+
+def sub_cate_search(people, cate_name):
+    result = []
+    if cate_name not in SUB_CATEGORY:
+        return result
+    for person in people:
+        for val in SUB_CATEGORY[cate_name]:
+            if val in person.skill:
+                result.append(person)
+                break
+    return result
+
 def test(request):
-    if request.method == "POST":
-        temp = request.POST
-        print(temp.get("skill"))
-        return HttpResponseRedirect("/upload_img/")
-    else:    
-        form = testform()
+    people = BioInfo.objects.all()
+    sub_cate = {"Process":['Automation & Job Scheduling', 'Process efficiency', 'Version Controlling',
+                           'Project Management', 'Space Management']}
+    sub_cate = ['Automation & Job Scheduling', 'Process efficiency', 'Version Controlling',
+            'Project Management', 'Space Management']
+    result = []
+    for person in people:
+        for cate in sub_cate:
+            if cate in person.skill:
+                result.append(person)
+                break
+    print(len(result))
+    # if request.method == "POST":
+    #     temp = request.POST
+    #     print(temp.get("skill"))
+    #     return HttpResponseRedirect("/upload_img/")
+    # else:    
+    #     form = testform()
     # return render(request, "bios/create.html", {"form" : form})
-    return render(request, 'bios/test.html', {"form" : form})
+    return render(request, 'bios/test.html', {"result":result})
 
 def index(response, name):
     # user in our database
@@ -643,10 +671,15 @@ def home(request):
                             people = people.exclude(id=person.id)
 
     if search_query:
-        search_sections = search_query.split(' ')
+        search_sections = search_query.split(',')
         search_list = [None] * len(search_sections)
+        # subcategory search
+        additional_peope = sub_cate_search(people, search_query)
+        print('addition_people', len(additional_peope), additional_peope)
+
         # first search word
-        people = people.filter(name__contains=search_sections[0]) | \
+        people = people.filter(nickname__contains=search_sections[0]) | \
+                        people.filter(name__contains=search_sections[0]) | \
                         people.filter(skill__contains=search_sections[0]) | \
                         people.filter(technique__contains=search_sections[0]) | \
                         people.filter(industry__contains=search_sections[0]) | \
@@ -655,14 +688,17 @@ def home(request):
         search_list[0] = people 
         if len(search_sections) > 1:
             for i in range(1, len(search_sections)):
-                search_list[i] = people.filter(name__contains=search_sections[i]) | \
+                search_list[i] = people.filter(nickname__contains=search_sections[i]) | \
+                                    people.filter(name__contains=search_sections[i]) | \
                                     people.filter(skill__contains=search_sections[i]) | \
                                     people.filter(technique__contains=search_sections[i]) | \
                                     people.filter(industry__contains=search_sections[i]) | \
                                     people.filter(position__contains=search_sections[i]) | \
                                     people.filter(business_domain__contains=search_sections[i])
 
-                people = search_list[i] & search_list[i - 1]            
+                people = search_list[i] & search_list[i - 1]    
+        print('people', len(people), people, len(list(people) + additional_peope))
+        people = list(set(list(people) + additional_peope))
             
     return render(request, 'bios/home.html', {"people_number": people,
                                             "position_distinct": position_dist,
@@ -1102,6 +1138,10 @@ def edit(request, name):
         if not uni_3 or not major_3 or not degree_3:
             uni_3, major_3, degree_3 = 'N/A', 'N/A', 'N/A'
 
+        nickname = form.get('nickname')
+        if not nickname:
+            nickname = ' '
+
         intro = form.get('intro')
         if not intro:
             intro = 'N/A'
@@ -1122,7 +1162,8 @@ def edit(request, name):
                 "degree2": degree_2,
                 "university3": uni_3,
                 "major3": major_3,
-                "degree3": degree_3,   
+                "degree3": degree_3,  
+                "nickname":nickname, 
             }
         )
         t.save()
@@ -1139,7 +1180,8 @@ def edit(request, name):
         d2 = person.degree2 if person.degree2 != 'N/A' else ''
         d3 = person.degree3 if person.degree3 != 'N/A' else ''
         intro = person.intro if person.intro != 'N/A' else ''
-
+        nickname = person.nickname if person.nickname != ' ' else person.name.replace('_', ' ')
+        print('nickname check', nickname)
         form = EditProfile(initial={'location' : location_init,
                                     'skill' : skill_init,
                                     'industry' : industry_init,
@@ -1156,6 +1198,7 @@ def edit(request, name):
                                     'university_3':u3,
                                     'major_3': m3,
                                     'degree_3': d3,
+                                    'nickname':nickname,
                                     })
         return render(request, "bios/edit.html", {"form":form,
                                                   "person":person,
