@@ -140,7 +140,7 @@ class BioInfo(models.Model):
 
     name = models.CharField(max_length=200)
     email = models.CharField(max_length=200)
-
+    # nickname = models.CharField(max_length=200, default=None)
     position = models.CharField(max_length=100, choices=POSITION_CHOICES, default=None)
     location = models.CharField(max_length=100, choices=LOCATION_CHOICES, default=None)
     skill = models.CharField(max_length=300, choices=SKILL_CHOICES, default=None)

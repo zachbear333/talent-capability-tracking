@@ -262,6 +262,14 @@ REVERSE_RUBRIC = {
     ">10YOE" : "5"    
 }
 
+DOMAIN_MODIFICATION = {
+    "Unfamiliar" : "<1 Year",
+    "Novice" : "1-3 Year",
+    "Proficient" : "4-5 Year",
+    "Advanced" : "5-10 Year",
+    "Expert" : ">10 Year",
+}
+
 tmp1 = []
 for a, _ in SKILL_CHOICES:
     tmp1.append(a)
@@ -642,7 +650,8 @@ def home(request):
                         people.filter(skill__contains=search_sections[0]) | \
                         people.filter(technique__contains=search_sections[0]) | \
                         people.filter(industry__contains=search_sections[0]) | \
-                        people.filter(position__contains=search_sections[0])
+                        people.filter(position__contains=search_sections[0]) | \
+                        people.filter(business_domain__contains=search_sections[0])
         search_list[0] = people 
         if len(search_sections) > 1:
             for i in range(1, len(search_sections)):
@@ -650,7 +659,8 @@ def home(request):
                                     people.filter(skill__contains=search_sections[i]) | \
                                     people.filter(technique__contains=search_sections[i]) | \
                                     people.filter(industry__contains=search_sections[i]) | \
-                                    people.filter(position__contains=search_sections[i])
+                                    people.filter(position__contains=search_sections[i]) | \
+                                    people.filter(business_domain__contains=search_sections[i])
 
                 people = search_list[i] & search_list[i - 1]            
             
@@ -1154,6 +1164,20 @@ def edit(request, name):
 
 def dashboard(request):
     people = BioInfo.objects.all()
+    location_dist = list(BioInfo.objects.values('location').distinct())
+    location_distinct = []
+    for x in location_dist:
+        location_distinct.append(x['location'])
+    # user in our database
+    user_db = []
+    for person in BioInfo.objects.all():
+        if person.name not in user_db:
+            user_db.append(person.name)
+    # in_db
+    name_str = request.user.first_name.replace(' ', '_') + '_' + request.user.last_name.replace(' ', '_')
+    in_db = 1 if name_str in user_db else 0
+    print("in_db here: ", in_db)  
+
     # sorted(skill_res), sorted(industry_res), sorted(tech_res), sorted(domain_res), 
     # sorted(university_res), sorted(major_res)
     feature_lst = distinct_features()
@@ -1163,14 +1187,23 @@ def dashboard(request):
     ###############################################
     skill_query = request.GET.getlist('skill-dropdown')
     industry_query = request.GET.getlist('industry-dropdown')
+    location_query = request.GET.get('location-dropdown')
+    degree_query = request.GET.get('degree-dropdown')
     filter_count = 0
     if skill_query and skill_query != ['']:
-        people = people.filter(skill__contains=skill_query[0])
+        people = people.filter(skill__contains=skill_query[0])| \
+                    people.filter(technique__contains=skill_query[0])
         filter_count += 1
     if industry_query and industry_query != ['']:
-        people = people.filter(industry__contains=industry_query[0])
+        people = people.filter(industry__contains=industry_query[0]) | \
+                    people.filter(business_domain__contains=industry_query[0])
         filter_count += 1
-    print(len(people), people, filter_count)
+    # print(len(people), people, filter_count)
+    if location_query:
+        people = people.filter(location__contains=location_query)
+    if degree_query:
+        print('check check here', degree_query)
+        people = people.filter(degree__contains=degree_query)
 
     ###############################################
     ## generate the data passed to visualization ##
@@ -1180,13 +1213,20 @@ def dashboard(request):
 
         if skill_query and skill_query != ['']:
             for item in people:
-                # find the skill level
+                ### find the skill level ###
+                # area of expertise
                 skills = item.skill.split(',')
                 for skill in skills:
                     if skill_query[0] in skill:
                         skill_lvl = skill.split(' ')[-1][1:-1]
-                        # print(skill_query[0], skill_lvl)
-                # find the industry level
+                # technique skill
+                techs = item.technique.split(',')
+                for tech in techs:
+                    if skill_query[0] in tech:
+                        skill_lvl = tech.split(' ')[-1][1:-1]
+
+                ### find the industry level ###
+                # industry experience
                 industries = item.industry.split(',')
                 if industries == ['N/A']:
                     continue
@@ -1194,15 +1234,17 @@ def dashboard(request):
                     exp = ''.join(industry.split(' ')[-2:])[1:-1]
                     if industry_query[0] and industry_query[0] in industry:   
                         industry_lvl = ADJUST_EXP[exp]
-                        print('=========> check here', len(industry_query[0]))
-                        print(industry_query[0])
-                        # print(industry_query[0], industry_lvl)
-                # dictionary {
-                #   unfamiliar: [<1 Year, <1 Year, 1-3 Year, 1-3 Year],
-                #   advanced: [5-10 Year]
-                # }
+                # business domain
+                domains = item.business_domain.split(',')
+                if domains == ['N/A']:
+                    continue
+                for domain in domains:
+                    exp = DOMAIN_MODIFICATION[domain.split(' ')[-1][1:-1]]
+                    if industry_query[0] and industry_query[0] in domain:
+                        industry_lvl = exp
+                        # res_freq[exp] = res_freq.get(exp, 0) + 1
+
                 res_freq[skill_lvl].append(industry_lvl)
-        print(res_freq)
 
         data = [[0 for _ in range(5)] for _ in range(5)]
         for i, sk_opt in enumerate(SKILL_RUBRIC.values()):
@@ -1212,19 +1254,33 @@ def dashboard(request):
             lvl_freq = collections.Counter(this_lvl)
             for j, ins_opt in enumerate(EXPERIENCE_RUBRIC.values()):
                 data[i][j] = lvl_freq.get(ADJUST_EXP[ins_opt.replace(' ', '')], 0)
-            
-        print(data)
+        plot_name = skill_query[0] + " by " + industry_query[0]
+
     else:
         res_freq = {}
         if skill_query and skill_query != ['']:
             for item in people:
+                ### for 'area of expertise' 
                 skills = item.skill.split(',')
                 for skill in skills:
                     if skill_query[0] in skill:
-                        res_freq[skill.split(' ')[-1][1:-1]] = res_freq.get(skill.split(' ')[-1][1:-1], 0) + 1
+                        res_freq[skill.split(' ')[-1][1:-1]] = res_freq.get(skill.split(' ')[-1][1:-1], 0) + 1               
+                ### for 'technique skill'
+                techs = item.technique.split(',')
+                for tech in techs:
+                    if skill_query[0] in tech:
+                        res_freq[tech.split(' ')[-1][1:-1]] = res_freq.get(tech.split(' ')[-1][1:-1], 0) + 1
+            plot_name = skill_query[0]
+            ### put the result in the correct order 
+            tmp_res = {}
+            for val in SKILL_RUBRIC.values():
+                if val in res_freq:   
+                    tmp_res[val] = res_freq[val]
+            res_freq = tmp_res
 
-        if industry_query and industry_query != ['']:
+        elif industry_query and industry_query != ['']:
             for item in people:
+                ### for 'industry experience'
                 industries = item.industry.split(',')
                 if industries == ['N/A']:
                     continue
@@ -1232,6 +1288,29 @@ def dashboard(request):
                     exp = ''.join(industry.split(' ')[-2:])[1:-1]
                     if industry_query[0] in industry:
                         res_freq[ADJUST_EXP[exp]] = res_freq.get(ADJUST_EXP[exp], 0) + 1
+                ### for 'business domain'
+                domains = item.business_domain.split(',')
+                if domains == ['N/A']:
+                    continue
+                for domain in domains:
+                    print("test123", DOMAIN_MODIFICATION[domain.split(' ')[-1][1:-1]])
+                    exp = DOMAIN_MODIFICATION[domain.split(' ')[-1][1:-1]]
+                    if industry_query[0] in domain:
+                        res_freq[exp] = res_freq.get(exp, 0) + 1
+
+            plot_name = industry_query[0]
+            print(res_freq)
+            tmp_res = {}
+            for val in EXPERIENCE_RUBRIC_MAIN.values():  
+                if val in res_freq:  
+                    tmp_res[val] = res_freq[val]
+            res_freq = tmp_res
+        # default page (bar chart by position)
+        else:
+            for person in people:
+                res_freq[person.location] = res_freq.get(person.location, 0) + 1
+            plot_name = 'Work Location'
+
         data = res_freq.values()
     a = str(sns.color_palette("Set2").as_hex())
 
@@ -1246,5 +1325,10 @@ def dashboard(request):
                                                    'tech_distinct':feature_lst[2],
                                                    'domain_distinct':feature_lst[3],
                                                    'filter_count': filter_count,
+                                                   'in_db': in_db,
+                                                   'plot_name':plot_name,
+                                                   'location_distinct':location_distinct,
+                                                   'location_query':location_query,
+                                                   'degree_query':degree_query,
+                                                   "filter_count":filter_count,
                                                    })
-        

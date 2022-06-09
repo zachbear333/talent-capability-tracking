@@ -15,27 +15,68 @@
                     <label for="skill">  Skill </label>
                     <select id="skill" class="custom-select d-block w-100" name="skill-dropdown">
                         <option value="">Choose...</option>
-                        {% for p in skill_distinct %}
-                            <option value="{{ p }}" {%if p in skill_query %} selected {%endif%}> {{ p }} </option>
-                        {% endfor %}
+                        <optgroup label='Area of Expertise'>
+                            {% for p in skill_distinct %}
+                                <option value="{{ p }}" {%if p in skill_query %} selected {%endif%}> {{ p }} </option>
+                            {% endfor %}
+                        </optgroup>
+
+                        <optgroup label='Technical Skill'>
+                            {% for q in tech_distinct %}
+                                <option value="{{ q }}" {%if q in skill_query %} selected {%endif%}> {{ q }} </option>
+                            {% endfor %}
+                        </optgroup>
 
                     </select>
-                    {% comment %} {% endcomment %}
                 </div>
-            </div>
-            <hr class="mb-4">
-            <div class="row">
                 <div class = "mb-3">
-                    <label for="industry"> Industry Experience</label>
+                    <label for="industry"> Experience</label>
                     <select class="custom-select d-block w-100" name="industry-dropdown">
                         <option value="">Choose...</option>
-                        {% for p in industry_distinct %}
-                        <option value="{{ p }}" {%if p in industry_query %} selected {%endif%}> {{ p }} </option>
-                        {% endfor %}
+
+                        <optgroup label='Industry Experience'>
+                            {% for p in industry_distinct %}
+                            <option value="{{ p }}" {%if p in industry_query %} selected {%endif%}> {{ p }} </option>
+                            {% endfor %}
+                        </optgroup>
+
+                        <optgroup label='Business Domain'>
+                            {% for q in domain_distinct %}
+                                <option value="{{ q }}" {%if q in industry_query %} selected {%endif%}> {{ q }} </option>
+                            {% endfor %}
+                        </optgroup>
+                        
                     </select>
                 </div>
             </div>
+
             <hr class="mb-4">
+            <div class="row">
+
+            </div>
+
+            <div class="mb-3">
+                <label for="degree"> Location </label>
+                <select class="custom-select d-block w-100" name="location-dropdown">
+                    <option value="">Choose...</option>
+                    {% for p in location_distinct %}
+                    <option value="{{ p }}" {%if p in location_query %} selected {%endif%}> {{ p }} </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="degree"> Degree </label>
+                <select class="custom-select d-block w-100" name="degree-dropdown">
+                    <option value="">Choose...</option>
+                    <option value="B.A." {%if degree_query == "B.A." %} selected {%endif%}> B.A.</option>
+                    <option value="B.S." {%if degree_query == "B.S." %} selected {%endif%}> B.S.</option>
+                    <option value="M.S." {%if degree_query == "M.S." %} selected {%endif%}> M.S.</option>
+                    <option value="PhD" {%if degree_query == "PhD" %} selected {%endif%}> PhD</option>
+                    <option value="Other" {%if degree_query == "Other" %} selected {%endif%}> Other</option>
+                </select>
+            </div>
+            {% comment %} <hr class="mb-4">
             <div class="row">
                 <div class = "mb-3">
                     <label for="tech"> Technique Skill </label>
@@ -58,11 +99,14 @@
                         {% endfor %}
                     </select>
                 </div>
-            </div>
+            </div> {% endcomment %}
 
 
             <button class="btn btn-primary btn-lg btn-block" type="submit" value="Apply">
                 Apply
+            </button>
+            <button class="btn btn-outline-primary btn-lg btn-block" onclick="reset_filter(event)">
+                Reset
             </button>
         </form>
     </div>
@@ -70,6 +114,11 @@
 
 <div id="container" style="width: 60%; margin:auto;">
     {% comment %} <canvas id="pie-chart"></canvas> {% endcomment %}
+    {% if filter_count == 2 %}
+        <center> {{plot_name}} </center>
+        <br>
+    {% endif %}
+    
     <canvas id="bar-chart"></canvas>
 </div>
 
@@ -88,7 +137,8 @@
         var color = "{{sns_color}}";
         color = decodeEntity(color);
         console.log(color);
-
+        y_label = '{{ skill_query }}'
+        y_label = decodeEntity(y_label).slice(2,-2)
         var config = {
             type:'horizontalBar',
             data: {
@@ -116,14 +166,30 @@
                 }]
             },
             options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Custom Chart Title',
+                    },
+                },
                 responsive: true,
                 scales: {
                     yAxes: [{
-                        ticks: { beginAtZero: true },
+                        ticks: { beginAtZero: true},
                         stacked: true,
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: y_label,
+                        },
                     }],
                     xAxes: [{
+                        ticks: {precision:0},
                         stacked: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: '# of Talents',
+                        },
                     }],
                 },
             }
@@ -135,6 +201,8 @@
         };
     }
     else {
+        name = '{{ plot_name }}'
+        console.log(name)
         var config = {
             type: 'bar',
             data: {
@@ -144,7 +212,7 @@
                         '#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3', '#a6d854', 
                         '#ffd92f', '#e5c494', '#b3b3b3'
                         ],
-                label: 'hahaha',
+                label: name,
               }],
               labels: {{ labels|safe }}
             },
@@ -152,8 +220,13 @@
                 scales: {
                     yAxes: [{
                         ticks: {
-                            beginAtZero: true
-                        }
+                            beginAtZero: true,
+                            precision:0,
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: '# of Talents',
+                        },
                     }]
                 },
                 responsive: true
@@ -165,7 +238,17 @@
         };
     }
      
-
+    function reset_filter(event) {
+        option_tag = document.getElementsByTagName('option');
+        // console.log(option_tag[1].selected)
+        for (var i = 0; i < option_tag.length; i++) {
+           if (option_tag[i].selected == true && option_tag[i].value != '') {
+               console.log(option_tag[i].text);
+               option_tag[i].selected = false;
+               console.log(option_tag[i].selected);
+           }
+        }
+    }
 </script>
 {%endblock jsblock%}
 
