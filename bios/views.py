@@ -294,7 +294,7 @@ for a, _ in DOMAIN_CHOICES:
     tmp4.append(a)
 
 def export(response):
-    if response.user.first_name != 'Ziyu':
+    if response.user.first_name != 'Zach':
         raise PermissionDenied("Custom message")
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="tct{}.csv"'.format(datetime.now().strftime("%Y%m%d"))
@@ -313,7 +313,6 @@ def export(response):
         writer.writerow(user)
 
     return response
-
 
 def sub_cate_search(people, cate_name):
     result = []
@@ -339,25 +338,21 @@ def test(request):
                 result.append(person)
                 break
     print(len(result))
-    # if request.method == "POST":
-    #     temp = request.POST
-    #     print(temp.get("skill"))
-    #     return HttpResponseRedirect("/upload_img/")
-    # else:    
-    #     form = testform()
-    # return render(request, "bios/create.html", {"form" : form})
     return render(request, 'bios/test.html', {"result":result})
+
 
 def index(response, name):
     print(response.user.first_name)
     # user in our database
     user_db = []
     for person in BioInfo.objects.all():
-        if person.name not in user_db:
-            user_db.append(person.name)
+        if person.email not in user_db:
+            user_db.append(person.email)
     # in_db
-    name_str = response.user.first_name.replace(' ', '_') + '_' + response.user.last_name.replace(' ', '_')
-    in_db = 1 if name_str in user_db else 0
+    # name_str = response.user.first_name.replace(' ', '_') + '_' + response.user.last_name.replace(' ', '_')
+    email_str = response.user
+    print(email_str)
+    in_db = 1 if email_str in user_db else 0
     print("in_db here: ", in_db)  
 
     item = BioInfo.objects.get(name=name)
