@@ -33,6 +33,9 @@ import collections
 SUB_CATEGORY = {
     'Process': ['Automation & Job Scheduling', 'Process efficiency', 'Version Controlling',
             'Project Management', 'Space Management'],
+    'NLP': ['Spatical Statistics', 'LSTM', 'CNN', 'Autoencoder', 'Transformer', 'BERT', 'TF-IDF',
+            'Word Embedding', 'Sentiment Analysis', 'Latent Dirichlet Allocation', 'Topic Modelling',
+            'Named Entity Recognition']
 }
 LOCATION_CHOICES = [
     ('Columbia, MD (HQ)', 'Columbia, MD (HQ)'),
@@ -346,6 +349,7 @@ def test(request):
     return render(request, 'bios/test.html', {"result":result})
 
 def index(response, name):
+    print(response.user.first_name)
     # user in our database
     user_db = []
     for person in BioInfo.objects.all():
@@ -1181,7 +1185,6 @@ def edit(request, name):
         d3 = person.degree3 if person.degree3 != 'N/A' else ''
         intro = person.intro if person.intro != 'N/A' else ''
         nickname = person.nickname if person.nickname != ' ' else person.name.replace('_', ' ')
-        print('nickname check', nickname)
         form = EditProfile(initial={'location' : location_init,
                                     'skill' : skill_init,
                                     'industry' : industry_init,
@@ -1203,7 +1206,7 @@ def edit(request, name):
         return render(request, "bios/edit.html", {"form":form,
                                                   "person":person,
                                                   "preselect":preselect_dict,
-                                                  'in_db':in_db})
+                                                  'in_db':in_db,})
 
 def dashboard(request):
     people = BioInfo.objects.all()
