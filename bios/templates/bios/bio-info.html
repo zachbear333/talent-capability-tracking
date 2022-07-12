@@ -210,10 +210,38 @@
             {% endfor %}
         </ul>
         {% endif %}
-        {% if technique|length > 0 %}
+        {% if application|length > 0 %}
         <ul class="list-group mb-3">
-            Technical Skill
-            {% for key, value in technique.items %}
+            Application
+            {% for key, value in application.items %}
+            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <div>
+                    <h6 class="my-0">{{key}}</h6>
+                    <small class="text-muted"></small>
+                </div>
+                <span class="text-muted">{{value}}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% if program_skill|length > 0 %}
+        <ul class="list-group mb-3">
+            Programming Skill
+            {% for key, value in program_skill.items %}
+            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <div>
+                    <h6 class="my-0">{{key}}</h6>
+                    <small class="text-muted"></small>
+                </div>
+                <span class="text-muted">{{value}}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% if techstack|length > 0 %}
+        <ul class="list-group mb-3">
+            Techstack
+            {% for key, value in techstack.items %}
             <li class="list-group-item d-flex justify-content-between lh-condensed">
                 <div>
                     <h6 class="my-0">{{key}}</h6>

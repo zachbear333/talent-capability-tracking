@@ -27,29 +27,106 @@
         <form action="/" method="get">
             <div class="row">
                 <div class="mb-3">
-                    <label for="skill"> Area of Expertise</label>
-                    <select id="skill" class="custom-select d-block w-100" name="skill-dropdown">
+                    <label for="app"> Application </label>
+                    <select id="app" class="custom-select d-block w-100" name="app-dropdown">
                         <option value="">Choose...</option>
                         {% comment %} <option value='' disabled selected>Skill Set</option> {% endcomment %}
-                        {% for p in skill_distinct %}
-                        <option value="{{ p }}" {%if p in skill_query %} selected {%endif%}> {{ p }} </option>
+                        {% for p in app_distinct %}
+                        <option value="{{ p }}" {%if p in app_query %} selected {%endif%}> {{ p }} </option>
                         {% endfor %}
                     </select>
-                    {% comment %} {% endcomment %}
                 </div>
                 <div class="mb-3">
-                    <label for="skill-level"> Experience Level </label>
-                    <select class="custom-select d-block w-100" name="skill-level-dropdown">
+                    <label for="app-level"> Experience Level </label>
+                    <select class="custom-select d-block w-100" name="app-level-dropdown">
                         <option value="">Choose...</option>
                         {% comment %} <option value='' disabled selected>SELECT</option>{% endcomment %}
-                        <option value="1" {%if skill_level == "1" %} selected {%endif%}> 1 - Unfamiliar</option>
-                        <option value="2" {%if skill_level == "2" %} selected {%endif%}> 2 - Novice</option>
-                        <option value="3" {%if skill_level == "3" %} selected {%endif%}> 3 - Proficient</option>
-                        <option value="4" {%if skill_level == "4" %} selected {%endif%}> 4 - Advanced</option>
-                        <option value="5" {%if skill_level == "5" %} selected {%endif%}> 5 - Expert</option>
+                        <option value="1" {%if app_level == "1" %} selected {%endif%}> 1 - Unfamiliar</option>
+                        <option value="2" {%if app_level == "2" %} selected {%endif%}> 2 - Novice</option>
+                        <option value="3" {%if app_level == "3" %} selected {%endif%}> 3 - Proficient</option>
+                        <option value="4" {%if app_level == "4" %} selected {%endif%}> 4 - Advanced</option>
+                        <option value="5" {%if app_level == "5" %} selected {%endif%}> 5 - Expert</option>
                     </select>
                 </div>
             </div>
+
+            <hr class="mb-4">
+            <div class="row">
+                <div class="mb-3">
+                    <label for="ds"> DS Skill </label>
+                    <select id="ds" class="custom-select d-block w-100" name="ds-dropdown">
+                        <option value="">Choose...</option>
+                        {% comment %} <option value='' disabled selected>Skill Set</option> {% endcomment %}
+                        {% for p in ds_distinct %}
+                        <option value="{{ p }}" {%if p in ds_query %} selected {%endif%}> {{ p }} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="ds-level"> Experience Level </label>
+                    <select class="custom-select d-block w-100" name="ds-level-dropdown">
+                        <option value="">Choose...</option>
+                        {% comment %} <option value='' disabled selected>SELECT</option>{% endcomment %}
+                        <option value="1" {%if ds_level == "1" %} selected {%endif%}> 1 - Unfamiliar</option>
+                        <option value="2" {%if ds_level == "2" %} selected {%endif%}> 2 - Novice</option>
+                        <option value="3" {%if ds_level == "3" %} selected {%endif%}> 3 - Proficient</option>
+                        <option value="4" {%if ds_level == "4" %} selected {%endif%}> 4 - Advanced</option>
+                        <option value="5" {%if ds_level == "5" %} selected {%endif%}> 5 - Expert</option>
+                    </select>
+                </div>
+            </div>
+
+            <hr class="mb-4">
+            <div class="row">
+                <div class="mb-3">
+                    <label for="program"> Programming Skill </label>
+                    <select id="program" class="custom-select d-block w-100" name="program-dropdown">
+                        <option value="">Choose...</option>
+                        {% comment %} <option value='' disabled selected>Skill Set</option> {% endcomment %}
+                        {% for p in program_distinct %}
+                        <option value="{{ p }}" {%if p in program_query %} selected {%endif%}> {{ p }} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="program-level"> Experience Level </label>
+                    <select class="custom-select d-block w-100" name="program-level-dropdown">
+                        <option value="">Choose...</option>
+                        {% comment %} <option value='' disabled selected>SELECT</option>{% endcomment %}
+                        <option value="1" {%if program_level == "1" %} selected {%endif%}> 1 - Unfamiliar</option>
+                        <option value="2" {%if program_level == "2" %} selected {%endif%}> 2 - Novice</option>
+                        <option value="3" {%if program_level == "3" %} selected {%endif%}> 3 - Proficient</option>
+                        <option value="4" {%if program_level == "4" %} selected {%endif%}> 4 - Advanced</option>
+                        <option value="5" {%if program_level == "5" %} selected {%endif%}> 5 - Expert</option>
+                    </select>
+                </div>
+            </div>
+
+            <hr class="mb-4">
+            <div class="row">
+                <div class="mb-3">
+                    <label for="techstack"> Techstack </label>
+                    <select id="techstack" class="custom-select d-block w-100" name="techstack-dropdown">
+                        <option value="">Choose...</option>
+                        {% for p in techstack_distinct %}
+                        <option value="{{ p }}" {%if p in techstack_query %} selected {%endif%}> {{ p }} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="techstack-level"> Experience Level </label>
+                    <select class="custom-select d-block w-100" name="techstack-level-dropdown">
+                        <option value="">Choose...</option>
+                        {% comment %} <option value='' disabled selected>SELECT</option>{% endcomment %}
+                        <option value="1" {%if techstack_level == "1" %} selected {%endif%}> 1 - Unfamiliar</option>
+                        <option value="2" {%if techstack_level == "2" %} selected {%endif%}> 2 - Novice</option>
+                        <option value="3" {%if techstack_level == "3" %} selected {%endif%}> 3 - Proficient</option>
+                        <option value="4" {%if techstack_level == "4" %} selected {%endif%}> 4 - Advanced</option>
+                        <option value="5" {%if techstack_level == "5" %} selected {%endif%}> 5 - Expert</option>
+                    </select>
+                </div>
+            </div>
+
             <hr class="mb-4">
             <div class="row">
                 <div class = "mb-3">
@@ -74,7 +151,7 @@
                     </select>
                 </div>
             </div>
-            <hr class="mb-4">
+            {% comment %} <hr class="mb-4">
             <div class="row">
                 <div class = "mb-3">
                     <label for="tech"> Technique Skill </label>
@@ -90,7 +167,6 @@
                     <label for="tech-level"> Experience Level </label>
                     <select class="custom-select d-block w-100" name="tech-level-dropdown">
                         <option value="">Choose...</option>
-                        {% comment %} <option value='' disabled selected>SELECT</option>{% endcomment %}
                         <option value="1" {%if tech_level == "1" %} selected {%endif%}> 1 - Unfamiliar</option>
                         <option value="2" {%if tech_level == "2" %} selected {%endif%}> 2 - Novice</option>
                         <option value="3" {%if tech_level == "3" %} selected {%endif%}> 3 - Proficient</option>
@@ -98,7 +174,7 @@
                         <option value="5" {%if tech_level == "5" %} selected {%endif%}> 5 - Expert</option>
                     </select>
                 </div>
-            </div>
+            </div> {% endcomment %}
             <hr class="mb-4">
             <div class="row">
                 <div class="mb-3">
@@ -192,9 +268,13 @@
     <table class="table table-striped table-sm">
         <tr>
             <th> Name</th>
-            <th> Area of Expertise </th>
+            {% comment %} <th> Area of Expertise </th> {% endcomment %}
+            {% comment %} <th> Technique Skill </th> {% endcomment %}
+            <th> Application </th>
+            <th> DS Skill </th>
+            <th> Programming Skill </th>
+            <th> Techstack </th>
             <th> Industry Experience </th>
-            <th> Technique Skill </th>
             <th> Business Domain </th>
             <th> Education </th>
             <th> Position </th>
@@ -203,15 +283,15 @@
         {% load replace %}
         <tr>
             <td> <a href="/{{person.name}}">
-                {% if person.nickname != " " %}
-                    {{ person.nickname|replace }}
-                {% else %}
-                    {{ person.name|replace }} 
-                {% endif %}
+                {{ person.name|replace }}
             </td>
-            <td> {{ person.skill_split }} </td>
+            {% comment %} <td> {{ person.skill_split }} </td> {% endcomment %}
+            {% comment %} <td> {{ person.technique_split }} </td> {% endcomment %}
+            <td> {{ person.application_split }} </td>
+            <td> {{ person.ds_skill_split }} </td>
+            <td> {{ person.program_skill_split }} </td>
+            <td> {{ person.techstack_split }} </td>
             <td> {{ person.industry_split }} </td>
-            <td> {{ person.technique_split }} </td>
             <td> {{ person.business_domain_split}} </td>
             <td> {{ person.major }}, {{ person.degree }}, {{ person.university }}</td>
             <td> {{ person.position }}</td>

@@ -1,6 +1,7 @@
 # show http requests, and the things showing up on the website
 # from math import dist
 # import pandas as pd
+from requests import request
 import seaborn as sns
 from ast import If
 from email.policy import default
@@ -21,14 +22,6 @@ import csv
 from datetime import datetime
 from django.core.exceptions import PermissionDenied
 import collections
-
-
-# register = template.Library()
-# @register.filter(name="remove_par")
-# def remove_par(value):
-#     value = value.replace('(', '')
-#     value = value.replace(')', '')
-#     return value
 
 SUB_CATEGORY = {
     'Process': ['Automation & Job Scheduling', 'Process efficiency', 'Version Controlling',
@@ -342,7 +335,7 @@ def test(request):
 
 
 def index(response, name):
-    print(response.user.first_name)
+    # print(response.user.first_name)
     # user in our database
     user_db = []
     for person in BioInfo.objects.all():
@@ -350,27 +343,63 @@ def index(response, name):
             user_db.append(person.email)
     # in_db
     # name_str = response.user.first_name.replace(' ', '_') + '_' + response.user.last_name.replace(' ', '_')
-    email_str = response.user
-    print(email_str)
-    in_db = 1 if email_str in user_db else 0
-    print("in_db here: ", in_db)  
-
+    email_str = str(response.user)
+    in_db = 1 if email_str.lower() in user_db else 0
     item = BioInfo.objects.get(name=name)
     try:
         item_file = Student.objects.get(name=name)
     except:
         item_file = None
-    # area of expertise table
-    skill_tmp = item.skill
+
+    # application table
+    app_tmp = item.application
+    app_dict = {}
+    for s in app_tmp.split(','):
+        if '(' in s:
+            idx = s.rfind('(')
+            print(s, idx, s[:idx-1].strip())
+            app_dict[s[:idx-1].strip()] = REVERSE_RUBRIC[s.strip()[idx+1:-1]]
+        else:
+            app_dict[s] = "1"
+    app_dict = sorted(app_dict.items(), key=lambda x:x[1], reverse=True)
+    app_dict = {k:SKILL_RUBRIC_MAIN[v] for k, v in app_dict}
+
+    # ds_skill table
+    skill_tmp = item.ds_skill
     skill_dict = {}
     for s in skill_tmp.split(','):
         if '(' in s:
-            idx = s.index('(')
-            skill_dict[s[:idx-1].strip()] = REVERSE_RUBRIC[s[idx+1:-1].strip()]
+            idx = s.rfind('(')
+            skill_dict[s[:idx-1].strip()] = REVERSE_RUBRIC[s.strip()[idx+1:-1]]
         else:
             skill_dict[s] = "1"
     skill_dict = sorted(skill_dict.items(), key=lambda x:x[1], reverse=True)
     skill_dict = {k:SKILL_RUBRIC_MAIN[v] for k, v in skill_dict}
+
+    
+    # program_skill table
+    prog_skill_tmp = item.program_skill
+    prog_skill_dict = {}
+    for s in prog_skill_tmp.split(','):
+        if '(' in s:
+            idx = s.rfind('(')
+            prog_skill_dict[s[:idx-1].strip()] = REVERSE_RUBRIC[s.strip()[idx+1:-1]]
+        else:
+            prog_skill_dict[s] = "1"
+    prog_skill_dict = sorted(prog_skill_dict.items(), key=lambda x:x[1], reverse=True)
+    prog_skill_dict = {k:SKILL_RUBRIC_MAIN[v] for k, v in prog_skill_dict}
+
+    # techstack table
+    techstack_tmp = item.tech_stack
+    techstack_dict = {}
+    for s in techstack_tmp.split(','):
+        if '(' in s:
+            idx = s.rfind('(')
+            techstack_dict[s[:idx-1].strip()] = REVERSE_RUBRIC[s.strip()[idx+1:-1]]
+        else:
+            techstack_dict[s] = "1"
+    techstack_dict = sorted(techstack_dict.items(), key=lambda x:x[1], reverse=True)
+    techstack_dict = {k:SKILL_RUBRIC_MAIN[v] for k, v in techstack_dict}
 
     # industry experience table
     industry_tmp = item.industry
@@ -383,18 +412,6 @@ def index(response, name):
             industry_dict[s] = "1"
     industry_dict = sorted(industry_dict.items(), key=lambda x:x[1], reverse=True)
     industry_dict = {k:EXPERIENCE_RUBRIC_MAIN[v] for k, v in industry_dict}
-
-    # technique skill table
-    tech_tmp = item.technique
-    tech_dict = {}
-    for s in tech_tmp.split(','):
-        if '(' in s:
-            idx = s.index('(')
-            tech_dict[s[:idx-1].strip()] = REVERSE_RUBRIC[s[idx+1:-1].strip()]
-        else:
-            tech_dict[s] = "1"
-    tech_dict = sorted(tech_dict.items(), key=lambda x:x[1], reverse=True)
-    tech_dict = {k:SKILL_RUBRIC_MAIN[v] for k, v in tech_dict}
 
     # domain skill table
     domain_tmp = item.business_domain
@@ -422,8 +439,10 @@ def index(response, name):
     user_last_name = response.user.last_name.replace(' ', '_')
     return render(response, 'bios/bio-info.html', {"people":item,
                                                    "skill":skill_dict,
+                                                   "application": app_dict,
+                                                   "program_skill":prog_skill_dict,
+                                                   "techstack":techstack_dict,
                                                    "industry":industry_dict,
-                                                   "technique":tech_dict,
                                                    "domain":domain_dict,
                                                    "file":item_file,
                                                    "bio_obj": bio_obj,
@@ -431,6 +450,53 @@ def index(response, name):
                                                    'user_first': user_first_name,
                                                    'user_last': user_last_name,
                                                    })
+def distinct_skill():
+    application, ds_skill, program_skill, techstack = [], [], [], []
+    for person in BioInfo.objects.all():
+        app_lst = person.application.split(',')
+        for apps in app_lst:
+            apps = apps.strip()
+            if apps in application or not apps or apps == 'N/A' or 'N/A' in apps:
+                continue
+            if "(" in apps:
+                if ' '.join(apps.split(' ')[:-1]) not in application:
+                    application.append(' '.join(apps.split(' ')[:-1]))
+            else:
+                application.append(apps)
+
+        ds_lst = person.ds_skill.split(',')
+        for ds in ds_lst:
+            ds = ds.strip()
+            if ds in ds_skill or not ds or ds == 'N/A' or 'N/A' in ds:
+                continue
+            if "(" in ds:
+                if ' '.join(ds.split(' ')[:-1]) not in ds_skill:
+                    ds_skill.append(' '.join(ds.split(' ')[:-1]))
+            else:
+                ds_skill.append(ds)
+
+        prog_lst = person.program_skill.split(',')
+        for prog in prog_lst:
+            prog = prog.strip()
+            if prog in program_skill or not prog or prog == 'N/A' or 'N/A' in prog:
+                continue
+            if "(" in prog:
+                if ' '.join(prog.split(' ')[:-1]) not in program_skill:
+                    program_skill.append(' '.join(prog.split(' ')[:-1]))
+            else:
+                program_skill.append(prog)
+
+        tech_lst = person.tech_stack.split(',')
+        for tech in tech_lst:
+            tech = tech.strip()
+            if tech in techstack or not tech or tech == 'N/A' or 'N/A' in tech:
+                continue
+            if "(" in tech:
+                if ' '.join(tech.split(' ')[:-1]) not in techstack:
+                    techstack.append(' '.join(tech.split(' ')[:-1]))
+            else:
+                techstack.append(tech)
+    return application, ds_skill, program_skill, techstack
 
 def distinct_features():
     skill_res, industry_res, tech_res, domain_res= [], [], [], []
@@ -546,18 +612,21 @@ def home(request):
     # user in our database
     user_db = []
     for person in BioInfo.objects.all():
-        if person.name not in user_db:
-            user_db.append(person.name)
+        if person.email not in user_db:
+            user_db.append(person.email)
     # in_db
-    name_str = request.user.first_name.replace(' ', '_') + '_' + request.user.last_name.replace(' ', '_')
-    in_db = 1 if name_str in user_db else 0
-    print("in_db here: ", in_db)
+    # name_str = request.user.first_name.replace(' ', '_') + '_' + request.user.last_name.replace(' ', '_')
+    email_str = str(request.user)
+    in_db = 1 if email_str.lower() in user_db else 0
+    print(request.user, in_db)
+    print(user_db)
+
     # single selection
     position_query = request.GET.get('position-dropdown')
     location_query = request.GET.get('location-dropdown')
     # multi selection
-    skill_query = request.GET.getlist('skill-dropdown')
-    skill_level_query = request.GET.get('skill-level-dropdown') # number
+    # skill_query = request.GET.getlist('skill-dropdown')
+    # skill_level_query = request.GET.get('skill-level-dropdown') # number
     industry_query = request.GET.getlist('industry-dropdown')
     industry_level_query = request.GET.get('industry-level-dropdown') # number
     tech_query = request.GET.getlist('tech-dropdown')
@@ -576,7 +645,19 @@ def home(request):
     position_dist = BioInfo.objects.values('position').distinct()
     location_dist = BioInfo.objects.values('location').distinct()
     skill_dist, industry_dist, tech_dist, domain_dist, university_dist, major_dist = distinct_features()
-
+    ###########################
+    #### new category here ####
+    ###########################
+    application, ds_skill, program_skill, techstack = distinct_skill()
+    app_query = request.GET.get('app-dropdown')
+    app_level_query = request.GET.get('app-level-dropdown') # number
+    ds_query = request.GET.get('ds-dropdown')
+    ds_level_query = request.GET.get('ds-level-dropdown') # number
+    program_query = request.GET.get('program-dropdown')
+    program_level_query = request.GET.get('program-level-dropdown') # number
+    techstack_query = request.GET.get('techstack-dropdown')
+    techstack_level_query = request.GET.get('techstack-level-dropdown') # number
+    
     # university_dist = list(set().union(university_dist, university_dist2, university_dist3))
     if position_query:
         people = people.filter(position=position_query)
@@ -593,24 +674,95 @@ def home(request):
     if degree_query:
         people = people.filter(degree=degree_query)
 
-    if skill_query != ['']:
-        for i in skill_query:
-            people = people.filter(skill__contains=i)
-            if skill_level_query:
-                for person in people:
-                    tmp_skill = person.skill
-                    for t in tmp_skill.split(','):
-                        if ")" in t[-1]:
-                            t = t.strip()
-                            if i in t:
-                                if REVERSE_RUBRIC[t.split(' ')[-1][1:-1]] < skill_level_query:
-                                    print(REVERSE_RUBRIC[t.split(' ')[-1][1:-1]], skill_level_query)
-                                    print(person.name, "excluded")
-                                    people = people.exclude(id=person.id)
-                        elif ")" not in t[-1] and skill_level_query == 1:
-                            continue
-                        else:
+    if app_query and app_query != '':
+        # for i in app_query:
+        people = people.filter(application__contains=app_query)
+        print("check here: ", len(people))
+        if app_level_query:
+            for person in people:
+                tmp_skill = person.application
+                for t in tmp_skill.split(','):
+                    if not app_query in t:
+                        continue
+                    t = t.strip()
+                    if ")" == t[-1]:
+                        # t = t.strip()
+                        print(t.split(' ')[-1])
+                        if REVERSE_RUBRIC[t.split(' ')[-1][1:-1]] < app_level_query:
+                            print(REVERSE_RUBRIC[t.split(' ')[-1][1:-1]], app_level_query)
+                            print(person.name, "excluded")
                             people = people.exclude(id=person.id)
+                    elif ")" not in t[-1] and app_level_query == 1:
+                        continue
+                    else:
+                        people = people.exclude(id=person.id)
+
+    if ds_query and ds_query != '':
+        # for i in app_query:
+        people = people.filter(ds_skill__contains=ds_query)
+        print("check here: ", len(people))
+        if ds_level_query:
+            for person in people:
+                tmp_skill = person.ds_skill
+                for t in tmp_skill.split(','):
+                    if not ds_query in t:
+                        continue
+                    t = t.strip()
+                    if ")" == t[-1]:
+                        # t = t.strip()
+                        print(t.split(' ')[-1])
+                        if REVERSE_RUBRIC[t.split(' ')[-1][1:-1]] < ds_level_query:
+                            print(REVERSE_RUBRIC[t.split(' ')[-1][1:-1]], ds_level_query)
+                            print(person.name, "excluded")
+                            people = people.exclude(id=person.id)
+                    elif ")" not in t[-1] and ds_level_query == 1:
+                        continue
+                    else:
+                        people = people.exclude(id=person.id)
+    
+    if program_query and program_query != '':
+        # for i in app_query:
+        people = people.filter(program_skill__contains=program_query)
+        if program_level_query:
+            for person in people:
+                tmp_skill = person.program_skill
+                for t in tmp_skill.split(','):
+                    if not program_query in t:
+                        continue
+                    t = t.strip()
+                    if ")" == t[-1]:
+                        # t = t.strip()
+                        print(t.split(' ')[-1])
+                        if REVERSE_RUBRIC[t.split(' ')[-1][1:-1]] < program_level_query:
+                            print(REVERSE_RUBRIC[t.split(' ')[-1][1:-1]], program_level_query)
+                            print(person.name, "excluded")
+                            people = people.exclude(id=person.id)
+                    elif ")" not in t[-1] and program_level_query == 1:
+                        continue
+                    else:
+                        people = people.exclude(id=person.id)
+    
+    if techstack_query and techstack_query != '':
+        # for i in app_query:
+        people = people.filter(tech_stack__contains=techstack_query)
+        if techstack_level_query:
+            for person in people:
+                tmp_skill = person.tech_stack
+                for t in tmp_skill.split(','):
+                    if not techstack_query in t:
+                        continue
+                    t = t.strip()
+                    if ")" == t[-1]:
+                        # t = t.strip()
+                        print(t.split(' ')[-1])
+                        if REVERSE_RUBRIC[t.split(' ')[-1][1:-1]] < techstack_level_query:
+                            print(REVERSE_RUBRIC[t.split(' ')[-1][1:-1]], techstack_level_query)
+                            print(person.name, "excluded")
+                            people = people.exclude(id=person.id)
+                    elif ")" not in t[-1] and techstack_level_query == 1:
+                        continue
+                    else:
+                        people = people.exclude(id=person.id)
 
     if industry_query != ['']:
         for i in industry_query:
@@ -631,24 +783,24 @@ def home(request):
                         else:
                             people = people.exclude(id=person.id)
 
-    if tech_query != ['']:
-        for i in tech_query:
-            people = people.filter(technique__contains=i)
-            if tech_level_query:
-                for person in people:
-                    tmp_tech = person.technique
-                    for t in tmp_tech.split(','):
-                        if ")" in t[-1]:
-                            t = t.strip()
-                            if i in t:
-                                if REVERSE_RUBRIC[t.split(' ')[-1][1:-1]] < tech_level_query:
-                                    print(REVERSE_RUBRIC[t.split(' ')[-1][1:-1]], tech_level_query)
-                                    print(person.name, "excluded")
-                                    people = people.exclude(id=person.id)
-                        elif ")" not in t[-1] and tech_level_query == 1:
-                            continue
-                        else:
-                            people = people.exclude(id=person.id)
+    # if tech_query != ['']:
+    #     for i in tech_query:
+    #         people = people.filter(technique__contains=i)
+    #         if tech_level_query:
+    #             for person in people:
+    #                 tmp_tech = person.technique
+    #                 for t in tmp_tech.split(','):
+    #                     if ")" in t[-1]:
+    #                         t = t.strip()
+    #                         if i in t:
+    #                             if REVERSE_RUBRIC[t.split(' ')[-1][1:-1]] < tech_level_query:
+    #                                 print(REVERSE_RUBRIC[t.split(' ')[-1][1:-1]], tech_level_query)
+    #                                 print(person.name, "excluded")
+    #                                 people = people.exclude(id=person.id)
+    #                     elif ")" not in t[-1] and tech_level_query == 1:
+    #                         continue
+    #                     else:
+    #                         people = people.exclude(id=person.id)
 
     if domain_query != ['']:
         for i in domain_query:
@@ -674,7 +826,7 @@ def home(request):
         search_list = [None] * len(search_sections)
         # subcategory search
         additional_peope = sub_cate_search(people, search_query)
-        print('addition_people', len(additional_peope), additional_peope)
+        # print('addition_people', len(additional_peope), additional_peope)
 
         # first search word
         people = people.filter(nickname__contains=search_sections[0]) | \
@@ -696,24 +848,21 @@ def home(request):
                                     people.filter(business_domain__contains=search_sections[i])
 
                 people = search_list[i] & search_list[i - 1]    
-        print('people', len(people), people, len(list(people) + additional_peope))
+        # print('people', len(people), people, len(list(people) + additional_peope))
         people = list(set(list(people) + additional_peope))
             
     return render(request, 'bios/home.html', {"people_number": people,
                                             "position_distinct": position_dist,
                                             "location_distinct": location_dist,
-                                            "skill_distinct": skill_dist,
                                             "industry_distinct": industry_dist,
-                                            "tech_distinct": tech_dist,
+                                            # "tech_distinct": tech_dist,
                                             "domain_distinct": domain_dist,
                                             "university_distinct": university_dist,
                                             "major_distinct": major_dist,
-                                            "skill_query": skill_query,
                                             "industry_query": industry_query,
-                                            "technique_query": tech_query,
+                                            # "technique_query": tech_query,
                                             "domain_query": domain_query,
-                                            "skill_level": skill_level_query,
-                                            "tech_level": tech_level_query,
+                                            # "tech_level": tech_level_query,
                                             "industry_level": industry_level_query,
                                             "domain_level": domain_level_query,
                                             'university_query': university_query,
@@ -721,7 +870,19 @@ def home(request):
                                             'degree_query':degree_query,
                                             'search_query':search_query,
                                             'in_db': in_db,
-                                            "request_len": len(request.GET)
+                                            "request_len": len(request.GET),
+                                            "app_distinct":application,
+                                            "app_query":app_query,
+                                            "app_level": app_level_query,
+                                            "ds_distinct":ds_skill,
+                                            "ds_query":ds_query,
+                                            "ds_level": ds_level_query,
+                                            "program_distinct":program_skill,
+                                            "program_query":program_query,
+                                            "program_level": program_level_query,
+                                            "techstack_distinct":techstack,
+                                            "techstack_query":techstack_query,
+                                            "techstack_level": techstack_level_query,
                                             })
 
 def create(request):
@@ -731,9 +892,9 @@ def create(request):
         if person.name not in user_db:
             user_db.append(person.name)
     # in_db
-    name_str = request.user.first_name.replace(' ', '_') + '_' + request.user.last_name.replace(' ', '_')
-    in_db = 1 if name_str in user_db else 0
-    print("in_db here: ", in_db)  
+    # name_str = request.user.first_name.replace(' ', '_') + '_' + request.user.last_name.replace(' ', '_')
+    email_str = str(request.user)
+    in_db = 1 if email_str.lower() in user_db else 0
     if request.method == "POST":
         form = request.POST
         n = form.get('name')
@@ -856,9 +1017,9 @@ def upload_img(request):
         if person.name not in user_db:
             user_db.append(person.name)
     # in_db
-    name_str = request.user.first_name.replace(' ', '_') + '_' + request.user.last_name.replace(' ', '_')
-    in_db = 1 if name_str in user_db else 0
-    print("in_db here: ", in_db)  
+    # name_str = request.user.first_name.replace(' ', '_') + '_' + request.user.last_name.replace(' ', '_')
+    email_str = str(request.user)
+    in_db = 1 if email_str.lower() in user_db else 0
     if request.method == "POST":
         print(os.listdir('bios/static/media/images'))
         form = request.FILES
@@ -953,9 +1114,9 @@ def edit(request, name):
         if person.name not in user_db:
             user_db.append(person.name)
     # in_db
-    name_str = request.user.first_name.replace(' ', '_') + '_' + request.user.last_name.replace(' ', '_')
-    in_db = 1 if name_str in user_db else 0
-    print("in_db here: ", in_db)  
+    # name_str = request.user.first_name.replace(' ', '_') + '_' + request.user.last_name.replace(' ', '_')
+    email_str = str(request.user)
+    in_db = 1 if email_str.lower() in user_db else 0
 
     person = BioInfo.objects.get(name=name)
 
@@ -1215,9 +1376,9 @@ def dashboard(request):
         if person.name not in user_db:
             user_db.append(person.name)
     # in_db
-    name_str = request.user.first_name.replace(' ', '_') + '_' + request.user.last_name.replace(' ', '_')
-    in_db = 1 if name_str in user_db else 0
-    print("in_db here: ", in_db)  
+    # name_str = request.user.first_name.replace(' ', '_') + '_' + request.user.last_name.replace(' ', '_')
+    email_str = str(request.user)
+    in_db = 1 if email_str.lower() in user_db else 0
 
     # sorted(skill_res), sorted(industry_res), sorted(tech_res), sorted(domain_res), 
     # sorted(university_res), sorted(major_res)

@@ -142,6 +142,10 @@ class BioInfo(models.Model):
     email = models.CharField(max_length=200)
     position = models.CharField(max_length=100, choices=POSITION_CHOICES, default=None)
     location = models.CharField(max_length=100, choices=LOCATION_CHOICES, default=None)
+    application = models.CharField(max_length=300, choices=SKILL_CHOICES, default=None, null=True, blank=True)
+    ds_skill = models.CharField(max_length=300, choices=TECHNICUQE_CHOICES, default=None, null=True, blank=True)
+    program_skill = models.CharField(max_length=300, choices=SKILL_CHOICES, default=None, null=True, blank=True)
+    tech_stack = models.CharField(max_length=300, choices=TECHNICUQE_CHOICES, default=None, null=True, blank=True)
     skill = models.CharField(max_length=300, choices=SKILL_CHOICES, default=None)
     technique = models.CharField(max_length=300, choices=TECHNICUQE_CHOICES, default=None)
     industry = models.CharField(max_length=300, choices=INDUSTRIES_CHOICES, default=None)
@@ -165,6 +169,50 @@ class BioInfo(models.Model):
     
     def __str__(self):
         return self.name
+
+    def application_split(self):
+        application = []
+        application_sections = self.application.split(',')
+        for application_tmp in application_sections:
+            if '(' in application_tmp:
+                idx = application_tmp.index('(')
+                application.append(application_tmp[:idx-1])
+            else:
+                application.append(application_tmp)
+        return ', '.join(application)
+
+    def ds_skill_split(self):
+        ds_skill = []
+        ds_skill_sections = self.ds_skill.split(',')
+        for ds_skill_tmp in ds_skill_sections:
+            if '(' in ds_skill_tmp:
+                idx = ds_skill_tmp.index('(')
+                ds_skill.append(ds_skill_tmp[:idx-1])
+            else:
+                ds_skill.append(ds_skill_tmp)
+        return ', '.join(ds_skill)
+
+    def program_skill_split(self):
+        program_skill = []
+        program_skill_sections = self.program_skill.split(',')
+        for program_skill_tmp in program_skill_sections:
+            if '(' in program_skill_tmp:
+                idx = program_skill_tmp.index('(')
+                program_skill.append(program_skill_tmp[:idx-1])
+            else:
+                program_skill.append(program_skill_tmp)
+        return ', '.join(program_skill)
+
+    def techstack_split(self):
+        techstack = []
+        techstack_sections = self.tech_stack.split(',')
+        for techstack_tmp in techstack_sections:
+            if '(' in techstack_tmp:
+                idx = techstack_tmp.index('(')
+                techstack.append(techstack_tmp[:idx-1])
+            else:
+                techstack.append(techstack_tmp)
+        return ', '.join(techstack)
 
     def skill_split(self):
         skill = []

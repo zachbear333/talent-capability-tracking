@@ -25,36 +25,42 @@ class UserAdmin(admin.ModelAdmin):
             error_lst = []
             # file_data = pd.read_csv(csv_file)
             df = pd.read_csv(csv_file)
+            df = df.fillna('N/A')
             for i, row in df.iterrows():
-                try:
-                    created = BioInfo.objects.update_or_create(
-                        name = row['name'],
-                        email = row['email'],
-                        position = row['position'],
-                        location = row['location'], 
-                        skill = row['skill'],
-                        technique = row['technique'],
-                        industry = row['industry'],
-                        business_domain = row['business_domain'],
-                        university = row['university'],
-                        major = row['major'],
-                        degree = row['degree'],
-                        university2 = row['university2'],
-                        major2 = row['major2'],
-                        degree2 = row['degree2'],
-                        university3 = row['university3'],
-                        major3 = row['major3'],
-                        degree3 = row['degree3'],
-                        intro =  row['intro'],
-                    )
+                # try:
+                created = BioInfo.objects.update_or_create(
+                    name = row['name'],
+                    email = row['email'],
+                    position = row['position'],
+                    location = row['location'], 
+                    skill = row['skill'],
+                    technique = row['technique'],
+                    application = row['Applications'],
+                    ds_skill = row['DS Skills'],
+                    program_skill = row['Programming Skills'],
+                    tech_stack = row['Techstack'],
+                    industry = row['industry'],
+                    business_domain = row['business_domain'],
+                    university = row['university'],
+                    major = row['major'],
+                    degree = row['degree'],
+                    university2 = row['university2'],
+                    major2 = row['major2'],
+                    degree2 = row['degree2'],
+                    university3 = row['university3'],
+                    major3 = row['major3'],
+                    degree3 = row['degree3'],
+                    intro =  row['intro'],
+                )
 
                     # created_ = Student.objects.update_or_create(
                     #     name = row['name'],
                     #     photo = 'images/logo2.png',
                     #     bio_ppt = 'bio_ppt/Blank_Bio.pdf',
                     # )
-                except:
-                    error_lst.append(row['name'])
+                # except:
+                #     error_lst.append(row['name'])
+                # print(error_lst)
         form = CsvImportForm()
         data = {"form" : form}
         return render(request, 'admin/csv_upload.html', data)
