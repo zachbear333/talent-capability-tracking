@@ -90,40 +90,6 @@ SKILL_CHOICES = [
     ('Named Entity Recognition', 'Named Entity Recognition'),
 ]
 
-INDUSTRIES_CHOICES = [
-    ('Retail', 'Retail'),
-    ('Grocery', "Grocery"),
-    ('Financial Services', "Financial Services"),
-    ('Transportation', 'Transportation'), 
-    ('Healthcare', "Healthcare"),
-    ('B2B', 'B2B'),
-    ('Construction', 'Construction'),
-    ('Manufacturing', 'Manufacturing'),
-    ('Utilities', 'Utilities'),
-    ('Insurance', 'Insurance'),
-    ('Communication Services', 'Communication Services'),
-    ('E Commerce', 'E Commerce'),
-    ('Educational Services', 'Educational Services'),
-    ('Energy', 'Energy'),
-    ('Hospitality', 'Hospitality'),
-    ('Information Technology', 'Information Technology'),
-    ('Life Sciences', 'Life Sciences'),
-    ('Real Estate', 'Real Estate'),
-    ('Technology', 'Technology'),
-]
-
-CLIENT_CHOICES = [
-    ('AARP', 'AARP'),
-    ('Acorns', "Acorns"),
-    ('CVS', "CVS"),
-    ('Grammarly', 'Grammarly'), 
-    ('HGV', "HGV"),
-    ('Marriott MTA', 'Marriott MTA'),
-    ('Sunovion', 'Sunovion'),
-    ('Visa', 'Visa'),
-    ('Walmart', 'Walmart')
-]
-
 TECHNICUQE_CHOICES = [
     # CLOUD COMPUTING SERVICES
     ('AWS', 'AWS'),
@@ -158,6 +124,82 @@ TECHNICUQE_CHOICES = [
     ('PyTorch', 'PyTorch'),
     ('Tensorflow', 'Tensorflow'),
     ('Keras', 'Keras'),
+]
+
+### APPLICATION CHOICE
+APPLICATION_SUBCATEGORY = {
+    'Analytics Application' : ['Demand Forcasting', 'Fraud detection', 'Image processing', 'Insight Generation',
+                                'Inventory/Space Management', 'LTV', 'Personalization', 'Pricing optimization',
+                                'Product Assortment', 'Recommender System', 'Supplier chain'],
+    'Digital Analystics' : ['Adobe Analytics', 'Digital Analytics', 'Google Analytics', 'Search Engine Optimization (SEO)',
+                            'Web development'],
+    'Sales and Marketing' : ['Campaign Management', 'Customer AcqusitioN', 'Customer retention', 'Customer Segmentation',
+                            'Market Mix Modeling (MMM)', 'Market Structure Analysis (MSA)', 'Multi-touch attribution (MTA)'] 
+}               
+APPLICATION_CHOICES = []
+for sub_cate in APPLICATION_SUBCATEGORY:
+    for choices in APPLICATION_SUBCATEGORY[sub_cate]:
+        APPLICATION_CHOICES.append((choices, choices))
+
+### DS SKILL CHOICE
+DSSKILL_SUBCATEGORY = {
+    'NLP' : ['Feature Creation', 'Sentiment Analysis', 'Text Reasoning', 'Text Summarization', 'Topic Modeling'],
+    'Optimization' : ['Graph Analytics', 'Optimization', 'Simulation'],
+    'Statistics/ML' : ['A/B Test', 'Bayesian Modelling', 'Causal Inference', 'Clustering', 'Deep Learning',
+                       'Experimental Design', 'Regression & Classification', 'Reinforcement Learning',
+                       'Spatial Statistics', 'Survival analysis', 'Time Series']
+}
+DS_SKILL_CHOICES = []
+for sub_cate in DSSKILL_SUBCATEGORY:
+    for choices in DSSKILL_SUBCATEGORY[sub_cate]:
+        DS_SKILL_CHOICES.append((choices, choices))
+
+### PROGRAMMING SKILL CHOICE
+PROGRAM_SKILL_SUBCATEGORY = {
+    'Optimization Programming' : ['Cplex', 'Gurobi'],
+    'Parallel Programming' : ['OpenCL', 'CUDA'],
+    'Programming Language' : ['C/C++/C#/.NET', 'Java', 'Matlab', 'PySpark', 'Python', 'R',
+                              'SAS', 'Scala', 'Spark', 'SQL', 'Tensorflow/Pytorch', 'HTML', 'Javascript'],
+    # 'Web Programming' : ['HTML', 'Javascript'] 
+}
+PROGRAM_SKILL_CHOICES = []
+for sub_cate in PROGRAM_SKILL_SUBCATEGORY:
+    for choices in PROGRAM_SKILL_SUBCATEGORY[sub_cate]:
+        PROGRAM_SKILL_CHOICES.append((choices, choices))
+
+### TECHSTACK CHOICE
+TECHSTACK_SUBCATEGORY = {
+    'BI' : ['Dash', 'Dashboard Design', 'Data Visualization', 'PowerBI', 'Qlik', 'R Shiny', 'Streamlit', 'Tableau'],
+    'Operation' : ['Airflow', 'Automation & Job Scheduling', 'Deployment', 'MLOps', 'Process Management'],
+    'Cloud Computing Service' : ['AWS', 'Azure', 'Databricks', 'GCP', 'Snowflakes'],
+    'Data' : ['3rd Party Data', 'Database Design'],
+    'Collabration' : ['GIT', 'Jira', 'Project Management', 'GitHub']
+}
+TECHSTACK_CHOICES = []
+for sub_cate in TECHSTACK_SUBCATEGORY:
+    for choices in TECHSTACK_SUBCATEGORY[sub_cate]:
+        TECHSTACK_CHOICES.append((choices, choices))
+
+INDUSTRIES_CHOICES = [
+    ('Retail', 'Retail'),
+    ('Grocery', "Grocery"),
+    ('Financial Services', "Financial Services"),
+    ('Transportation', 'Transportation'), 
+    ('Healthcare', "Healthcare"),
+    ('B2B', 'B2B'),
+    ('Construction', 'Construction'),
+    ('Manufacturing', 'Manufacturing'),
+    ('Utilities', 'Utilities'),
+    ('Insurance', 'Insurance'),
+    ('Communication Services', 'Communication Services'),
+    ('E Commerce', 'E Commerce'),
+    ('Educational Services', 'Educational Services'),
+    ('Energy', 'Energy'),
+    ('Hospitality', 'Hospitality'),
+    ('Information Technology', 'Information Technology'),
+    ('Life Sciences', 'Life Sciences'),
+    ('Real Estate', 'Real Estate'),
+    ('Technology', 'Technology'),
 ]
 
 POSITION_CHOICES = [
@@ -235,6 +277,22 @@ class CreateNewProfile(forms.Form):
 class EditProfile(forms.Form):
     location = forms.CharField(label="Location", widget=forms.Select(choices=LOCATION_CHOICES))
     domain = forms.CharField(label="Business Domain", widget=forms.Select(choices=DOMAIN_CHOICES))
+    application = forms.MultipleChoiceField(required=False, label="Application", choices=APPLICATION_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={
+    'class':'industry-test',
+    'onchange':'test(event);',      
+    }))
+    ds_skill = forms.MultipleChoiceField(required=False, label="DS Skill", choices=DS_SKILL_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={
+    'class':'industry-test',
+    'onchange':'test(event);',      
+    }))
+    program_skill = forms.MultipleChoiceField(required=False, label="Programming Skill", choices=PROGRAM_SKILL_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={
+    'class':'industry-test',
+    'onchange':'test(event);',      
+    }))
+    tech_stack = forms.MultipleChoiceField(required=False, label="Techstack", choices=TECHSTACK_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={
+    'class':'industry-test',
+    'onchange':'test(event);',      
+    }))
     skill = forms.MultipleChoiceField(required=False, label="Areas of Expertise", choices=SKILL_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={
     'class':'industry-test',
     'onchange':'test(event);',      

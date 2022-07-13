@@ -77,7 +77,651 @@
             <li><b>5</b> - Expert: I have significant experience with this skill, including supporting others. Anyone can turn to me. </li>
         </ul>
         <table class="table table-sm">
+
             <thead class="thead-light">
+                <tr>
+                    <th colspan=6> Application
+                    </th>
+                </tr>
+            </thead>
+            <tr>
+                <th> Analytics Application </th>
+                <th> Digital Analystics </th>
+                <th> Sales and Marketing </th>
+            </tr>
+            <tr>
+                <td>
+                    {% for s in form.application %}
+                        {% if forloop.counter0 >= 0  and forloop.counter0 < 11%}
+                        <li class="list-group-item" id="{{forloop.counter0}}">
+                            {{s}}
+                            <div class="col-sm-2 input-group">
+                                <div class="hidden" id="tmp_id_application_{{forloop.counter0}}">
+                                    <div class="btn-group mr-2" role="group" aria-label="first group"
+                                        id="application_select_{{forloop.counter0}}">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_application_{{forloop.counter0}}" value="1" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_application_{{forloop.counter0}}">1</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_application_{{forloop.counter0}}" value="2" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_application_{{forloop.counter0}}">2</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_application_{{forloop.counter0}}" value="3" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_application_{{forloop.counter0}}">3</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_application_{{forloop.counter0}}" value="4" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_application_{{forloop.counter0}}">4</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_application_{{forloop.counter0}}" value="5" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_application_{{forloop.counter0}}">5</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+
+                <td>
+                    {% for s in form.application %}
+                        {% if forloop.counter0 >= 11  and forloop.counter0 < 16%}
+                        <li class="list-group-item" id="{{forloop.counter0}}">
+                            {{s}}
+                            <div class="col-sm-2 input-group">
+                                <div class="hidden" id="tmp_id_application_{{forloop.counter0}}">
+                                    <div class="btn-group mr-2" role="group" aria-label="first group"
+                                        id="application_select_{{forloop.counter0}}">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_application_{{forloop.counter0}}" value="1" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_application_{{forloop.counter0}}">1</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_application_{{forloop.counter0}}" value="2" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_application_{{forloop.counter0}}">2</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_application_{{forloop.counter0}}" value="3" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_application_{{forloop.counter0}}">3</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_application_{{forloop.counter0}}" value="4" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_application_{{forloop.counter0}}">4</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_application_{{forloop.counter0}}" value="5" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_application_{{forloop.counter0}}">5</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for s in form.application %}
+                        {% if forloop.counter0 >= 16%}
+                        <li class="list-group-item" id="{{forloop.counter0}}">
+                            {{s}}
+                            <div class="col-sm-2 input-group">
+                                <div class="hidden" id="tmp_id_application_{{forloop.counter0}}">
+                                    <div class="btn-group mr-2" role="group" aria-label="first group"
+                                        id="application_select_{{forloop.counter0}}">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_application_{{forloop.counter0}}" value="1" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_application_{{forloop.counter0}}">1</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_application_{{forloop.counter0}}" value="2" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_application_{{forloop.counter0}}">2</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_application_{{forloop.counter0}}" value="3" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_application_{{forloop.counter0}}">3</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_application_{{forloop.counter0}}" value="4" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_application_{{forloop.counter0}}">4</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_application_{{forloop.counter0}}" value="5" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_application_{{forloop.counter0}}">5</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+
+            <thead class="thead-light">
+                <tr>
+                    <th colspan=6> DS Skill
+                    </th>
+                </tr>
+            </thead>
+            <tr>
+                <th> NLP </th>
+                <th> Optimization </th>
+                <th> Statistics/ML </th>
+            </tr>
+            <tr>
+                <td>
+                    {% for s in form.ds_skill %}
+                        {% if forloop.counter0 >= 0  and forloop.counter0 < 5 %}
+                        <li class="list-group-item" id="{{forloop.counter0}}">
+                            {{s}}
+                            <div class="col-sm-2 input-group">
+                                <div class="hidden" id="tmp_id_ds_skill_{{forloop.counter0}}">
+                                    <div class="btn-group mr-2" role="group" aria-label="first group"
+                                        id="ds_skill_select_{{forloop.counter0}}">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_ds_skill_{{forloop.counter0}}" value="1" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_ds_skill_{{forloop.counter0}}">1</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_ds_skill_{{forloop.counter0}}" value="2" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_ds_skill_{{forloop.counter0}}">2</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_ds_skill_{{forloop.counter0}}" value="3" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_ds_skill_{{forloop.counter0}}">3</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_ds_skill_{{forloop.counter0}}" value="4" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_ds_skill_{{forloop.counter0}}">4</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_ds_skill_{{forloop.counter0}}" value="5" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_ds_skill_{{forloop.counter0}}">5</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+
+                <td>
+                    {% for s in form.ds_skill %}
+                        {% if forloop.counter0 >= 5  and forloop.counter0 < 8 %}
+                        <li class="list-group-item" id="{{forloop.counter0}}">
+                            {{s}}
+                            <div class="col-sm-2 input-group">
+                                <div class="hidden" id="tmp_id_ds_skill_{{forloop.counter0}}">
+                                    <div class="btn-group mr-2" role="group" aria-label="first group"
+                                        id="ds_skill_select_{{forloop.counter0}}">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_ds_skill_{{forloop.counter0}}" value="1" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_ds_skill_{{forloop.counter0}}">1</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_ds_skill_{{forloop.counter0}}" value="2" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_ds_skill_{{forloop.counter0}}">2</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_ds_skill_{{forloop.counter0}}" value="3" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_ds_skill_{{forloop.counter0}}">3</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_ds_skill_{{forloop.counter0}}" value="4" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_ds_skill_{{forloop.counter0}}">4</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_ds_skill_{{forloop.counter0}}" value="5" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_ds_skill_{{forloop.counter0}}">5</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for s in form.ds_skill %}
+                        {% if forloop.counter0 >= 8%}
+                        <li class="list-group-item" id="{{forloop.counter0}}">
+                            {{s}}
+                            <div class="col-sm-2 input-group">
+                                <div class="hidden" id="tmp_id_ds_skill_{{forloop.counter0}}">
+                                    <div class="btn-group mr-2" role="group" aria-label="first group"
+                                        id="ds_skill_select_{{forloop.counter0}}">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_ds_skill_{{forloop.counter0}}" value="1" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_ds_skill_{{forloop.counter0}}">1</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_ds_skill_{{forloop.counter0}}" value="2" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_ds_skill_{{forloop.counter0}}">2</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_ds_skill_{{forloop.counter0}}" value="3" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_ds_skill_{{forloop.counter0}}">3</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_ds_skill_{{forloop.counter0}}" value="4" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_ds_skill_{{forloop.counter0}}">4</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_ds_skill_{{forloop.counter0}}" value="5" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_ds_skill_{{forloop.counter0}}">5</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+
+            <thead class="thead-light">
+                <tr>
+                    <th colspan=6> Programming Skills
+                    </th>
+                </tr>
+            </thead>
+            <tr>
+                <th> Optimization Programming </th>
+                <th> Parallel Programming </th>
+                <th> Programming Language </th>
+            </tr>
+            <tr>
+                <td>
+                    {% for s in form.program_skill %}
+                        {% if forloop.counter0 >= 0  and forloop.counter0 < 2 %}
+                        <li class="list-group-item" id="{{forloop.counter0}}">
+                            {{s}}
+                            <div class="col-sm-2 input-group">
+                                <div class="hidden" id="tmp_id_program_skill_{{forloop.counter0}}">
+                                    <div class="btn-group mr-2" role="group" aria-label="first group"
+                                        id="program_skill_select_{{forloop.counter0}}">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_program_skill_{{forloop.counter0}}" value="1" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_program_skill_{{forloop.counter0}}">1</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_program_skill_{{forloop.counter0}}" value="2" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_program_skill_{{forloop.counter0}}">2</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_program_skill_{{forloop.counter0}}" value="3" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_program_skill_{{forloop.counter0}}">3</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_program_skill_{{forloop.counter0}}" value="4" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_program_skill_{{forloop.counter0}}">4</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_program_skill_{{forloop.counter0}}" value="5" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_program_skill_{{forloop.counter0}}">5</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+
+                <td>
+                    {% for s in form.program_skill %}
+                        {% if forloop.counter0 >= 2  and forloop.counter0 < 4 %}
+                        <li class="list-group-item" id="{{forloop.counter0}}">
+                            {{s}}
+                            <div class="col-sm-2 input-group">
+                                <div class="hidden" id="tmp_id_program_skill_{{forloop.counter0}}">
+                                    <div class="btn-group mr-2" role="group" aria-label="first group"
+                                        id="program_skill_select_{{forloop.counter0}}">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_program_skill_{{forloop.counter0}}" value="1" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_program_skill_{{forloop.counter0}}">1</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_program_skill_{{forloop.counter0}}" value="2" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_program_skill_{{forloop.counter0}}">2</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_program_skill_{{forloop.counter0}}" value="3" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_program_skill_{{forloop.counter0}}">3</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_program_skill_{{forloop.counter0}}" value="4" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_program_skill_{{forloop.counter0}}">4</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_program_skill_{{forloop.counter0}}" value="5" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_program_skill_{{forloop.counter0}}">5</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for s in form.program_skill %}
+                        {% if forloop.counter0 >= 4 %}
+                        <li class="list-group-item" id="{{forloop.counter0}}">
+                            {{s}}
+                            <div class="col-sm-2 input-group">
+                                <div class="hidden" id="tmp_id_program_skill_{{forloop.counter0}}">
+                                    <div class="btn-group mr-2" role="group" aria-label="first group"
+                                        id="program_skill_select_{{forloop.counter0}}">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_program_skill_{{forloop.counter0}}" value="1" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_program_skill_{{forloop.counter0}}">1</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_program_skill_{{forloop.counter0}}" value="2" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_program_skill_{{forloop.counter0}}">2</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_program_skill_{{forloop.counter0}}" value="3" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_program_skill_{{forloop.counter0}}">3</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_program_skill_{{forloop.counter0}}" value="4" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_program_skill_{{forloop.counter0}}">4</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_program_skill_{{forloop.counter0}}" value="5" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_program_skill_{{forloop.counter0}}">5</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+
+            <thead class="thead-light">
+                <tr>
+                    <th colspan=6> Techstack
+                    </th>
+                </tr>
+            </thead>
+            <tr>
+                <th> BI </th>
+                <th> Operations </th>
+                <th> Cloud Computing Service </th>
+            </tr>
+            <tr>
+                <td>
+                    {% for s in form.tech_stack %}
+                        {% if forloop.counter0 >= 0  and forloop.counter0 < 8 %}
+                        <li class="list-group-item" id="{{forloop.counter0}}">
+                            {{s}}
+                            <div class="col-sm-2 input-group">
+                                <div class="hidden" id="tmp_id_tech_stack_{{forloop.counter0}}">
+                                    <div class="btn-group mr-2" role="group" aria-label="first group"
+                                        id="tech_stack_select_{{forloop.counter0}}">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_tech_stack_{{forloop.counter0}}" value="1" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_tech_stack_{{forloop.counter0}}">1</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_tech_stack_{{forloop.counter0}}" value="2" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_tech_stack_{{forloop.counter0}}">2</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_tech_stack_{{forloop.counter0}}" value="3" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_tech_stack_{{forloop.counter0}}">3</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_tech_stack_{{forloop.counter0}}" value="4" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_tech_stack_{{forloop.counter0}}">4</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_tech_stack_{{forloop.counter0}}" value="5" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_tech_stack_{{forloop.counter0}}">5</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+
+                <td>
+                    {% for s in form.tech_stack %}
+                        {% if forloop.counter0 >= 8  and forloop.counter0 < 13 %}
+                        <li class="list-group-item" id="{{forloop.counter0}}">
+                            {{s}}
+                            <div class="col-sm-2 input-group">
+                                <div class="hidden" id="tmp_id_tech_stack_{{forloop.counter0}}">
+                                    <div class="btn-group mr-2" role="group" aria-label="first group"
+                                        id="tech_stack_select_{{forloop.counter0}}">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_tech_stack_{{forloop.counter0}}" value="1" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_tech_stack_{{forloop.counter0}}">1</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_tech_stack_{{forloop.counter0}}" value="2" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_tech_stack_{{forloop.counter0}}">2</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_tech_stack_{{forloop.counter0}}" value="3" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_tech_stack_{{forloop.counter0}}">3</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_tech_stack_{{forloop.counter0}}" value="4" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_tech_stack_{{forloop.counter0}}">4</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_tech_stack_{{forloop.counter0}}" value="5" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_tech_stack_{{forloop.counter0}}">5</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for s in form.tech_stack %}
+                        {% if forloop.counter0 >= 13 and forloop.counter0 < 18 %}
+                        <li class="list-group-item" id="{{forloop.counter0}}">
+                            {{s}}
+                            <div class="col-sm-2 input-group">
+                                <div class="hidden" id="tmp_id_tech_stack_{{forloop.counter0}}">
+                                    <div class="btn-group mr-2" role="group" aria-label="first group"
+                                        id="tech_stack_select_{{forloop.counter0}}">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_tech_stack_{{forloop.counter0}}" value="1" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_tech_stack_{{forloop.counter0}}">1</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_tech_stack_{{forloop.counter0}}" value="2" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_tech_stack_{{forloop.counter0}}">2</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_tech_stack_{{forloop.counter0}}" value="3" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_tech_stack_{{forloop.counter0}}">3</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_tech_stack_{{forloop.counter0}}" value="4" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_tech_stack_{{forloop.counter0}}">4</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_tech_stack_{{forloop.counter0}}" value="5" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_tech_stack_{{forloop.counter0}}">5</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+
+            <tr>
+                <th> Data </th>
+                <th> Collabration </th>
+            </tr>
+            <tr>
+                <td>
+                    {% for s in form.tech_stack %}
+                        {% if forloop.counter0 >= 18  and forloop.counter0 < 20 %}
+                        <li class="list-group-item" id="{{forloop.counter0}}">
+                            {{s}}
+                            <div class="col-sm-2 input-group">
+                                <div class="hidden" id="tmp_id_tech_stack_{{forloop.counter0}}">
+                                    <div class="btn-group mr-2" role="group" aria-label="first group"
+                                        id="tech_stack_select_{{forloop.counter0}}">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_tech_stack_{{forloop.counter0}}" value="1" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_tech_stack_{{forloop.counter0}}">1</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_tech_stack_{{forloop.counter0}}" value="2" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_tech_stack_{{forloop.counter0}}">2</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_tech_stack_{{forloop.counter0}}" value="3" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_tech_stack_{{forloop.counter0}}">3</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_tech_stack_{{forloop.counter0}}" value="4" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_tech_stack_{{forloop.counter0}}">4</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_tech_stack_{{forloop.counter0}}" value="5" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_tech_stack_{{forloop.counter0}}">5</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+
+                <td>
+                    {% for s in form.tech_stack %}
+                        {% if forloop.counter0 >= 20 %}
+                        <li class="list-group-item" id="{{forloop.counter0}}">
+                            {{s}}
+                            <div class="col-sm-2 input-group">
+                                <div class="hidden" id="tmp_id_tech_stack_{{forloop.counter0}}">
+                                    <div class="btn-group mr-2" role="group" aria-label="first group"
+                                        id="tech_stack_select_{{forloop.counter0}}">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_tech_stack_{{forloop.counter0}}" value="1" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_tech_stack_{{forloop.counter0}}">1</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_tech_stack_{{forloop.counter0}}" value="2" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_tech_stack_{{forloop.counter0}}">2</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_tech_stack_{{forloop.counter0}}" value="3" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_tech_stack_{{forloop.counter0}}">3</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_tech_stack_{{forloop.counter0}}" value="4" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_tech_stack_{{forloop.counter0}}">4</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                name="id_tech_stack_{{forloop.counter0}}" value="5" onchange="select_level(event);">
+                                            <label class="form-check-label" for="id_tech_stack_{{forloop.counter0}}">5</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+
+            </tr>
+
+            {% comment %} <thead class="thead-light">
                 <tr>
                     <th colspan=6> Areas of Expertise
                     </th>
@@ -87,7 +731,7 @@
                 <th> Data Engineering</th>
                 <th> Business Intelligence</th>
                 <th> Process</th>
-            </tr>
+            </tr> 
             <tr>
                 <td>
                     {% for s in form.skill%}
@@ -214,11 +858,6 @@
                 </td>
             </tr>
             <tr>
-                <th> Analytics Application</th>
-                <th> Statistics / Machine Learning</th>
-                <th> Deep Learning / Natural Language Processing</th>
-            </tr>
-            <tr>
                 <td>
                     {% for s in form.skill %}
                     {% if forloop.counter0 >= 11  and forloop.counter0 < 26%}
@@ -342,9 +981,9 @@
                     {% endif %}
                     {% endfor %}
                 </td>
-            </tr>
+            </tr>{% endcomment %}
         </table>
-        <table class="table table-sm">
+        {% comment %} <table class="table table-sm">
             <thead class="thead-light"><tr><th colspan = 5>Technique</th></tr></thead>
             <tr>
                 <th> Cloud Computing Services</th>
@@ -560,7 +1199,7 @@
                     {% endfor %}
                 </td>
             </tr>
-        </table>
+        </table> {% endcomment %}
         <table class="table table-sm">
             <thead class="thead-light">
                 <tr>
@@ -756,9 +1395,10 @@
     var preselect = {{preselect}};
     console.log(preselect.items)
     for (let key in preselect) {
-        console.log(key);
+        console.log(key, 'tmp_'.concat(key));
         // getelementid (tmp_) - setAttribute to 'unhide'
         element = document.getElementById('tmp_'.concat(key));
+        console.log(element)
         element.setAttribute('class', 'unhide');
 
         // append level value

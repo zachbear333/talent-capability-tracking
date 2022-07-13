@@ -23,6 +23,41 @@ from datetime import datetime
 from django.core.exceptions import PermissionDenied
 import collections
 
+### Sub category
+APPLICATION_SUBCATEGORY = {
+    'Analytics Application' : ['Demand Forcasting', 'Fraud detection', 'Image processing', 'Insight Generation',
+                                'Inventory/Space Management', 'LTV', 'Personalization', 'Pricing optimization',
+                                'Product Assortment', 'Recommender System', 'Supplier chain'],
+    'Digital Analystics' : ['Adobe Analytics', 'Digital Analytics', 'Google Analytics', 'Search Engine Optimization (SEO)',
+                            'Web development'],
+    'Sales and Marketing' : ['Campaign Management', 'Customer AcqusitioN', 'Customer retention', 'Customer Segmentation',
+                            'Market Mix Modeling (MMM)', 'Market Structure Analysis (MSA)', 'Multi-touch attribution (MTA)'] 
+}    
+
+DSSKILL_SUBCATEGORY = {
+    'NLP' : ['Feature Creation', 'Sentiment Analysis', 'Text Reasoning', 'Text Summarization', 'Topic Modeling'],
+    'Optimization' : ['Graph Analytics', 'Optimization', 'Simulation'],
+    'Statistics/ML' : ['A/B Test', 'Bayesian Modelling', 'Causal Inference', 'Clustering', 'Deep Learning',
+                       'Experimental Design', 'Regression & Classification', 'Reinforcement Learning',
+                       'Spatial Statistics', 'Survival analysis', 'Time Series']
+}
+
+PROGRAM_SKILL_SUBCATEGORY = {
+    'Optimization Programming' : ['Cplex', 'Gurobi'],
+    'Parallel Programming' : ['OpenCL', 'CUDA'],
+    'Programming Language' : ['C/C++/C#/.NET', 'Java', 'Matlab', 'PySpark', 'Python', 'R',
+                              'SAS', 'Scala', 'Spark', 'SQL', 'Tensorflow/Pytorch', 'HTML', 'Javascript'],
+    # 'Web Programming' : ['HTML', 'Javascript'] 
+}
+
+TECHSTACK_SUBCATEGORY = {
+    'BI' : ['Dash', 'Dashboard Design', 'Data Visualization', 'PowerBI', 'Qlik', 'R Shiny', 'Streamlit', 'Tableau'],
+    'Operation' : ['Airflow', 'Automation & Job Scheduling', 'Deployment', 'MLOps', 'Process Management'],
+    'Cloud Computing Service' : ['AWS', 'Azure', 'Databricks', 'GCP', 'Snowflakes'],
+    'Data' : ['3rd Party Data', 'Database Design'],
+    'Collabration' : ['GIT', 'Jira', 'Project Management', 'GitHub']
+}
+
 SUB_CATEGORY = {
     'Process': ['Automation & Job Scheduling', 'Process efficiency', 'Version Controlling',
             'Project Management', 'Space Management'],
@@ -356,9 +391,10 @@ def index(response, name):
     app_dict = {}
     for s in app_tmp.split(','):
         if '(' in s:
+            s = s.strip()
             idx = s.rfind('(')
             print(s, idx, s[:idx-1].strip())
-            app_dict[s[:idx-1].strip()] = REVERSE_RUBRIC[s.strip()[idx+1:-1]]
+            app_dict[s.strip()[:idx-1]] = REVERSE_RUBRIC[s.strip()[idx+1:-1]]
         else:
             app_dict[s] = "1"
     app_dict = sorted(app_dict.items(), key=lambda x:x[1], reverse=True)
@@ -369,8 +405,9 @@ def index(response, name):
     skill_dict = {}
     for s in skill_tmp.split(','):
         if '(' in s:
+            s = s.strip()
             idx = s.rfind('(')
-            skill_dict[s[:idx-1].strip()] = REVERSE_RUBRIC[s.strip()[idx+1:-1]]
+            skill_dict[s.strip()[:idx-1]] = REVERSE_RUBRIC[s.strip()[idx+1:-1]]
         else:
             skill_dict[s] = "1"
     skill_dict = sorted(skill_dict.items(), key=lambda x:x[1], reverse=True)
@@ -382,8 +419,9 @@ def index(response, name):
     prog_skill_dict = {}
     for s in prog_skill_tmp.split(','):
         if '(' in s:
+            s = s.strip()
             idx = s.rfind('(')
-            prog_skill_dict[s[:idx-1].strip()] = REVERSE_RUBRIC[s.strip()[idx+1:-1]]
+            prog_skill_dict[s.strip()[:idx-1]] = REVERSE_RUBRIC[s.strip()[idx+1:-1]]
         else:
             prog_skill_dict[s] = "1"
     prog_skill_dict = sorted(prog_skill_dict.items(), key=lambda x:x[1], reverse=True)
@@ -394,8 +432,10 @@ def index(response, name):
     techstack_dict = {}
     for s in techstack_tmp.split(','):
         if '(' in s:
+            s = s.strip()
             idx = s.rfind('(')
-            techstack_dict[s[:idx-1].strip()] = REVERSE_RUBRIC[s.strip()[idx+1:-1]]
+            print(s, idx, s[idx+1:-1])
+            techstack_dict[s[:idx-1]] = REVERSE_RUBRIC[s[idx+1:-1]]
         else:
             techstack_dict[s] = "1"
     techstack_dict = sorted(techstack_dict.items(), key=lambda x:x[1], reverse=True)
@@ -406,8 +446,9 @@ def index(response, name):
     industry_dict = {}
     for s in industry_tmp.split(','):
         if '(' in s:
+            s = s.strip()
             idx = s.index('(')
-            industry_dict[s[:idx-1].strip()] = REVERSE_RUBRIC[s.split(' ')[-2][1:]]
+            industry_dict[s.strip()[:idx-1]] = REVERSE_RUBRIC[s.split(' ')[-2][1:]]
         else:
             industry_dict[s] = "1"
     industry_dict = sorted(industry_dict.items(), key=lambda x:x[1], reverse=True)
@@ -419,9 +460,9 @@ def index(response, name):
     if domain_tmp:
         for s in domain_tmp.split(','):
             if '(' in s:
+                s = s.strip()
                 idx = s.index('(')
-                # print(s[idx+1:-1].strip())
-                domain_dict[s[:idx-1].strip()] = REVERSE_RUBRIC[s[idx+1:-1].strip()]
+                domain_dict[s.strip()[:idx-1]] = REVERSE_RUBRIC[s.strip()[idx+1:-1]]
             else:
                 domain_dict[s] = "1"
         domain_dict = sorted(domain_dict.items(), key=lambda x:x[1], reverse=True)
@@ -1119,11 +1160,11 @@ def edit(request, name):
     in_db = 1 if email_str.lower() in user_db else 0
 
     person = BioInfo.objects.get(name=name)
+    preselect_dict = {}
 
     # initial skills
     skills = person.skill.split(',')
     skill_init = []
-    preselect_dict = {}
     for s in skills:
         if 'N/A' in s:
             continue
@@ -1135,11 +1176,90 @@ def edit(request, name):
         # print(flag)
         if flag != 0:
             skill_init.append(s[:flag-1].strip())
-            print("SKILL ****>", skill_init)
-            preselect_dict['id_skill_{}'.format(tmp1.index(s[:flag-1].strip()))] = ''.join(s.strip().split(" ")[-1])
+            # preselect_dict['id_skill_{}'.format(tmp1.index(s[:flag-1].strip()))] = ''.join(s.strip().split(" ")[-1])
         if flag == 0:
             print(s[:flag-1].strip())
-    print("skill initial", skill_init)
+    # print("skill initial", skill_init)
+
+    # initial applications
+    applications = person.application.split(',')
+    application_init = []
+    for s in applications:
+        if 'N/A' in s:
+            continue
+        flag = 0
+        s = s.strip()
+        flag = s.rfind('(')
+        # print(s, flag)
+        if flag != 0:
+            application_init.append(s[:flag-1].strip())
+            # print(s, flag, s[:flag-1].strip())
+            tmp_list = sum(APPLICATION_SUBCATEGORY.values(), [])
+            preselect_dict['id_application_{}'.format(tmp_list.index(s[:flag-1].strip()))] = ''.join(s.strip().split(" ")[-1])
+        if flag == 0:
+            print(s[:flag-1].strip())
+
+    # initial ds skill
+    dsskill = person.ds_skill.split(',')
+    dsskill_init = []
+    for s in dsskill:
+        if 'N/A' in s:
+            continue
+        s = s.strip()
+        flag = s.rfind('(')
+        # flag = 0
+        # for i in range(len(s)):
+        #     if s[i].isdigit() or s[i] == '(':
+        #         flag = i
+        #         break
+        # print(flag, s, s.rfind('('))
+        if flag != 0:
+            dsskill_init.append(s[:flag-1].strip())
+            tmp_list = sum(DSSKILL_SUBCATEGORY.values(), [])
+            # print('check here: ', tmp_list)
+            preselect_dict['id_ds_skill_{}'.format(tmp_list.index(s[:flag-1].strip()))] = ''.join(s.strip().split(" ")[-1])
+        if flag == 0:
+            print(s[:flag-1].strip())
+
+    # initial program skill
+    programskill = person.program_skill.split(',')
+    programskill_init = []
+    for s in programskill:
+        if 'N/A' in s:
+            continue
+        s = s.strip()
+        flag = s.rfind('(')
+        # flag = 0
+        # for i in range(len(s)):
+        #     if s[i].isdigit() or s[i] == '(':
+        #         flag = i
+        #         break
+        if flag != 0:
+            programskill_init.append(s[:flag-1].strip())
+            tmp_list = sum(PROGRAM_SKILL_SUBCATEGORY.values(), [])
+            preselect_dict['id_program_skill_{}'.format(tmp_list.index(s[:flag-1].strip()))] = ''.join(s.strip().split(" ")[-1])
+        if flag == 0:
+            print(s[:flag-1].strip())
+
+    # initial tech stack
+    techstack = person.tech_stack.split(',')
+    techstack_init = []
+    for s in techstack:
+        if 'N/A' in s:
+            continue
+        s = s.strip()
+        flag = s.rfind('(')
+        # flag = 0
+        # for i in range(len(s)):
+        #     if s[i].isdigit() or s[i] == '(':
+        #         flag = i
+        #         break
+        if flag != 0:
+            techstack_init.append(s[:flag-1].strip())
+            tmp_list = sum(TECHSTACK_SUBCATEGORY.values(), [])
+            preselect_dict['id_tech_stack_{}'.format(tmp_list.index(s[:flag-1].strip()))] = ''.join(s.strip().split(" ")[-1])
+        if flag == 0:
+            print(s[:flag-1].strip())
 
     # initial industries
     industries = person.industry.split(',')
@@ -1147,19 +1267,21 @@ def edit(request, name):
     for ins in industries:
         if 'N/A' in ins:
             continue
-        flag = 0
-        for i in range(len(ins)):
-            if ins[i] == "2" and ins[i-1] == "B" and ins[i+1] == "B":
-                print('warning here')
-                continue   
-            if ins[i].isdigit() or ins[i] == '(':
-                flag = i
-                break
+        ins = ins.strip()
+        flag = ins.rfind('(')
+        # flag = 0
+        # for i in range(len(ins)):
+        #     if ins[i] == "2" and ins[i-1] == "B" and ins[i+1] == "B":
+        #         # print('warning here')
+        #         continue   
+        #     if ins[i].isdigit() or ins[i] == '(':
+        #         flag = i
+        #         break
         if flag != 0:
             industry_init.append(ins[:flag-1].strip())
             print("INDUSTRY ****>", industry_init)
             preselect_dict['id_industry_{}'.format(tmp2.index(ins[:flag-1].strip()))] = ''.join(ins.strip().split(" ")[-2:])
-    print("industry initial", industry_init)
+    # print("industry initial", industry_init)
 
     # initial techniques
     techniques = person.technique.split(',')
@@ -1174,10 +1296,11 @@ def edit(request, name):
                 break
         if flag != 0:
             tech_init.append(tech[:flag-1].strip())
-        if tech_init:
-            print("TECH ****>", tech_init)
-            preselect_dict['id_technique_{}'.format(tmp3.index(tech[:flag-1].strip()))] = ''.join(tech.strip().split(" ")[-1])
-    print('technique skill initial', tech_init)
+        # if tech_init:
+        #     print('haha')
+            # print("TECH ****>", tech_init)
+            # preselect_dict['id_technique_{}'.format(tmp3.index(tech[:flag-1].strip()))] = ''.join(tech.strip().split(" ")[-1])
+    # print('technique skill initial', tech_init)
 
     # initial domain
     domain_init = []
@@ -1194,56 +1317,114 @@ def edit(request, name):
             if flag != 0:
                 domain_init.append(dom[:flag-1].strip())
             if domain_init:
-                print("DOMAIN ****>", domain_init)
+                # print("DOMAIN ****>", domain_init)
                 preselect_dict['id_domain_{}'.format(tmp4.index(dom[:flag-1].strip()))] = ''.join(dom.strip().split(" ")[-1])
-    print('domain initial', domain_init)
+    # print('domain initial', domain_init)
 
     location_init = ''
     if person.location and person.location != 'N/A':
         location_init = person.location
 
-    print(preselect_dict)
-    print("====================")
+    # print(preselect_dict)
+    # print("====================")
     for k, v in preselect_dict.items():
-        # print(k, v)
         preselect_dict[k] = REVERSE_RUBRIC[v[1:-1]]
-    print(preselect_dict)
+    # print(preselect_dict)
 
     if request.method == "POST":
         form = request.POST
 
         l = form.get('location')
 
-        s = form.getlist('skill')
-        if not s:
-            s = ['N/A 1']
-        for i in range(len(s)):
-            level = s[i].split(' ')[-1]
+        app = form.getlist('application')
+        if not app:
+            app = ['N/A 1']
+        for i in range(len(app)):
+            level = app[i].split(' ')[-1]
             if level.isdigit():
-                for j in range(len(s[i])):
-                    if s[i][j].isdigit():
+                for j in range(len(app[i])):
+                    if app[i][j].isdigit():
                         flag = j
                         break
-                print("{} ({})".format(s[i][:flag-1], SKILL_RUBRIC[level]))
-                s[i] = "{} ({})".format(s[i][:flag-1], SKILL_RUBRIC[level])
+                # print("{} ({})".format(app[i][:flag-1], SKILL_RUBRIC[level]))
+                app[i] = "{} ({})".format(app[i][:flag-1], SKILL_RUBRIC[level])
             else:
-                s[i] = "{} ({})".format(s[i], SKILL_RUBRIC['1'])
+                app[i] = "{} ({})".format(app[i], SKILL_RUBRIC['1'])
 
-
-        tech = form.getlist('technique')
-        if not tech:
-            tech = ['N/A 1']
-        for i in range(len(tech)):
-            level = tech[i].split(' ')[-1]
+        ds_skill = form.getlist('ds_skill')
+        if not ds_skill:
+            ds_skill = ['N/A 1']
+        for i in range(len(ds_skill)):
+            level = ds_skill[i].split(' ')[-1]
             if level.isdigit():
-                for j in range(len(tech[i])):
-                    if tech[i][j].isdigit():
+                for j in range(len(ds_skill[i])):
+                    if ds_skill[i][j].isdigit():
                         flag = j
                         break
-                print("{} ({})".format(tech[i][:flag-1], SKILL_RUBRIC[level]))
-                tech[i] = "{} ({})".format(tech[i][:flag-1], SKILL_RUBRIC[level])
+                # print("{} ({})".format(app[i][:flag-1], SKILL_RUBRIC[level]))
+                ds_skill[i] = "{} ({})".format(ds_skill[i][:flag-1], SKILL_RUBRIC[level])
             else:
-                tech[i] = "{} ({})".format(tech[i], SKILL_RUBRIC['1'])
+                ds_skill[i] = "{} ({})".format(ds_skill[i], SKILL_RUBRIC['1'])
+
+        program_skill = form.getlist('program_skill')
+        if not program_skill:
+            program_skill = ['N/A 1']
+        for i in range(len(program_skill)):
+            level = program_skill[i].split(' ')[-1]
+            if level.isdigit():
+                for j in range(len(program_skill[i])):
+                    if program_skill[i][j].isdigit():
+                        flag = j
+                        break
+                # print("{} ({})".format(app[i][:flag-1], SKILL_RUBRIC[level]))
+                program_skill[i] = "{} ({})".format(program_skill[i][:flag-1], SKILL_RUBRIC[level])
+            else:
+                program_skill[i] = "{} ({})".format(program_skill[i], SKILL_RUBRIC['1'])
+
+        tech_stack = form.getlist('tech_stack')
+        if not tech_stack:
+            tech_stack = ['N/A 1']
+        for i in range(len(tech_stack)):
+            level = tech_stack[i].split(' ')[-1]
+            if level.isdigit():
+                for j in range(len(tech_stack[i])):
+                    if tech_stack[i][j].isdigit():
+                        flag = j
+                        break
+                # print("{} ({})".format(app[i][:flag-1], SKILL_RUBRIC[level]))
+                tech_stack[i] = "{} ({})".format(tech_stack[i][:flag-1], SKILL_RUBRIC[level])
+            else:
+                tech_stack[i] = "{} ({})".format(tech_stack[i], SKILL_RUBRIC['1'])
+        # s = form.getlist('skill')
+        # if not s:
+        #     s = ['N/A 1']
+        # for i in range(len(s)):
+        #     level = s[i].split(' ')[-1]
+        #     if level.isdigit():
+        #         for j in range(len(s[i])):
+        #             if s[i][j].isdigit():
+        #                 flag = j
+        #                 break
+        #         print("{} ({})".format(s[i][:flag-1], SKILL_RUBRIC[level]))
+        #         s[i] = "{} ({})".format(s[i][:flag-1], SKILL_RUBRIC[level])
+        #     else:
+        #         s[i] = "{} ({})".format(s[i], SKILL_RUBRIC['1'])
+
+
+        # tech = form.getlist('technique')
+        # if not tech:
+        #     tech = ['N/A 1']
+        # for i in range(len(tech)):
+        #     level = tech[i].split(' ')[-1]
+        #     if level.isdigit():
+        #         for j in range(len(tech[i])):
+        #             if tech[i][j].isdigit():
+        #                 flag = j
+        #                 break
+        #         print("{} ({})".format(tech[i][:flag-1], SKILL_RUBRIC[level]))
+        #         tech[i] = "{} ({})".format(tech[i][:flag-1], SKILL_RUBRIC[level])
+        #     else:
+        #         tech[i] = "{} ({})".format(tech[i], SKILL_RUBRIC['1'])
 
         i = form.getlist('industry')
         if not i:
@@ -1310,6 +1491,10 @@ def edit(request, name):
             defaults={
                 "location" : l, 
                 "skill" : ', '.join(s),
+                "application":', '.join(app),
+                "ds_skill":', '.join(ds_skill),
+                "program_skill":', '.join(program_skill),
+                "tech_stack":', '.join(tech_stack),
                 "technique" : ', '.join(tech), 
                 "university": uni_1,
                 "major": major_1,
@@ -1343,6 +1528,10 @@ def edit(request, name):
         nickname = person.nickname if person.nickname != ' ' else person.name.replace('_', ' ')
         form = EditProfile(initial={'location' : location_init,
                                     'skill' : skill_init,
+                                    'application':application_init,
+                                    'ds_skill': dsskill_init,
+                                    'program_skill':programskill_init,
+                                    'tech_stack': techstack_init,
                                     'industry' : industry_init,
                                     'technique' : tech_init, 
                                     'degree' : person.degree,

@@ -15,3 +15,7 @@ def remove_par(value):
 @register.filter(name="my_split")
 def my_split(value):
     return value.replace(' ', '_')
+
+@register.filter(name='ifinlist')
+def ifinlist(value, list):
+    return value in list
