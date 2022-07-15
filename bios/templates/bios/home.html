@@ -8,12 +8,30 @@
     <span>
     </span>
     <h3 class="cover-heading">Talent Capability Tracker</h3>
-    <form action="/" method="get">
+    {% comment %} <form action="/" method="get">
         <form class="form-outline my-2 my-md-0">
             <input name='search-input' class="form-control" type="text" placeholder="Search" aria-label="Search">
         </form>
-    </form>
+    </form> {% endcomment %}
 </div>
+
+<form>
+    <fieldset class = "text-center" style = "width: 100%;max-width: 600px;margin: 0 auto;margin-top:0.5%;">
+    <legend style="font-weight:bold;">Choose Category</legend>
+      <input type="checkbox" name='all-categories' value="All Categories"> All Categories
+      <input type="checkbox" name='application' value="Application" style="margin-left: 10px"> Application
+      <input type="checkbox" name='ds-skill' value="DS Skill" style="margin-left: 10px"> DS Skill
+      <input type="checkbox" name='programming-skill' value="Programming Skill" style="margin-left: 10px"> Programming Skill
+      <input type="checkbox" name='techstack' value="Techstack" style="margin-left: 10px"> Techstack<br><br>
+      <div>
+          <input name='search-input' class="form-control" type="text" placeholder="Search" aria-label="Search"><br>
+      </div>
+      <div>
+          <button class="btn btn-primary btn-lg" type="submit" value="Apply"> Search</button>
+      </div>
+    </fieldset>
+</form>
+
 {% else %}
 <form action="/" method="get">
     <form class="form-outline my-2 my-md-0">

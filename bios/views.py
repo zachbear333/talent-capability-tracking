@@ -681,6 +681,7 @@ def home(request):
     print("degree here", degree_query)
     # search bar
     search_query = request.GET.get('search-input')
+    category_query = request.GET.get('category-input')
     # distinct options in filter
     people = BioInfo.objects.all()
     position_dist = BioInfo.objects.values('position').distinct()
@@ -862,36 +863,209 @@ def home(request):
                         else:
                             people = people.exclude(id=person.id)
 
+    all_categories_query=request.GET.get('all-categories')
+    application_query=request.GET.get('application')
+    ds_skill_query=request.GET.get('ds-skill')
+    programming_skill_query=request.GET.get('programming-skill')
+    techstack_query=request.GET.get('techstack')
+    category_query_list=[all_categories_query,application_query,ds_skill_query,programming_skill_query,techstack_query]
     if search_query:
         search_sections = search_query.split(',')
         search_list = [None] * len(search_sections)
         # subcategory search
-        additional_peope = sub_cate_search(people, search_query)
+        #additional_peope = sub_cate_search(people, search_query)
         # print('addition_people', len(additional_peope), additional_peope)
-
+        
         # first search word
-        people = people.filter(nickname__contains=search_sections[0]) | \
-                        people.filter(name__contains=search_sections[0]) | \
-                        people.filter(skill__contains=search_sections[0]) | \
-                        people.filter(technique__contains=search_sections[0]) | \
-                        people.filter(industry__contains=search_sections[0]) | \
-                        people.filter(position__contains=search_sections[0]) | \
-                        people.filter(business_domain__contains=search_sections[0])
+        if category_query_list[0]:
+            people = people.filter(nickname__contains=search_sections[0]) | \
+                            people.filter(name__contains=search_sections[0]) | \
+                            people.filter(skill__contains=search_sections[0]) | \
+                            people.filter(technique__contains=search_sections[0]) | \
+                            people.filter(industry__contains=search_sections[0]) | \
+                            people.filter(position__contains=search_sections[0]) | \
+                            people.filter(business_domain__contains=search_sections[0])|\
+                            people.filter(application__contains=search_sections[0])|\
+                            people.filter(ds_skill__contains=search_sections[0])|\
+                            people.filter(program_skill__contains=search_sections[0])|\
+                            people.filter(tech_stack__contains=search_sections[0])
+                                
+        else:
+            if(not category_query_list[1] and not category_query_list[2] and not category_query_list[3] and not category_query_list[4]):
+               people = people.filter(nickname__contains=search_sections[0]) | \
+                               people.filter(name__contains=search_sections[0]) | \
+                               people.filter(skill__contains=search_sections[0]) | \
+                               people.filter(technique__contains=search_sections[0]) | \
+                               people.filter(industry__contains=search_sections[0]) | \
+                               people.filter(position__contains=search_sections[0]) | \
+                               people.filter(business_domain__contains=search_sections[0])|\
+                               people.filter(application__contains=search_sections[0])|\
+                               people.filter(ds_skill__contains=search_sections[0])|\
+                               people.filter(program_skill__contains=search_sections[0])|\
+                               people.filter(tech_stack__contains=search_sections[0])
+            elif(category_query_list[1] and not category_query_list[2] and not category_query_list[3] and not category_query_list[4]):
+                people=people.filter(application__contains=search_sections[0])
+            elif(not category_query_list[1] and category_query_list[2] and not category_query_list[3] and not category_query_list[4]):
+                people=people.filter(ds_skill__contains=search_sections[0])
+            elif(not category_query_list[1] and not category_query_list[2] and category_query_list[3] and not category_query_list[4]):
+                people=people.filter(program_skill__contains=search_sections[0])
+            elif(not category_query_list[1] and not category_query_list[2] and not category_query_list[3] and category_query_list[4]):
+                people=people.filter(tech_stack__contains=search_sections[0])
+            elif(category_query_list[1] and category_query_list[2] and not category_query_list[3] and not category_query_list[4]):
+                people=people.filter(application__contains=search_sections[0])| \
+                    people.filter(ds_skill__contains=search_sections[0])
+            elif(category_query_list[1] and not category_query_list[2] and category_query_list[3] and not category_query_list[4]):
+                people=people.filter(application__contains=search_sections[0])| \
+                    people.filter(program_skill__contains=search_sections[0])
+            elif(category_query_list[1] and not category_query_list[2] and not category_query_list[3] and category_query_list[4]):
+                people=people.filter(application__contains=search_sections[0])| \
+                    people.filter(tech_stack__contains=search_sections[0])
+            elif(not category_query_list[1] and category_query_list[2] and category_query_list[3] and not category_query_list[4]):
+                people=people.filter(ds_skill__contains=search_sections[0])| \
+                    people.filter(program_skill__contains=search_sections[0])
+            elif(not category_query_list[1] and category_query_list[2] and not category_query_list[3] and category_query_list[4]):
+                people=people.filter(ds_skill__contains=search_sections[0])| \
+                    people.filter(tech_stack__contains=search_sections[0])
+            elif(not category_query_list[1] and not category_query_list[2] and category_query_list[3] and category_query_list[4]):
+                people=people.filter(program_skill__contains=search_sections[0])| \
+                    people.filter(tech_stack__contains=search_sections[0])
+            elif(category_query_list[1] and category_query_list[2] and category_query_list[3] and not category_query_list[4]):
+                people=people.filter(application__contains=search_sections[0])| \
+                    people.filter(ds_skill__contains=search_sections[0])| \
+                    people.filter(program_skill__contains=search_sections[0])
+            elif(category_query_list[1] and category_query_list[2] and not category_query_list[3] and category_query_list[4]):
+                people=people.filter(application__contains=search_sections[0])| \
+                    people.filter(ds_skill__contains=search_sections[0])| \
+                    people.filter(tech_stack__contains=search_sections[0])
+            elif(category_query_list[1] and not category_query_list[2] and category_query_list[3] and category_query_list[4]):
+                people=people.filter(application__contains=search_sections[0])| \
+                    people.filter(program_skill__contains=search_sections[0])| \
+                    people.filter(tech_stack__contains=search_sections[0])
+            elif(not category_query_list[1] and category_query_list[2] and category_query_list[3] and category_query_list[4]):
+                people=people.filter(ds_skill__contains=search_sections[0])| \
+                    people.filter(program_skill__contains=search_sections[0])| \
+                    people.filter(tech_stack__contains=search_sections[0])     
+            elif(category_query_list[1] and category_query_list[2] and category_query_list[3] and category_query_list[4]):
+                people=people.filter(application__contains=search_sections[0])| \
+                    people.filter(ds_skill__contains=search_sections[0])| \
+                    people.filter(program_skill__contains=search_sections[0])| \
+                    people.filter(tech_stack__contains=search_sections[0])             
+   
+        
         search_list[0] = people 
         if len(search_sections) > 1:
             for i in range(1, len(search_sections)):
-                search_list[i] = people.filter(nickname__contains=search_sections[i]) | \
-                                    people.filter(name__contains=search_sections[i]) | \
-                                    people.filter(skill__contains=search_sections[i]) | \
-                                    people.filter(technique__contains=search_sections[i]) | \
-                                    people.filter(industry__contains=search_sections[i]) | \
-                                    people.filter(position__contains=search_sections[i]) | \
-                                    people.filter(business_domain__contains=search_sections[i])
+                if category_query_list[0]:
+                    search_list[i] = people.filter(nickname__contains=search_sections[0]) | \
+                                    people.filter(name__contains=search_sections[0]) | \
+                                    people.filter(skill__contains=search_sections[0]) | \
+                                    people.filter(technique__contains=search_sections[0]) | \
+                                    people.filter(industry__contains=search_sections[0]) | \
+                                    people.filter(position__contains=search_sections[0]) | \
+                                    people.filter(business_domain__contains=search_sections[0])|\
+                                    people.filter(application__contains=search_sections[0])|\
+                                    people.filter(ds_skill__contains=search_sections[0])|\
+                                    people.filter(program_skill__contains=search_sections[0])|\
+                                    people.filter(tech_stack__contains=search_sections[0])
+                                        
+                else:
+                    if(not category_query_list[1] and not category_query_list[2] and not category_query_list[3] and not category_query_list[4]):
+                      search_list[i] = people.filter(nickname__contains=search_sections[0]) | \
+                                       people.filter(name__contains=search_sections[0]) | \
+                                       people.filter(skill__contains=search_sections[0]) | \
+                                       people.filter(technique__contains=search_sections[0]) | \
+                                       people.filter(industry__contains=search_sections[0]) | \
+                                       people.filter(position__contains=search_sections[0]) | \
+                                       people.filter(business_domain__contains=search_sections[0])|\
+                                       people.filter(application__contains=search_sections[0])|\
+                                       people.filter(ds_skill__contains=search_sections[0])|\
+                                       people.filter(program_skill__contains=search_sections[0])|\
+                                       people.filter(tech_stack__contains=search_sections[0])
+                    elif(category_query_list[1] and not category_query_list[2] and not category_query_list[3] and not category_query_list[4]):
+                        search_list[i]=people.filter(application__contains=search_sections[0])
+                    elif(not category_query_list[1] and category_query_list[2] and not category_query_list[3] and not category_query_list[4]):
+                        search_list[i]=people.filter(ds_skill__contains=search_sections[0])
+                    elif(not category_query_list[1] and not category_query_list[2] and category_query_list[3] and not category_query_list[4]):
+                        search_list[i]=people.filter(program_skill__contains=search_sections[0])
+                    elif(not category_query_list[1] and not category_query_list[2] and not category_query_list[3] and category_query_list[4]):
+                        search_list[i]=people.filter(tech_stack__contains=search_sections[0])
+                    elif(category_query_list[1] and category_query_list[2] and not category_query_list[3] and not category_query_list[4]):
+                        search_list[i]=people.filter(application__contains=search_sections[0])| \
+                            people.filter(ds_skill__contains=search_sections[0])
+                    elif(category_query_list[1] and not category_query_list[2] and category_query_list[3] and not category_query_list[4]):
+                        search_list[i]=people.filter(application__contains=search_sections[0])| \
+                            people.filter(program_skill__contains=search_sections[0])
+                    elif(category_query_list[1] and not category_query_list[2] and not category_query_list[3] and category_query_list[4]):
+                        search_list[i]=people.filter(application__contains=search_sections[0])| \
+                            people.filter(tech_stack__contains=search_sections[0])
+                    elif(not category_query_list[1] and category_query_list[2] and category_query_list[3] and not category_query_list[4]):
+                        search_list[i]=people.filter(ds_skill__contains=search_sections[0])| \
+                            people.filter(program_skill__contains=search_sections[0])
+                    elif(not category_query_list[1] and category_query_list[2] and not category_query_list[3] and category_query_list[4]):
+                        search_list[i]=people.filter(ds_skill__contains=search_sections[0])| \
+                            people.filter(tech_stack__contains=search_sections[0])
+                    elif(not category_query_list[1] and not category_query_list[2] and category_query_list[3] and category_query_list[4]):
+                        search_list[i]=people.filter(program_skill__contains=search_sections[0])| \
+                            people.filter(tech_stack__contains=search_sections[0])
+                    elif(category_query_list[1] and category_query_list[2] and category_query_list[3] and not category_query_list[4]):
+                        search_list[i]=people.filter(application__contains=search_sections[0])| \
+                            people.filter(ds_skill__contains=search_sections[0])| \
+                            people.filter(program_skill__contains=search_sections[0])
+                    elif(category_query_list[1] and category_query_list[2] and not category_query_list[3] and category_query_list[4]):
+                        search_list[i]=people.filter(application__contains=search_sections[0])| \
+                            people.filter(ds_skill__contains=search_sections[0])| \
+                            people.filter(tech_stack__contains=search_sections[0])
+                    elif(category_query_list[1] and not category_query_list[2] and category_query_list[3] and category_query_list[4]):
+                        search_list[i]=people.filter(application__contains=search_sections[0])| \
+                            people.filter(program_skill__contains=search_sections[0])| \
+                            people.filter(tech_stack__contains=search_sections[0])
+                    elif(not category_query_list[1] and category_query_list[2] and category_query_list[3] and category_query_list[4]):
+                        search_list[i]=people.filter(ds_skill__contains=search_sections[0])| \
+                            people.filter(program_skill__contains=search_sections[0])| \
+                            people.filter(tech_stack__contains=search_sections[0])     
+                    elif(category_query_list[1] and category_query_list[2] and category_query_list[3] and category_query_list[4]):
+                        search_list[i]=people.filter(application__contains=search_sections[0])| \
+                            people.filter(ds_skill__contains=search_sections[0])| \
+                            people.filter(program_skill__contains=search_sections[0])| \
+                            people.filter(tech_stack__contains=search_sections[0])      
 
                 people = search_list[i] & search_list[i - 1]    
         # print('people', len(people), people, len(list(people) + additional_peope))
-        people = list(set(list(people) + additional_peope))
-            
+        #people = list(set(list(people) + additional_peope))
+       
+
+    # if search_query:
+    #     search_sections = search_query.split(',')
+    #     search_list = [None] * len(search_sections)
+    #     # subcategory search
+    #     additional_peope = sub_cate_search(people, search_query)
+    #     # print('addition_people', len(additional_peope), additional_peope)
+        
+    #     # first search word
+    #     people = people.filter(nickname__contains=search_sections[0]) | \
+    #                     people.filter(name__contains=search_sections[0]) | \
+    #                     people.filter(skill__contains=search_sections[0]) | \
+    #                     people.filter(technique__contains=search_sections[0]) | \
+    #                     people.filter(industry__contains=search_sections[0]) | \
+    #                     people.filter(position__contains=search_sections[0]) | \
+    #                     people.filter(business_domain__contains=search_sections[0])
+    #     search_list[0] = people 
+    #     if len(search_sections) > 1:
+    #         for i in range(1, len(search_sections)):
+    #             search_list[i] = people.filter(nickname__contains=search_sections[i]) | \
+    #                                 people.filter(name__contains=search_sections[i]) | \
+    #                                 people.filter(skill__contains=search_sections[i]) | \
+    #                                 people.filter(technique__contains=search_sections[i]) | \
+    #                                 people.filter(industry__contains=search_sections[i]) | \
+    #                                 people.filter(position__contains=search_sections[i]) | \
+    #                                 people.filter(business_domain__contains=search_sections[i])
+
+    #             people = search_list[i] & search_list[i - 1]    
+    #     # print('people', len(people), people, len(list(people) + additional_peope))
+    #     people = list(set(list(people) + additional_peope))
+
+
+
     return render(request, 'bios/home.html', {"people_number": people,
                                             "position_distinct": position_dist,
                                             "location_distinct": location_dist,
