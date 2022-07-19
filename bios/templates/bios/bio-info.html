@@ -196,23 +196,9 @@
             <li><small class="text-muted">5 - Expert: I have significant experience with this skill, including
                     supporting others. Anyone can turn to me. </small></li>
         </ul>
-        {% if skill|length > 0 %}
-        <ul class="list-group mb-3">
-            Application
-            {% for key, value in skill.items %}
-            <li class="list-group-item d-flex justify-content-between lh-condensed">
-                <div>
-                    <h6 class="my-0">{{key}}</h6>
-                    <small class="text-muted"></small>
-                </div>
-                <span class="text-muted">{{value}}</span>
-            </li>
-            {% endfor %}
-        </ul>
-        {% endif %}
         {% if application|length > 0 %}
         <ul class="list-group mb-3">
-            DS Skill
+            Application
             {% for key, value in application.items %}
             <li class="list-group-item d-flex justify-content-between lh-condensed">
                 <div>
@@ -224,6 +210,21 @@
             {% endfor %}
         </ul>
         {% endif %}
+        {% if skill|length > 0 %}
+        <ul class="list-group mb-3">
+            DS Skill
+            {% for key, value in skill.items %}
+            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <div>
+                    <h6 class="my-0">{{key}}</h6>
+                    <small class="text-muted"></small>
+                </div>
+                <span class="text-muted">{{value}}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
         {% if program_skill|length > 0 %}
         <ul class="list-group mb-3">
             Programming Skill

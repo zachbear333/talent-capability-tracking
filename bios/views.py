@@ -28,10 +28,10 @@ APPLICATION_SUBCATEGORY = {
     'Analytics Application' : ['Demand Forcasting', 'Fraud detection', 'Image processing', 'Insight Generation',
                                 'Inventory/Space Management', 'LTV', 'Personalization', 'Pricing optimization',
                                 'Product Assortment', 'Recommender System', 'Supplier chain'],
-    'Digital Analystics' : ['Adobe Analytics', 'Digital Analytics', 'Google Analytics', 'Search Engine Optimization (SEO)',
+    'Digital Analystics' : ['Adobe Analytics', 'Digital Analytics', 'Google Analytics', 'Search Engine Optimization - SEO',
                             'Web development'],
     'Sales and Marketing' : ['Campaign Management', 'Customer AcqusitioN', 'Customer retention', 'Customer Segmentation',
-                            'Market Mix Modeling (MMM)', 'Market Structure Analysis (MSA)', 'Multi-touch attribution (MTA)'] 
+                            'Market Mix Modeling - MMM', 'Market Structure Analysis - MSA', 'Multi-touch attribution - MTA'] 
 }    
 
 DSSKILL_SUBCATEGORY = {
