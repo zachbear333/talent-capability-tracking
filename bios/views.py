@@ -1390,7 +1390,7 @@ def edit(request, name):
         if flag != 0:
             dsskill_init.append(s[:flag-1].strip())
             tmp_list = sum(DSSKILL_SUBCATEGORY.values(), [])
-            # print('check here: ', tmp_list)
+            print('check here: ', tmp_list)
             preselect_dict['id_ds_skill_{}'.format(tmp_list.index(s[:flag-1].strip()))] = ''.join(s.strip().split(" ")[-1])
         if flag == 0:
             print(s[:flag-1].strip())
@@ -1746,6 +1746,7 @@ def dashboard(request):
     # sorted(skill_res), sorted(industry_res), sorted(tech_res), sorted(domain_res), 
     # sorted(university_res), sorted(major_res)
     feature_lst = distinct_features()
+    application, ds_skill, program_skill, techstack = distinct_skill()
 
     ###############################################
     ## filter people out ##
@@ -1883,11 +1884,11 @@ def dashboard(request):
                                                    'single_data':list(res_freq.values()),
                                                    'data':data,
                                                    'sns_color':a,
-                                                   'skill_distinct':feature_lst[0],
+                                                   'skill_distinct': application, # feature_lst[0],
                                                    'skill_query':skill_query,
                                                    'industry_distinct':feature_lst[1],
                                                    'industry_query':industry_query,
-                                                   'tech_distinct':feature_lst[2],
+                                                   'tech_distinct': ds_skill, # feature_lst[2],
                                                    'domain_distinct':feature_lst[3],
                                                    'filter_count': filter_count,
                                                    'in_db': in_db,
