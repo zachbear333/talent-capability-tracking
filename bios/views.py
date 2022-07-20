@@ -31,7 +31,7 @@ APPLICATION_SUBCATEGORY = {
     'Digital Analystics' : ['Adobe Analytics', 'Digital Analytics', 'Google Analytics', 'Search Engine Optimization - SEO',
                             'Web development'],
     'Sales and Marketing' : ['Campaign Management', 'Customer AcqusitioN', 'Customer retention', 'Customer Segmentation',
-                            'Market Mix Modeling - MMM', 'Market Structure Analysis - MSA', 'Multi-touch attribution - MTA'] 
+                            'Marketing Mix Modeling - MMM', 'Market Structure Analysis - MSA', 'Multi-touch attribution - MTA'] 
 }    
 
 DSSKILL_SUBCATEGORY = {
@@ -58,6 +58,15 @@ TECHSTACK_SUBCATEGORY = {
     'Collabration' : ['GIT', 'Jira', 'Project Management', 'GitHub']
 }
 
+def Merge_SubCategories(dict1, dict2, dict3, dict4):
+    res = {**dict1, **dict2, **dict3, **dict4}
+    return res
+
+ALL_SUBCATEGORIES= Merge_SubCategories(APPLICATION_SUBCATEGORY,DSSKILL_SUBCATEGORY,
+                                       PROGRAM_SKILL_SUBCATEGORY,TECHSTACK_SUBCATEGORY)    
+
+
+
 SUB_CATEGORY = {
     'Process': ['Automation & Job Scheduling', 'Process efficiency', 'Version Controlling',
             'Project Management', 'Space Management'],
@@ -65,6 +74,9 @@ SUB_CATEGORY = {
             'Word Embedding', 'Sentiment Analysis', 'Latent Dirichlet Allocation', 'Topic Modelling',
             'Named Entity Recognition']
 }
+
+
+
 LOCATION_CHOICES = [
     ('Columbia, MD (HQ)', 'Columbia, MD (HQ)'),
     ('New York, NY', 'New York, NY'),
@@ -342,15 +354,133 @@ def export(response):
 
     return response
 
-def sub_cate_search(people, cate_name):
+def sub_cate_search(people,category_query_list, subcate_name):
     result = []
-    if cate_name not in SUB_CATEGORY:
-        return result
-    for person in people:
-        for val in SUB_CATEGORY[cate_name]:
-            if val in person.skill:
-                result.append(person)
-                break
+    subcategory=ALL_SUBCATEGORIES
+    if category_query_list[0]:
+        if subcate_name in list(subcategory.keys()):
+            for person in people:
+                for val in subcategory[subcate_name]:
+                    if any(val in string for string in list(person.application.split(','))+list(person.ds_skill.split(','))+list(person.program_skill.split(','))+list(person.tech_stack.split(','))):
+                        result.append(person)
+                        break
+    else:
+        if(not category_query_list[1] and not category_query_list[2] and not category_query_list[3] and not category_query_list[4]):
+            if subcate_name in list(subcategory.keys()):
+                for person in people:
+                    for val in subcategory[subcate_name]:
+                        if any(val in string for string in list(person.application.split(','))+list(person.ds_skill.split(','))+list(person.program_skill.split(','))+list(person.tech_stack.split(','))):
+                            result.append(person)
+                            break
+        elif(category_query_list[1] and not category_query_list[2] and not category_query_list[3] and not category_query_list[4]):
+            if subcate_name in list(subcategory.keys()):
+                for person in people:
+                    for val in subcategory[subcate_name]:
+                        if any(val in string for string in list(person.application.split(','))):
+                            result.append(person)
+                            break
+        elif(not category_query_list[1] and category_query_list[2] and not category_query_list[3] and not category_query_list[4]):
+            if subcate_name in list(subcategory.keys()):
+                for person in people:
+                    for val in subcategory[subcate_name]:
+                        if any(val in string for string in list(person.ds_skill.split(','))):
+                            result.append(person)
+                            break
+        elif(not category_query_list[1] and not category_query_list[2] and category_query_list[3] and not category_query_list[4]):
+            if subcate_name in list(subcategory.keys()):
+                for person in people:
+                    for val in subcategory[subcate_name]:
+                        if any(val in string for string in list(person.program_skill.split(','))):
+                            result.append(person)
+                            break
+        elif(not category_query_list[1] and not category_query_list[2] and not category_query_list[3] and category_query_list[4]):
+            if subcate_name in list(subcategory.keys()):
+                for person in people:
+                    for val in subcategory[subcate_name]:
+                        if any(val in string for string in list(person.tech_stack.split(','))):
+                            result.append(person)
+                            break
+        elif(category_query_list[1] and category_query_list[2] and not category_query_list[3] and not category_query_list[4]):
+            if subcate_name in list(subcategory.keys()):
+                for person in people:
+                    for val in subcategory[subcate_name]:
+                        if any(val in string for string in list(person.application.split(','))+list(person.ds_skill.split(','))):
+                            result.append(person)
+                            break
+        elif(category_query_list[1] and not category_query_list[2] and category_query_list[3] and not category_query_list[4]):
+            if subcate_name in list(subcategory.keys()):
+                for person in people:
+                    for val in subcategory[subcate_name]:
+                        if any(val in string for string in list(person.application.split(','))+list(person.program_skill.split(','))):
+                            result.append(person)
+                            break
+        elif(category_query_list[1] and not category_query_list[2] and not category_query_list[3] and category_query_list[4]):
+            if subcate_name in list(subcategory.keys()):
+                for person in people:
+                    for val in subcategory[subcate_name]:
+                        if any(val in string for string in list(person.application.split(','))+list(person.tech_stack.split(','))):
+                            result.append(person)
+                            break
+        elif(not category_query_list[1] and category_query_list[2] and category_query_list[3] and not category_query_list[4]):
+           if subcate_name in list(subcategory.keys()):
+               for person in people:
+                   for val in subcategory[subcate_name]:
+                       if any(val in string for string in list(person.ds_skill.split(','))+list(person.program_skill.split(','))):
+                           result.append(person)
+                           break
+        elif(not category_query_list[1] and category_query_list[2] and not category_query_list[3] and category_query_list[4]):
+            if subcate_name in list(subcategory.keys()):
+                for person in people:
+                    for val in subcategory[subcate_name]:
+                        if any(val in string for string in list(person.ds_skill.split(','))+list(person.tech_stack.split(','))):
+                            result.append(person)
+                            break
+        elif(not category_query_list[1] and not category_query_list[2] and category_query_list[3] and category_query_list[4]):
+            if subcate_name in list(subcategory.keys()):
+                for person in people:
+                    for val in subcategory[subcate_name]:
+                        if any(val in string for string in list(person.program_skill.split(','))+list(person.tech_stack.split(','))):
+                            result.append(person)
+                            break
+        elif(category_query_list[1] and category_query_list[2] and category_query_list[3] and not category_query_list[4]):
+            if subcate_name in list(subcategory.keys()):
+                for person in people:
+                    for val in subcategory[subcate_name]:
+                        if any(val in string for string in list(person.application.split(','))+list(person.ds_skill.split(','))+list(person.program_skill.split(','))):
+                            result.append(person)
+                            break
+        elif(category_query_list[1] and category_query_list[2] and not category_query_list[3] and category_query_list[4]):
+            if subcate_name in list(subcategory.keys()):
+                for person in people:
+                    for val in subcategory[subcate_name]:
+                        if any(val in string for string in list(person.application.split(','))+list(person.ds_skill.split(','))+list(person.tech_stack.split(','))):
+                            result.append(person)
+                            break
+        elif(category_query_list[1] and not category_query_list[2] and category_query_list[3] and category_query_list[4]):
+            if subcate_name in list(subcategory.keys()):
+                for person in people:
+                    for val in subcategory[subcate_name]:
+                        if any(val in string for string in list(person.application.split(','))+list(person.program_skill.split(','))+list(person.tech_stack.split(','))):
+                            result.append(person)
+                            break
+        elif(not category_query_list[1] and category_query_list[2] and category_query_list[3] and category_query_list[4]):
+            if subcate_name in list(subcategory.keys()):
+                for person in people:
+                    for val in subcategory[subcate_name]:
+                        if any(val in string for string in list(person.ds_skill.split(','))+list(person.program_skill.split(','))+list(person.tech_stack.split(','))):
+                            result.append(person)
+                            break
+        elif(category_query_list[1] and category_query_list[2] and category_query_list[3] and category_query_list[4]):
+            if subcate_name in list(subcategory.keys()):
+                for person in people:
+                    for val in subcategory[subcate_name]:
+                        if any(val in string for string in list(person.application.split(','))+list(person.ds_skill.split(','))+list(person.program_skill.split(','))+list(person.tech_stack.split(','))):
+                            result.append(person)
+                            break
+                        
+    list_ids=[result[idx].id for idx in range(len(result))]
+    result=people.filter(pk__in=list_ids)
+    print(result)
     return result
 
 def test(request):
@@ -869,13 +999,15 @@ def home(request):
     programming_skill_query=request.GET.get('programming-skill')
     techstack_query=request.GET.get('techstack')
     category_query_list=[all_categories_query,application_query,ds_skill_query,programming_skill_query,techstack_query]
+    
     if search_query:
         search_sections = search_query.split(',')
         search_list = [None] * len(search_sections)
         # subcategory search
         #additional_peope = sub_cate_search(people, search_query)
         # print('addition_people', len(additional_peope), additional_peope)
-        
+        sub_cat_filter=sub_cate_search(people,category_query_list,search_sections[0])
+
         # first search word
         if category_query_list[0]:
             people = people.filter(nickname__contains=search_sections[0]) | \
@@ -888,11 +1020,12 @@ def home(request):
                             people.filter(application__contains=search_sections[0])|\
                             people.filter(ds_skill__contains=search_sections[0])|\
                             people.filter(program_skill__contains=search_sections[0])|\
-                            people.filter(tech_stack__contains=search_sections[0])
-                                
+                            people.filter(tech_stack__contains=search_sections[0])|\
+                            sub_cat_filter
         else:
             if(not category_query_list[1] and not category_query_list[2] and not category_query_list[3] and not category_query_list[4]):
-               people = people.filter(nickname__contains=search_sections[0]) | \
+                sub_cat_filter=sub_cate_search(people,category_query_list,search_sections[0])
+                people = people.filter(nickname__contains=search_sections[0]) | \
                                people.filter(name__contains=search_sections[0]) | \
                                people.filter(skill__contains=search_sections[0]) | \
                                people.filter(technique__contains=search_sections[0]) | \
@@ -902,134 +1035,137 @@ def home(request):
                                people.filter(application__contains=search_sections[0])|\
                                people.filter(ds_skill__contains=search_sections[0])|\
                                people.filter(program_skill__contains=search_sections[0])|\
-                               people.filter(tech_stack__contains=search_sections[0])
+                               people.filter(tech_stack__contains=search_sections[0])|\
+                               sub_cat_filter
+
             elif(category_query_list[1] and not category_query_list[2] and not category_query_list[3] and not category_query_list[4]):
-                people=people.filter(application__contains=search_sections[0])
+                people=people.filter(application__contains=search_sections[0]) | sub_cat_filter
             elif(not category_query_list[1] and category_query_list[2] and not category_query_list[3] and not category_query_list[4]):
-                people=people.filter(ds_skill__contains=search_sections[0])
+                people=people.filter(ds_skill__contains=search_sections[0]) | sub_cat_filter
             elif(not category_query_list[1] and not category_query_list[2] and category_query_list[3] and not category_query_list[4]):
-                people=people.filter(program_skill__contains=search_sections[0])
+                people=people.filter(program_skill__contains=search_sections[0]) | sub_cat_filter
             elif(not category_query_list[1] and not category_query_list[2] and not category_query_list[3] and category_query_list[4]):
-                people=people.filter(tech_stack__contains=search_sections[0])
+                people=people.filter(tech_stack__contains=search_sections[0]) | sub_cat_filter
             elif(category_query_list[1] and category_query_list[2] and not category_query_list[3] and not category_query_list[4]):
                 people=people.filter(application__contains=search_sections[0])| \
-                    people.filter(ds_skill__contains=search_sections[0])
+                    people.filter(ds_skill__contains=search_sections[0]) | sub_cat_filter
             elif(category_query_list[1] and not category_query_list[2] and category_query_list[3] and not category_query_list[4]):
                 people=people.filter(application__contains=search_sections[0])| \
-                    people.filter(program_skill__contains=search_sections[0])
+                    people.filter(program_skill__contains=search_sections[0]) | sub_cat_filter
             elif(category_query_list[1] and not category_query_list[2] and not category_query_list[3] and category_query_list[4]):
                 people=people.filter(application__contains=search_sections[0])| \
-                    people.filter(tech_stack__contains=search_sections[0])
+                    people.filter(tech_stack__contains=search_sections[0]) | sub_cat_filter
             elif(not category_query_list[1] and category_query_list[2] and category_query_list[3] and not category_query_list[4]):
                 people=people.filter(ds_skill__contains=search_sections[0])| \
-                    people.filter(program_skill__contains=search_sections[0])
+                    people.filter(program_skill__contains=search_sections[0]) | sub_cat_filter
             elif(not category_query_list[1] and category_query_list[2] and not category_query_list[3] and category_query_list[4]):
                 people=people.filter(ds_skill__contains=search_sections[0])| \
-                    people.filter(tech_stack__contains=search_sections[0])
+                    people.filter(tech_stack__contains=search_sections[0]) | sub_cat_filter
             elif(not category_query_list[1] and not category_query_list[2] and category_query_list[3] and category_query_list[4]):
                 people=people.filter(program_skill__contains=search_sections[0])| \
-                    people.filter(tech_stack__contains=search_sections[0])
+                    people.filter(tech_stack__contains=search_sections[0]) | sub_cat_filter
             elif(category_query_list[1] and category_query_list[2] and category_query_list[3] and not category_query_list[4]):
                 people=people.filter(application__contains=search_sections[0])| \
                     people.filter(ds_skill__contains=search_sections[0])| \
-                    people.filter(program_skill__contains=search_sections[0])
+                    people.filter(program_skill__contains=search_sections[0]) | sub_cat_filter
             elif(category_query_list[1] and category_query_list[2] and not category_query_list[3] and category_query_list[4]):
                 people=people.filter(application__contains=search_sections[0])| \
                     people.filter(ds_skill__contains=search_sections[0])| \
-                    people.filter(tech_stack__contains=search_sections[0])
+                    people.filter(tech_stack__contains=search_sections[0]) | sub_cat_filter
             elif(category_query_list[1] and not category_query_list[2] and category_query_list[3] and category_query_list[4]):
                 people=people.filter(application__contains=search_sections[0])| \
                     people.filter(program_skill__contains=search_sections[0])| \
-                    people.filter(tech_stack__contains=search_sections[0])
+                    people.filter(tech_stack__contains=search_sections[0]) | sub_cat_filter
             elif(not category_query_list[1] and category_query_list[2] and category_query_list[3] and category_query_list[4]):
                 people=people.filter(ds_skill__contains=search_sections[0])| \
                     people.filter(program_skill__contains=search_sections[0])| \
-                    people.filter(tech_stack__contains=search_sections[0])     
+                    people.filter(tech_stack__contains=search_sections[0]) | sub_cat_filter   
             elif(category_query_list[1] and category_query_list[2] and category_query_list[3] and category_query_list[4]):
                 people=people.filter(application__contains=search_sections[0])| \
                     people.filter(ds_skill__contains=search_sections[0])| \
                     people.filter(program_skill__contains=search_sections[0])| \
-                    people.filter(tech_stack__contains=search_sections[0])             
+                    people.filter(tech_stack__contains=search_sections[0]) | sub_cat_filter          
    
-        
-        search_list[0] = people 
+        search_list[0] = people
         if len(search_sections) > 1:
             for i in range(1, len(search_sections)):
+                sub_cat_filter=sub_cate_search(people,category_query_list,search_sections[i])
                 if category_query_list[0]:
-                    search_list[i] = people.filter(nickname__contains=search_sections[0]) | \
-                                    people.filter(name__contains=search_sections[0]) | \
-                                    people.filter(skill__contains=search_sections[0]) | \
-                                    people.filter(technique__contains=search_sections[0]) | \
-                                    people.filter(industry__contains=search_sections[0]) | \
-                                    people.filter(position__contains=search_sections[0]) | \
-                                    people.filter(business_domain__contains=search_sections[0])|\
-                                    people.filter(application__contains=search_sections[0])|\
-                                    people.filter(ds_skill__contains=search_sections[0])|\
-                                    people.filter(program_skill__contains=search_sections[0])|\
-                                    people.filter(tech_stack__contains=search_sections[0])
+                    search_list[i] = people.filter(nickname__contains=search_sections[i]) | \
+                                    people.filter(name__contains=search_sections[i]) | \
+                                    people.filter(skill__contains=search_sections[i]) | \
+                                    people.filter(technique__contains=search_sections[i]) | \
+                                    people.filter(industry__contains=search_sections[i]) | \
+                                    people.filter(position__contains=search_sections[i]) | \
+                                    people.filter(business_domain__contains=search_sections[i])|\
+                                    people.filter(application__contains=search_sections[i])|\
+                                    people.filter(ds_skill__contains=search_sections[i])|\
+                                    people.filter(program_skill__contains=search_sections[i])|\
+                                    people.filter(tech_stack__contains=search_sections[i]) | sub_cat_filter
                                         
                 else:
                     if(not category_query_list[1] and not category_query_list[2] and not category_query_list[3] and not category_query_list[4]):
-                      search_list[i] = people.filter(nickname__contains=search_sections[0]) | \
-                                       people.filter(name__contains=search_sections[0]) | \
-                                       people.filter(skill__contains=search_sections[0]) | \
-                                       people.filter(technique__contains=search_sections[0]) | \
-                                       people.filter(industry__contains=search_sections[0]) | \
-                                       people.filter(position__contains=search_sections[0]) | \
-                                       people.filter(business_domain__contains=search_sections[0])|\
-                                       people.filter(application__contains=search_sections[0])|\
-                                       people.filter(ds_skill__contains=search_sections[0])|\
-                                       people.filter(program_skill__contains=search_sections[0])|\
-                                       people.filter(tech_stack__contains=search_sections[0])
+                      search_list[i] = people.filter(nickname__contains=search_sections[i]) | \
+                                       people.filter(name__contains=search_sections[i]) | \
+                                       people.filter(skill__contains=search_sections[i]) | \
+                                       people.filter(technique__contains=search_sections[i]) | \
+                                       people.filter(industry__contains=search_sections[i]) | \
+                                       people.filter(position__contains=search_sections[i]) | \
+                                       people.filter(business_domain__contains=search_sections[i])|\
+                                       people.filter(application__contains=search_sections[i])|\
+                                       people.filter(ds_skill__contains=search_sections[i])|\
+                                       people.filter(program_skill__contains=search_sections[i])|\
+                                       people.filter(tech_stack__contains=search_sections[i])| sub_cat_filter
                     elif(category_query_list[1] and not category_query_list[2] and not category_query_list[3] and not category_query_list[4]):
-                        search_list[i]=people.filter(application__contains=search_sections[0])
+                        search_list[i]=people.filter(application__contains=search_sections[i])| sub_cat_filter
                     elif(not category_query_list[1] and category_query_list[2] and not category_query_list[3] and not category_query_list[4]):
-                        search_list[i]=people.filter(ds_skill__contains=search_sections[0])
+                        search_list[i]=people.filter(ds_skill__contains=search_sections[i])| sub_cat_filter
                     elif(not category_query_list[1] and not category_query_list[2] and category_query_list[3] and not category_query_list[4]):
-                        search_list[i]=people.filter(program_skill__contains=search_sections[0])
+                        search_list[i]=people.filter(program_skill__contains=search_sections[i])| sub_cat_filter
                     elif(not category_query_list[1] and not category_query_list[2] and not category_query_list[3] and category_query_list[4]):
-                        search_list[i]=people.filter(tech_stack__contains=search_sections[0])
+                        search_list[i]=people.filter(tech_stack__contains=search_sections[i])| sub_cat_filter
                     elif(category_query_list[1] and category_query_list[2] and not category_query_list[3] and not category_query_list[4]):
-                        search_list[i]=people.filter(application__contains=search_sections[0])| \
-                            people.filter(ds_skill__contains=search_sections[0])
+                        search_list[i]=people.filter(application__contains=search_sections[i])| \
+                            people.filter(ds_skill__contains=search_sections[i])| sub_cat_filter
                     elif(category_query_list[1] and not category_query_list[2] and category_query_list[3] and not category_query_list[4]):
-                        search_list[i]=people.filter(application__contains=search_sections[0])| \
-                            people.filter(program_skill__contains=search_sections[0])
+                        search_list[i]=people.filter(application__contains=search_sections[i])| \
+                            people.filter(program_skill__contains=search_sections[i])| sub_cat_filter
                     elif(category_query_list[1] and not category_query_list[2] and not category_query_list[3] and category_query_list[4]):
-                        search_list[i]=people.filter(application__contains=search_sections[0])| \
-                            people.filter(tech_stack__contains=search_sections[0])
+                        search_list[i]=people.filter(application__contains=search_sections[i])| \
+                            people.filter(tech_stack__contains=search_sections[i])| sub_cat_filter
                     elif(not category_query_list[1] and category_query_list[2] and category_query_list[3] and not category_query_list[4]):
-                        search_list[i]=people.filter(ds_skill__contains=search_sections[0])| \
-                            people.filter(program_skill__contains=search_sections[0])
+                        search_list[i]=people.filter(ds_skill__contains=search_sections[i])| \
+                            people.filter(program_skill__contains=search_sections[i])| sub_cat_filter
                     elif(not category_query_list[1] and category_query_list[2] and not category_query_list[3] and category_query_list[4]):
-                        search_list[i]=people.filter(ds_skill__contains=search_sections[0])| \
-                            people.filter(tech_stack__contains=search_sections[0])
+                        search_list[i]=people.filter(ds_skill__contains=search_sections[i])| \
+                            people.filter(tech_stack__contains=search_sections[i])| sub_cat_filter
                     elif(not category_query_list[1] and not category_query_list[2] and category_query_list[3] and category_query_list[4]):
-                        search_list[i]=people.filter(program_skill__contains=search_sections[0])| \
-                            people.filter(tech_stack__contains=search_sections[0])
+                        search_list[i]=people.filter(program_skill__contains=search_sections[i])| \
+                            people.filter(tech_stack__contains=search_sections[i])| sub_cat_filter
                     elif(category_query_list[1] and category_query_list[2] and category_query_list[3] and not category_query_list[4]):
-                        search_list[i]=people.filter(application__contains=search_sections[0])| \
-                            people.filter(ds_skill__contains=search_sections[0])| \
-                            people.filter(program_skill__contains=search_sections[0])
+                        search_list[i]=people.filter(application__contains=search_sections[i])| \
+                            people.filter(ds_skill__contains=search_sections[i])| \
+                            people.filter(program_skill__contains=search_sections[i])| sub_cat_filter
                     elif(category_query_list[1] and category_query_list[2] and not category_query_list[3] and category_query_list[4]):
-                        search_list[i]=people.filter(application__contains=search_sections[0])| \
-                            people.filter(ds_skill__contains=search_sections[0])| \
-                            people.filter(tech_stack__contains=search_sections[0])
+                        search_list[i]=people.filter(application__contains=search_sections[i])| \
+                            people.filter(ds_skill__contains=search_sections[i])| \
+                            people.filter(tech_stack__contains=search_sections[i])| sub_cat_filter
                     elif(category_query_list[1] and not category_query_list[2] and category_query_list[3] and category_query_list[4]):
-                        search_list[i]=people.filter(application__contains=search_sections[0])| \
-                            people.filter(program_skill__contains=search_sections[0])| \
-                            people.filter(tech_stack__contains=search_sections[0])
+                        search_list[i]=people.filter(application__contains=search_sections[i])| \
+                            people.filter(program_skill__contains=search_sections[i])| \
+                            people.filter(tech_stack__contains=search_sections[i])| sub_cat_filter
                     elif(not category_query_list[1] and category_query_list[2] and category_query_list[3] and category_query_list[4]):
-                        search_list[i]=people.filter(ds_skill__contains=search_sections[0])| \
-                            people.filter(program_skill__contains=search_sections[0])| \
-                            people.filter(tech_stack__contains=search_sections[0])     
+                        search_list[i]=people.filter(ds_skill__contains=search_sections[i])| \
+                            people.filter(program_skill__contains=search_sections[i])| \
+                            people.filter(tech_stack__contains=search_sections[i])  | sub_cat_filter   
                     elif(category_query_list[1] and category_query_list[2] and category_query_list[3] and category_query_list[4]):
-                        search_list[i]=people.filter(application__contains=search_sections[0])| \
-                            people.filter(ds_skill__contains=search_sections[0])| \
-                            people.filter(program_skill__contains=search_sections[0])| \
-                            people.filter(tech_stack__contains=search_sections[0])      
+                        search_list[i]=people.filter(application__contains=search_sections[i])| \
+                            people.filter(ds_skill__contains=search_sections[i])| \
+                            people.filter(program_skill__contains=search_sections[i])| \
+                            people.filter(tech_stack__contains=search_sections[i])| sub_cat_filter      
 
-                people = search_list[i] & search_list[i - 1]    
+               #people = search_list[i] & search_list[i - 1]  
+                people = search_list[i] & people    
         # print('people', len(people), people, len(list(people) + additional_peope))
         #people = list(set(list(people) + additional_peope))
        

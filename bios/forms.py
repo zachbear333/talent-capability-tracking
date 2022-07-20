@@ -134,7 +134,7 @@ APPLICATION_SUBCATEGORY = {
     'Digital Analystics' : ['Adobe Analytics', 'Digital Analytics', 'Google Analytics', 'Search Engine Optimization - SEO',
                             'Web development'],
     'Sales and Marketing' : ['Campaign Management', 'Customer AcqusitioN', 'Customer retention', 'Customer Segmentation',
-                            'Market Mix Modeling - MMM', 'Market Structure Analysis - MSA', 'Multi-touch attribution - MTA'] 
+                            'Marketing Mix Modeling - MMM', 'Market Structure Analysis - MSA', 'Multi-touch attribution - MTA'] 
 }                 
 APPLICATION_CHOICES = []
 for sub_cate in APPLICATION_SUBCATEGORY:
