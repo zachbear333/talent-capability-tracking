@@ -30,8 +30,8 @@ APPLICATION_SUBCATEGORY = {
                                 'Product Assortment', 'Recommender System', 'Supplier chain'],
     'Digital Analystics' : ['Adobe Analytics', 'Digital Analytics', 'Google Analytics', 'Search Engine Optimization - SEO',
                             'Web development'],
-    'Sales and Marketing' : ['Campaign Management', 'Customer AcqusitioN', 'Customer retention', 'Customer Segmentation',
-                            'Marketing Mix Modeling - MMM', 'Market Structure Analysis - MSA', 'Multi-touch attribution - MTA'] 
+    'Sales and Marketing' : ['Campaign Management', 'Customer Acqusition', 'Customer retention', 'Customer Segmentation',
+                            'Marketing Mix Modeling - MMM', 'Market Structure Analysis - MSA', 'Multi-touch Attribution - MTA'] 
 }    
 
 DSSKILL_SUBCATEGORY = {
@@ -357,124 +357,126 @@ def export(response):
 def sub_cate_search(people,category_query_list, subcate_name):
     result = []
     subcategory=ALL_SUBCATEGORIES
+    subcategory={k.lower():v for k,v in subcategory.items()}
+    subcate_name=subcate_name.lower().strip()
     if category_query_list[0]:
-        if subcate_name in list(subcategory.keys()):
+        if subcate_name.lower().strip() in [subcate.lower().strip() for subcate in subcategory.keys()]:
             for person in people:
                 for val in subcategory[subcate_name]:
-                    if any(val in string for string in list(person.application.split(','))+list(person.ds_skill.split(','))+list(person.program_skill.split(','))+list(person.tech_stack.split(','))):
+                    if any(val.lower().strip() in string.lower().strip() for string in list(person.application.split(','))+list(person.ds_skill.split(','))+list(person.program_skill.split(','))+list(person.tech_stack.split(','))):
                         result.append(person)
                         break
     else:
         if(not category_query_list[1] and not category_query_list[2] and not category_query_list[3] and not category_query_list[4]):
-            if subcate_name in list(subcategory.keys()):
+            if subcate_name.lower().strip() in [subcate.lower().strip() for subcate in subcategory.keys()]:
                 for person in people:
                     for val in subcategory[subcate_name]:
-                        if any(val in string for string in list(person.application.split(','))+list(person.ds_skill.split(','))+list(person.program_skill.split(','))+list(person.tech_stack.split(','))):
+                        if any(val.lower().strip() in string.lower().strip() for string in list(person.application.split(','))+list(person.ds_skill.split(','))+list(person.program_skill.split(','))+list(person.tech_stack.split(','))):
                             result.append(person)
                             break
         elif(category_query_list[1] and not category_query_list[2] and not category_query_list[3] and not category_query_list[4]):
-            if subcate_name in list(subcategory.keys()):
+            if subcate_name.lower().strip() in [subcate.lower().strip() for subcate in subcategory.keys()]:
                 for person in people:
                     for val in subcategory[subcate_name]:
-                        if any(val in string for string in list(person.application.split(','))):
+                        if any(val.lower().strip() in string.lower().strip() for string in list(person.application.split(','))):
                             result.append(person)
                             break
         elif(not category_query_list[1] and category_query_list[2] and not category_query_list[3] and not category_query_list[4]):
-            if subcate_name in list(subcategory.keys()):
+            if subcate_name.lower().strip() in [subcate.lower().strip() for subcate in subcategory.keys()]:
                 for person in people:
                     for val in subcategory[subcate_name]:
-                        if any(val in string for string in list(person.ds_skill.split(','))):
+                        if any(val.lower().strip() in string.lower().strip() for string in list(person.ds_skill.split(','))):
                             result.append(person)
                             break
         elif(not category_query_list[1] and not category_query_list[2] and category_query_list[3] and not category_query_list[4]):
-            if subcate_name in list(subcategory.keys()):
+            if subcate_name.lower().strip() in [subcate.lower().strip() for subcate in subcategory.keys()]:
                 for person in people:
                     for val in subcategory[subcate_name]:
-                        if any(val in string for string in list(person.program_skill.split(','))):
+                        if any(val.lower().strip() in string.lower().strip() for string in list(person.program_skill.split(','))):
                             result.append(person)
                             break
         elif(not category_query_list[1] and not category_query_list[2] and not category_query_list[3] and category_query_list[4]):
-            if subcate_name in list(subcategory.keys()):
+            if subcate_name.lower().strip() in [subcate.lower().strip() for subcate in subcategory.keys()]:
                 for person in people:
                     for val in subcategory[subcate_name]:
-                        if any(val in string for string in list(person.tech_stack.split(','))):
+                        if any(val.lower().strip() in string.lower().strip() for string in list(person.tech_stack.split(','))):
                             result.append(person)
                             break
         elif(category_query_list[1] and category_query_list[2] and not category_query_list[3] and not category_query_list[4]):
-            if subcate_name in list(subcategory.keys()):
+            if subcate_name.lower().strip() in [subcate.lower().strip() for subcate in subcategory.keys()]:
                 for person in people:
                     for val in subcategory[subcate_name]:
-                        if any(val in string for string in list(person.application.split(','))+list(person.ds_skill.split(','))):
+                        if any(val.lower().strip() in string.lower().strip() for string in list(person.application.split(','))+list(person.ds_skill.split(','))):
                             result.append(person)
                             break
         elif(category_query_list[1] and not category_query_list[2] and category_query_list[3] and not category_query_list[4]):
-            if subcate_name in list(subcategory.keys()):
+            if subcate_name.lower().strip() in [subcate.lower().strip() for subcate in subcategory.keys()]:
                 for person in people:
                     for val in subcategory[subcate_name]:
-                        if any(val in string for string in list(person.application.split(','))+list(person.program_skill.split(','))):
+                        if any(val.lower().strip() in string.lower().strip() for string in list(person.application.split(','))+list(person.program_skill.split(','))):
                             result.append(person)
                             break
         elif(category_query_list[1] and not category_query_list[2] and not category_query_list[3] and category_query_list[4]):
-            if subcate_name in list(subcategory.keys()):
+            if subcate_name.lower().strip() in [subcate.lower().strip() for subcate in subcategory.keys()]:
                 for person in people:
                     for val in subcategory[subcate_name]:
-                        if any(val in string for string in list(person.application.split(','))+list(person.tech_stack.split(','))):
+                        if any(val.lower().strip() in string.lower().strip() for string in list(person.application.split(','))+list(person.tech_stack.split(','))):
                             result.append(person)
                             break
         elif(not category_query_list[1] and category_query_list[2] and category_query_list[3] and not category_query_list[4]):
-           if subcate_name in list(subcategory.keys()):
+           if subcate_name.lower().strip() in [subcate.lower().strip() for subcate in subcategory.keys()]:
                for person in people:
                    for val in subcategory[subcate_name]:
-                       if any(val in string for string in list(person.ds_skill.split(','))+list(person.program_skill.split(','))):
+                       if any(val.lower().strip() in string.lower().strip() for string in list(person.ds_skill.split(','))+list(person.program_skill.split(','))):
                            result.append(person)
                            break
         elif(not category_query_list[1] and category_query_list[2] and not category_query_list[3] and category_query_list[4]):
-            if subcate_name in list(subcategory.keys()):
+            if subcate_name.lower().strip() in [subcate.lower().strip() for subcate in subcategory.keys()]:
                 for person in people:
                     for val in subcategory[subcate_name]:
-                        if any(val in string for string in list(person.ds_skill.split(','))+list(person.tech_stack.split(','))):
+                        if any(val.lower().strip() in string.lower().strip() for string in list(person.ds_skill.split(','))+list(person.tech_stack.split(','))):
                             result.append(person)
                             break
         elif(not category_query_list[1] and not category_query_list[2] and category_query_list[3] and category_query_list[4]):
-            if subcate_name in list(subcategory.keys()):
+            if subcate_name.lower().strip() in [subcate.lower().strip() for subcate in subcategory.keys()]:
                 for person in people:
                     for val in subcategory[subcate_name]:
-                        if any(val in string for string in list(person.program_skill.split(','))+list(person.tech_stack.split(','))):
+                        if any(val.lower().strip() in string.lower().strip() for string in list(person.program_skill.split(','))+list(person.tech_stack.split(','))):
                             result.append(person)
                             break
         elif(category_query_list[1] and category_query_list[2] and category_query_list[3] and not category_query_list[4]):
-            if subcate_name in list(subcategory.keys()):
+            if subcate_name.lower().strip() in [subcate.lower().strip() for subcate in subcategory.keys()]:
                 for person in people:
                     for val in subcategory[subcate_name]:
-                        if any(val in string for string in list(person.application.split(','))+list(person.ds_skill.split(','))+list(person.program_skill.split(','))):
+                        if any(val.lower().strip() in string.lower().strip() for string in list(person.application.split(','))+list(person.ds_skill.split(','))+list(person.program_skill.split(','))):
                             result.append(person)
                             break
         elif(category_query_list[1] and category_query_list[2] and not category_query_list[3] and category_query_list[4]):
-            if subcate_name in list(subcategory.keys()):
+           if subcate_name.lower().strip() in [subcate.lower().strip() for subcate in subcategory.keys()]:
                 for person in people:
                     for val in subcategory[subcate_name]:
-                        if any(val in string for string in list(person.application.split(','))+list(person.ds_skill.split(','))+list(person.tech_stack.split(','))):
+                        if any(val.lower().strip() in string.lower().strip() for string in list(person.application.split(','))+list(person.ds_skill.split(','))+list(person.tech_stack.split(','))):
                             result.append(person)
                             break
         elif(category_query_list[1] and not category_query_list[2] and category_query_list[3] and category_query_list[4]):
-            if subcate_name in list(subcategory.keys()):
+            if subcate_name.lower().strip() in [subcate.lower().strip() for subcate in subcategory.keys()]:
                 for person in people:
                     for val in subcategory[subcate_name]:
-                        if any(val in string for string in list(person.application.split(','))+list(person.program_skill.split(','))+list(person.tech_stack.split(','))):
+                        if any(val.lower().strip() in string.lower().strip() for string in list(person.application.split(','))+list(person.program_skill.split(','))+list(person.tech_stack.split(','))):
                             result.append(person)
                             break
         elif(not category_query_list[1] and category_query_list[2] and category_query_list[3] and category_query_list[4]):
-            if subcate_name in list(subcategory.keys()):
+            if subcate_name.lower().strip() in [subcate.lower().strip() for subcate in subcategory.keys()]:
                 for person in people:
                     for val in subcategory[subcate_name]:
-                        if any(val in string for string in list(person.ds_skill.split(','))+list(person.program_skill.split(','))+list(person.tech_stack.split(','))):
+                        if any(val.lower().strip() in string.lower().strip() for string in list(person.ds_skill.split(','))+list(person.program_skill.split(','))+list(person.tech_stack.split(','))):
                             result.append(person)
                             break
         elif(category_query_list[1] and category_query_list[2] and category_query_list[3] and category_query_list[4]):
-            if subcate_name in list(subcategory.keys()):
+            if subcate_name.lower().strip() in [subcate.lower().strip() for subcate in subcategory.keys()]:
                 for person in people:
                     for val in subcategory[subcate_name]:
-                        if any(val in string for string in list(person.application.split(','))+list(person.ds_skill.split(','))+list(person.program_skill.split(','))+list(person.tech_stack.split(','))):
+                        if any(val.lower().strip() in string.lower().strip() for string in list(person.application.split(','))+list(person.ds_skill.split(','))+list(person.program_skill.split(','))+list(person.tech_stack.split(','))):
                             result.append(person)
                             break
                         

@@ -133,8 +133,8 @@ APPLICATION_SUBCATEGORY = {
                                 'Product Assortment', 'Recommender System', 'Supplier chain'],
     'Digital Analystics' : ['Adobe Analytics', 'Digital Analytics', 'Google Analytics', 'Search Engine Optimization - SEO',
                             'Web development'],
-    'Sales and Marketing' : ['Campaign Management', 'Customer AcqusitioN', 'Customer retention', 'Customer Segmentation',
-                            'Marketing Mix Modeling - MMM', 'Market Structure Analysis - MSA', 'Multi-touch attribution - MTA'] 
+    'Sales and Marketing' : ['Campaign Management', 'Customer Acqusition', 'Customer retention', 'Customer Segmentation',
+                            'Marketing Mix Modeling - MMM', 'Market Structure Analysis - MSA', 'Multi-touch Attribution - MTA'] 
 }                 
 APPLICATION_CHOICES = []
 for sub_cate in APPLICATION_SUBCATEGORY:
