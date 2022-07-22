@@ -7,14 +7,14 @@
 
 <div class="row bio-page-container">
     <div class="col-md-3 align-items-center">
-        {% comment %} <img src="{% static 'media/images/'%}{{people.name}}.jpeg"
-            onerror="this.onerror=null; this.src='static/img/logo2.png'" alt="home" width=240px /> {% endcomment %}
+        
         <img class="img-fluid mx-auto d-block" src="{{ file.photo.url }}"
         onerror="this.onerror=null; this.src='static/img/logo2.png'" alt="home" width=240px />
         {% comment %} {% if people.name == user.first_name.split|join:'_'|add:"_"|add:user.last_name.split|join:'_' %} {% endcomment %}
         {% if people.name == user.first_name.split|join:'_'|add:"_"|add:user.last_name or people.name == user_first|add:"_"|add:user_last %}
         <a class="p-2 text-light" href="/{{user.first_name.split|join:'_'}}_{{user.last_name.split|join:'_'}}/edit/">
-
+         {% comment %}    <img src="{% static 'media/images/'%}{{people.name}}.jpeg" style='margin:10px
+                onerror="this.onerror=null; this.src='static/img/logo2.png'" alt="home" width=320px /> {% endcomment %}
             <button class="btn btn-primary btn-sm btn-block" type="submit" value="Apply" style='margin:10px 0;'>
             Edit Profile
             </button>

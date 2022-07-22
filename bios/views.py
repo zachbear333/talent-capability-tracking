@@ -340,15 +340,15 @@ def export(response):
     response['Content-Disposition'] = 'attachment; filename="tct{}.csv"'.format(datetime.now().strftime("%Y%m%d"))
 
     writer = csv.writer(response)
-    writer.writerow(['name','email', 'position', 'location', 'skill', 'technique', 
-                        'industry', 'business_domain', 'university', 'major', 'degree',
+    writer.writerow(['name','email', 'position', 'location', 'application','ds_skill','program_skill',
+                     'tech_stack', 'skill','technique','industry', 'business_domain', 'university', 'major', 'degree',
                         'university2', 'major2', 'degree2', 'university3', 'major3', 'degree3',
                         'intro', 'date_modified'])
 
-    users = BioInfo.objects.all().values_list('name','email', 'position', 'location', 'skill', 'technique', 
-                                            'industry', 'business_domain', 'university', 'major', 'degree',
-                                            'university2', 'major2', 'degree2', 'university3', 'major3', 'degree3',
-                                            'intro', 'date_modified')
+    users = BioInfo.objects.all().values_list('name','email', 'position', 'location', 'application','ds_skill','program_skill',
+                     'tech_stack', 'skill','technique','industry', 'business_domain', 'university', 'major', 'degree',
+                        'university2', 'major2', 'degree2', 'university3', 'major3', 'degree3',
+                        'intro', 'date_modified')
     for user in users:
         writer.writerow(user)
 

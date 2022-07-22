@@ -35,10 +35,10 @@ class UserAdmin(admin.ModelAdmin):
                     location = row['location'], 
                     skill = row['skill'],
                     technique = row['technique'],
-                    application = row['Applications'],
-                    ds_skill = row['DS Skills'],
-                    program_skill = row['Programming Skills'],
-                    tech_stack = row['Techstack'],
+                    application = row['application'],
+                    ds_skill = row['ds_skill'],
+                    program_skill = row['program_skill'],
+                    tech_stack = row['tech_stack'],
                     industry = row['industry'],
                     business_domain = row['business_domain'],
                     university = row['university'],
@@ -53,11 +53,11 @@ class UserAdmin(admin.ModelAdmin):
                     intro =  row['intro'],
                 )
 
-                    # created_ = Student.objects.update_or_create(
-                    #     name = row['name'],
-                    #     photo = 'images/logo2.png',
-                    #     bio_ppt = 'bio_ppt/Blank_Bio.pdf',
-                    # )
+                created_ = Student.objects.update_or_create(
+                    name = row['name'],
+                    photo = 'images/logo2.png',
+                    bio_ppt = 'bio_ppt/Blank_Bio.pdf',
+                )
                 # except:
                 #     error_lst.append(row['name'])
                 # print(error_lst)
