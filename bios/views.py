@@ -1297,6 +1297,15 @@ def create(request):
                 print("{} ({})".format(i[i_][:flag-1], EXPERIENCE_RUBRIC[level]))
                 i[i_] = "{} ({})".format(i[i_][:flag-1], EXPERIENCE_RUBRIC[level])
 
+        if not form.getlist('application'):
+            application = ['N/A']
+        if not form.getlist('ds_skill'):
+            ds_skill = ['N/A']
+        if not form.getlist('program_skill'):
+            program_skill = ['N/A']
+        if not form.getlist('tech_stack'):
+            tech_stack = ['N/A']
+
         u = form.get('university')
         if not u:
             u = 'N/A'
@@ -1328,11 +1337,15 @@ def create(request):
         t, _ = BioInfo.objects.update_or_create(
             name = n,
             defaults={
-                "email" : e, 
+                "email" : e.lower(), 
                 "position" : p, 
                 "location" : l, 
                 "skill" : ', '.join(s),
                 "technique" : ', '.join(tech), 
+                "application" : ', '.join(application),
+                "ds_skill" : ', '.join(ds_skill),
+                "program_skill" : ', '.join(program_skill),
+                "tech_stack" : ', '.join(tech_stack),
                 "industry" : ', '.join(i), 
                 "university" : u,
                 "major" : m,
