@@ -31,7 +31,7 @@
             <td> {{person.name|replace}} </td>
             <td> {{form.nickname}} </td>
             <td> {{person.email}} </td>
-            <td> {{person.position}} </td>
+            <td> {{form.position}} </td>
             <td> {{form.location}} </td>
             {% comment %} <td> {{form.domain}} </td> {% endcomment %}
         </table>
@@ -60,6 +60,31 @@
             <td> {{ form.degree_3 }} </td>
             </tr>
         </table>
+
+        <table class="table table-sm">
+            <thead class="thead-light">
+            <tr>
+                <th> Certification</th>
+                <th> Issuer </th>
+                <th> Expire Date </th>
+            </tr>
+            </thead>
+            <tr>
+            <td> {{ form.cerificate_1 }} </td>
+            <td> {{ form.issuer_1 }} </td>
+            <td> {{ form.expire_1 }} </td>
+            </tr>
+            <tr>
+                <td> {{ form.cerificate_2 }} </td>
+                <td> {{ form.issuer_2 }} </td>
+                <td> {{ form.expire_2 }} </td>
+            </tr>
+            <tr>
+                <td> {{ form.cerificate_3 }} </td>
+                <td> {{ form.issuer_3 }} </td>
+                <td> {{ form.expire_3 }} </td>
+            </tr>
+        </table>        
         <table class="table table-sm">
             <thead class="thead-light">
                 <tr>

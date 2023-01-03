@@ -607,6 +607,9 @@ def index(response, name):
     else:
         bio_obj = 0
     
+    # Certification
+
+
     # preprocess the user name
     user_first_name = response.user.first_name.replace(' ', '_')
     user_last_name = response.user.last_name.replace(' ', '_')
@@ -783,6 +786,7 @@ def distinct_features():
 
 def home(request):
     # user in our database
+    # print(request.user.AUTH_USER_MODEL)
     user_db = []
     for person in BioInfo.objects.all():
         if person.email not in user_db:
@@ -791,6 +795,46 @@ def home(request):
     # name_str = request.user.first_name.replace(' ', '_') + '_' + request.user.last_name.replace(' ', '_')
     email_str = str(request.user)
     in_db = 1 if email_str.lower() in user_db else 0
+    if in_db == 0:
+        n = "{}_{}".format(request.user.first_name, request.user.last_name)
+        t, _ = BioInfo.objects.update_or_create(
+            name = n,
+            defaults={
+                "email" : str(request.user).lower(), 
+                "position" : 'Associate Data Scientist, All-Star', 
+                "location" : 'Columbia, MD (HQ)', 
+                "skill" : 'N/A',
+                "technique" : 'N/A', 
+                "application" : 'N/A',
+                "ds_skill" : 'N/A',
+                "program_skill" : 'N/A',
+                "tech_stack" : 'N/A',
+                "industry" : 'N/A', 
+                "university" : 'N/A',
+                "major" : 'N/A',
+                "degree" : 'N/A', 
+                "university2" : 'N/A',
+                "major2" : 'N/A',
+                "degree2" : 'N/A',
+                "university3" : 'N/A',
+                "major3" : 'N/A',
+                "degree3" : 'N/A',
+                "cerificate": 'N/A',
+                "issuer": 'N/A',
+                "expire": datetime.now(),
+                "intro" : 'N/A',
+                "business_domain" : 'N/A',
+            }
+        )
+        stu, _ = Student.objects.update_or_create(
+            name = n,
+            defaults={
+                'photo': 'images/logo2.png',
+                'bio_ppt': 'bio_ppt/Blank_Bio.pdf',
+            }
+        )
+        t.save()
+
     print(request.user, in_db)
     print(user_db)
 
@@ -1250,6 +1294,9 @@ def create(request):
     in_db = 1 if email_str.lower() in user_db else 0
     if request.method == "POST":
         form = request.POST
+        print('form here ==========')
+        print(form)
+        print('/////////')
         n = form.get('name')
         e = form.get('email')
         p = form.get('position')
@@ -1360,7 +1407,26 @@ def create(request):
                 "business_domain" : ', '.join(d),
             }
         )
-
+        # print(
+        #     {"skill" : ', '.join(s),
+        #     "technique" : ', '.join(tech), 
+        #     "application" : ', '.join(application),
+        #     "ds_skill" : ', '.join(ds_skill),
+        #     "program_skill" : ', '.join(program_skill),
+        #     "tech_stack" : ', '.join(tech_stack),
+        #     "industry" : ', '.join(i), 
+        #     "university" : u,
+        #     "major" : m,
+        #     "degree" : c, 
+        #     "university2" : u,
+        #     "major2" : m,
+        #     "degree2" : c,
+        #     "university3" : u,
+        #     "major3" : m,
+        #     "degree3" : c,
+        #     "intro" : intro,
+        #     "business_domain" : ', '.join(d),}
+        # )
         stu, _ = Student.objects.update_or_create(
             name = n,
             defaults={
@@ -1518,7 +1584,6 @@ def edit(request, name):
         # print(s, flag)
         if flag != 0:
             application_init.append(s[:flag-1].strip())
-            # print(s, flag, s[:flag-1].strip())
             tmp_list = sum(APPLICATION_SUBCATEGORY.values(), [])
             preselect_dict['id_application_{}'.format(tmp_list.index(s[:flag-1].strip()))] = ''.join(s.strip().split(" ")[-1])
         if flag == 0:
@@ -1532,12 +1597,6 @@ def edit(request, name):
             continue
         s = s.strip()
         flag = s.rfind('(')
-        # flag = 0
-        # for i in range(len(s)):
-        #     if s[i].isdigit() or s[i] == '(':
-        #         flag = i
-        #         break
-        # print(flag, s, s.rfind('('))
         if flag != 0:
             dsskill_init.append(s[:flag-1].strip())
             tmp_list = sum(DSSKILL_SUBCATEGORY.values(), [])
@@ -1554,11 +1613,6 @@ def edit(request, name):
             continue
         s = s.strip()
         flag = s.rfind('(')
-        # flag = 0
-        # for i in range(len(s)):
-        #     if s[i].isdigit() or s[i] == '(':
-        #         flag = i
-        #         break
         if flag != 0:
             programskill_init.append(s[:flag-1].strip())
             tmp_list = sum(PROGRAM_SKILL_SUBCATEGORY.values(), [])
@@ -1574,11 +1628,6 @@ def edit(request, name):
             continue
         s = s.strip()
         flag = s.rfind('(')
-        # flag = 0
-        # for i in range(len(s)):
-        #     if s[i].isdigit() or s[i] == '(':
-        #         flag = i
-        #         break
         if flag != 0:
             techstack_init.append(s[:flag-1].strip())
             tmp_list = sum(TECHSTACK_SUBCATEGORY.values(), [])
@@ -1594,19 +1643,10 @@ def edit(request, name):
             continue
         ins = ins.strip()
         flag = ins.rfind('(')
-        # flag = 0
-        # for i in range(len(ins)):
-        #     if ins[i] == "2" and ins[i-1] == "B" and ins[i+1] == "B":
-        #         # print('warning here')
-        #         continue   
-        #     if ins[i].isdigit() or ins[i] == '(':
-        #         flag = i
-        #         break
         if flag != 0:
             industry_init.append(ins[:flag-1].strip())
             print("INDUSTRY ****>", industry_init)
             preselect_dict['id_industry_{}'.format(tmp2.index(ins[:flag-1].strip()))] = ''.join(ins.strip().split(" ")[-2:])
-    # print("industry initial", industry_init)
 
     # initial techniques
     techniques = person.technique.split(',')
@@ -1621,11 +1661,6 @@ def edit(request, name):
                 break
         if flag != 0:
             tech_init.append(tech[:flag-1].strip())
-        # if tech_init:
-        #     print('haha')
-            # print("TECH ****>", tech_init)
-            # preselect_dict['id_technique_{}'.format(tmp3.index(tech[:flag-1].strip()))] = ''.join(tech.strip().split(" ")[-1])
-    # print('technique skill initial', tech_init)
 
     # initial domain
     domain_init = []
@@ -1642,19 +1677,14 @@ def edit(request, name):
             if flag != 0:
                 domain_init.append(dom[:flag-1].strip())
             if domain_init:
-                # print("DOMAIN ****>", domain_init)
                 preselect_dict['id_domain_{}'.format(tmp4.index(dom[:flag-1].strip()))] = ''.join(dom.strip().split(" ")[-1])
-    # print('domain initial', domain_init)
 
     location_init = ''
     if person.location and person.location != 'N/A':
         location_init = person.location
 
-    # print(preselect_dict)
-    # print("====================")
     for k, v in preselect_dict.items():
         preselect_dict[k] = REVERSE_RUBRIC[v[1:-1]]
-    # print(preselect_dict)
 
     if request.method == "POST":
         form = request.POST
@@ -1671,7 +1701,6 @@ def edit(request, name):
                     if app[i][j].isdigit():
                         flag = j
                         break
-                # print("{} ({})".format(app[i][:flag-1], SKILL_RUBRIC[level]))
                 app[i] = "{} ({})".format(app[i][:flag-1], SKILL_RUBRIC[level])
             else:
                 app[i] = "{} ({})".format(app[i], SKILL_RUBRIC['1'])
@@ -1686,7 +1715,6 @@ def edit(request, name):
                     if ds_skill[i][j].isdigit():
                         flag = j
                         break
-                # print("{} ({})".format(app[i][:flag-1], SKILL_RUBRIC[level]))
                 ds_skill[i] = "{} ({})".format(ds_skill[i][:flag-1], SKILL_RUBRIC[level])
             else:
                 ds_skill[i] = "{} ({})".format(ds_skill[i], SKILL_RUBRIC['1'])
@@ -1720,36 +1748,6 @@ def edit(request, name):
                 tech_stack[i] = "{} ({})".format(tech_stack[i][:flag-1], SKILL_RUBRIC[level])
             else:
                 tech_stack[i] = "{} ({})".format(tech_stack[i], SKILL_RUBRIC['1'])
-        # s = form.getlist('skill')
-        # if not s:
-        #     s = ['N/A 1']
-        # for i in range(len(s)):
-        #     level = s[i].split(' ')[-1]
-        #     if level.isdigit():
-        #         for j in range(len(s[i])):
-        #             if s[i][j].isdigit():
-        #                 flag = j
-        #                 break
-        #         print("{} ({})".format(s[i][:flag-1], SKILL_RUBRIC[level]))
-        #         s[i] = "{} ({})".format(s[i][:flag-1], SKILL_RUBRIC[level])
-        #     else:
-        #         s[i] = "{} ({})".format(s[i], SKILL_RUBRIC['1'])
-
-
-        # tech = form.getlist('technique')
-        # if not tech:
-        #     tech = ['N/A 1']
-        # for i in range(len(tech)):
-        #     level = tech[i].split(' ')[-1]
-        #     if level.isdigit():
-        #         for j in range(len(tech[i])):
-        #             if tech[i][j].isdigit():
-        #                 flag = j
-        #                 break
-        #         print("{} ({})".format(tech[i][:flag-1], SKILL_RUBRIC[level]))
-        #         tech[i] = "{} ({})".format(tech[i][:flag-1], SKILL_RUBRIC[level])
-        #     else:
-        #         tech[i] = "{} ({})".format(tech[i], SKILL_RUBRIC['1'])
 
         i = form.getlist('industry')
         if not i:
@@ -1804,6 +1802,33 @@ def edit(request, name):
         if not uni_3 or not major_3 or not degree_3:
             uni_3, major_3, degree_3 = 'N/A', 'N/A', 'N/A'
 
+        cer_1 = form.get('cerificate_1')
+        issue_1 = form.get('issuer_1')
+        expire_1_month = form.get('expire_1_month')
+        expire_1_day = form.get('expire_1_day')
+        expire_1_year = form.get('expire_1_year')
+        expire_1 = datetime(int(expire_1_year), int(expire_1_month), int(expire_1_day))
+        if not cer_1 or not issue_1 or not expire_1:
+            cer_1, issue_1 = 'N/A', 'N/A'
+        
+        cer_2 = form.get('cerificate_2')
+        issue_2 = form.get('issuer_2')
+        expire_2_month = form.get('expire_2_month')
+        expire_2_day = form.get('expire_2_day')
+        expire_2_year = form.get('expire_2_year')
+        expire_2 = datetime(int(expire_2_year), int(expire_2_month), int(expire_2_day))
+        if not cer_2 or not issue_2 or not expire_2:
+            cer_2, issue_2 = 'N/A', 'N/A'
+
+        cer_3 = form.get('cerificate_3')
+        issue_3 = form.get('issuer_3')
+        expire_3_month = form.get('expire_3_month')
+        expire_3_day = form.get('expire_3_day')
+        expire_3_year = form.get('expire_3_year')
+        expire_3 = datetime(int(expire_3_year), int(expire_3_month), int(expire_3_day))
+        if not cer_3 or not issue_3 or not expire_3:
+            cer_3, issue_3 = 'N/A', 'N/A'
+
         nickname = form.get('nickname')
         if not nickname:
             nickname = ' '
@@ -1811,10 +1836,13 @@ def edit(request, name):
         intro = form.get('intro')
         if not intro:
             intro = 'N/A'
+
+        position = form.get('position')
         t, _ = BioInfo.objects.update_or_create(
             name = name,
             defaults={
                 "location" : l, 
+                "position" : position,
                 "skill" : ', '.join(s),
                 "application":', '.join(app),
                 "ds_skill":', '.join(ds_skill),
@@ -1832,7 +1860,16 @@ def edit(request, name):
                 "degree2": degree_2,
                 "university3": uni_3,
                 "major3": major_3,
-                "degree3": degree_3,  
+                "degree3": degree_3,
+                "cerificate": cer_1,
+                "issuer": issue_1,
+                "expire": expire_1,
+                "cerificate2": cer_2,
+                "issuer2": issue_2,
+                "expire2": expire_2,
+                "cerificate3": cer_3,
+                "issuer3": issue_3,
+                "expire3": expire_3,
                 "nickname":nickname, 
             }
         )
@@ -1849,9 +1886,20 @@ def edit(request, name):
         d1 = person.degree if person.degree != 'N/A' else ''
         d2 = person.degree2 if person.degree2 != 'N/A' else ''
         d3 = person.degree3 if person.degree3 != 'N/A' else ''
+        p1 = person.position if person.position != 'N/A' else ''
+        certificate = person.cerificate if person.cerificate != 'N/A' else ''
+        issuer = person.issuer if person.issuer != 'N/A' else ''
+        expire = person.expire
+        certificate2 = person.cerificate2 if person.cerificate2 != 'N/A' else ''
+        issuer2 = person.issuer2 if person.issuer2 != 'N/A' else ''
+        expire2 = person.expire2
+        certificate3 = person.cerificate3 if person.cerificate3 != 'N/A' else ''
+        issuer3 = person.issuer3 if person.issuer3 != 'N/A' else ''
+        expire3 = person.expire3
         intro = person.intro if person.intro != 'N/A' else ''
         nickname = person.nickname if person.nickname != ' ' else person.name.replace('_', ' ')
         form = EditProfile(initial={'location' : location_init,
+                                    'position' : p1,
                                     'skill' : skill_init,
                                     'application':application_init,
                                     'ds_skill': dsskill_init,
@@ -1871,6 +1919,15 @@ def edit(request, name):
                                     'university_3':u3,
                                     'major_3': m3,
                                     'degree_3': d3,
+                                    'cerificate_1': certificate,
+                                    'issuer_1': issuer,
+                                    'expire_1': expire,
+                                    'cerificate_2': certificate2,
+                                    'issuer_2': issuer2,
+                                    'expire_2': expire2,
+                                    'cerificate_3': certificate3,
+                                    'issuer_3': issuer3,
+                                    'expire_3': expire3,
                                     'nickname':nickname,
                                     })
         return render(request, "bios/edit.html", {"form":form,

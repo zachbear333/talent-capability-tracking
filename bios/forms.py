@@ -276,6 +276,7 @@ class CreateNewProfile(forms.Form):
 
 class EditProfile(forms.Form):
     location = forms.CharField(label="Location", widget=forms.Select(choices=LOCATION_CHOICES))
+    position = forms.CharField(label="Position", widget=forms.Select(choices=POSITION_CHOICES))
     domain = forms.CharField(label="Business Domain", widget=forms.Select(choices=DOMAIN_CHOICES))
     application = forms.MultipleChoiceField(required=False, label="Application", choices=APPLICATION_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={
     'class':'industry-test',
@@ -338,6 +339,27 @@ class EditProfile(forms.Form):
     # client = forms.MultipleChoiceField(label="Blend Client", choices=CLIENT_CHOICES, widget=forms.CheckboxSelectMultiple)
     degree_3 = forms.CharField(required=False, label="Degree", widget=forms.Select(choices=DEGREE_CHOICE))
     
+    cerificate_1 = forms.CharField(required=False, label="Certification1", max_length=400,
+                                widget=forms.TextInput(attrs={
+                                                             'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:25px;'}))
+    issuer_1 = forms.CharField(required=False, label="Issuer1", max_length=400,
+                                widget=forms.TextInput(attrs={
+                                                             'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:25px;'}))
+    expire_1 = forms.DateField(label='Expiration Date', widget=forms.SelectDateWidget())
+    cerificate_2 = forms.CharField(required=False, label="Certification1", max_length=400,
+                                widget=forms.TextInput(attrs={
+                                                             'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:25px;'}))
+    issuer_2 = forms.CharField(required=False, label="Issuer1", max_length=400,
+                                widget=forms.TextInput(attrs={
+                                                             'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:25px;'}))
+    expire_2 = forms.DateField(label='Expiration Date', widget=forms.SelectDateWidget())
+    cerificate_3 = forms.CharField(required=False, label="Certification1", max_length=400,
+                                widget=forms.TextInput(attrs={
+                                                             'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:25px;'}))
+    issuer_3 = forms.CharField(required=False, label="Issuer1", max_length=400,
+                                widget=forms.TextInput(attrs={
+                                                             'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:25px;'}))
+    expire_3 = forms.DateField(label='Expiration Date', widget=forms.SelectDateWidget())
     nickname = forms.CharField(required=False, label="Major2", max_length=400,
                                 widget=forms.TextInput(attrs={
                                                              'style' : 'width:100%;border: 1px solid grey; border-radius: 5px;height:25px;'}))

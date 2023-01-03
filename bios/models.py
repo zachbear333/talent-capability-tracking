@@ -2,6 +2,7 @@ from pyexpat import model
 from django.db import models
 from django import forms
 import os
+import datetime
 # Create your models here.
 def path_and_rename(instance, filename):
     upload_to = 'images/'
@@ -159,6 +160,15 @@ class BioInfo(models.Model):
     university3 = models.CharField(max_length=300)
     major3 =  models.CharField(max_length=300)
     degree3 = models.CharField(max_length=300)
+    cerificate = models.CharField(max_length=300)
+    issuer = models.CharField(max_length=300)
+    expire = models.DateField(default=datetime.date.today)
+    cerificate2 = models.CharField(max_length=300)
+    issuer2 = models.CharField(max_length=300)
+    expire2 = models.DateField(default=datetime.date.today)
+    cerificate3 = models.CharField(max_length=300)
+    issuer3 = models.CharField(max_length=300)
+    expire3 = models.DateField(default=datetime.date.today)
     nickname = models.CharField(max_length=300)
     intro = models.TextField()
     photo = models.ImageField(null=True, blank=True, upload_to="images/")
